@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Talks Index</title>
+  <style>
+    :root {
+      --bg: #f7f6f3;
+      --card: #ffffff;
+      --text: #1f2a2e;
+      --muted: #5a6a70;
+      --link: #0a6b73;
+      --link-hover: #084e53;
+      --border: #dbe2e4;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "Avenir Next", "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top right, #eef6f7, var(--bg));
+      color: var(--text);
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 2rem 1rem;
+    }
+
+    main {
+      width: min(760px, 100%);
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.5rem;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.05);
+    }
+
+    h1 {
+      margin: 0 0 0.25rem;
+      font-size: 1.8rem;
+    }
+
+    p {
+      margin: 0 0 1.25rem;
+      color: var(--muted);
+    }
+
+    ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      gap: 0.75rem;
+    }
+
+    a {
+      display: block;
+      padding: 0.9rem 1rem;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--link);
+      text-decoration: none;
+      font-weight: 600;
+      transition: border-color 0.15s ease, transform 0.15s ease, color 0.15s ease;
+    }
+
+    a:hover {
+      color: var(--link-hover);
+      border-color: #a8c5c8;
+      transform: translateY(-1px);
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Talks</h1>
+    <p>Select a talk:</p>
+    <ul>
+      <li><a href="aiagents.html">AI Agents</a></li>
+    </ul>
+  </main>
+</body>
+</html>

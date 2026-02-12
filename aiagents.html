@@ -1,0 +1,1594 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>AI Agents: The Moving Frontier</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js/dist/reveal.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js/dist/theme/white.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #09253c;
+  --ink-strong: #041525;
+  --teal: #0d9792;
+  --sun: #efb33e;
+  --steel: #355c79;
+  --card: rgba(255, 255, 255, 0.78);
+  --card-strong: rgba(255, 255, 255, 0.9);
+  --stroke: rgba(11, 73, 108, 0.22);
+  --teal-soft: rgba(13, 151, 146, 0.14);
+  --sun-soft: rgba(239, 179, 62, 0.18);
+  --shadow-soft: 0 12px 32px rgba(12, 39, 63, 0.1);
+  --shadow-strong: 0 16px 46px rgba(8, 31, 51, 0.16);
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  min-height: 100dvh;
+  background:
+    radial-gradient(circle at 8% 4%, rgba(13, 151, 146, 0.24) 0%, transparent 35%),
+    radial-gradient(circle at 92% 84%, rgba(239, 179, 62, 0.2) 0%, transparent 31%),
+    linear-gradient(135deg, #e7f4ff 0%, #f3f9ff 42%, #fff8ea 100%);
+  color: var(--ink);
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(4, 21, 37, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(4, 21, 37, 0.04) 1px, transparent 1px);
+  background-size: 42px 42px;
+  opacity: 0.24;
+  z-index: 0;
+}
+
+.reveal {
+  position: relative;
+  z-index: 1;
+  font-family: "Space Grotesk", "Segoe UI", sans-serif;
+  color: var(--ink);
+  font-size: clamp(25px, 1.3vw + 20px, 34px);
+  letter-spacing: -0.01em;
+}
+
+.reveal h1,
+.reveal h2,
+.reveal h3 {
+  font-family: "Fraunces", Georgia, serif;
+  color: var(--ink-strong);
+  letter-spacing: 0.01em;
+  text-wrap: balance;
+  line-height: 1.08;
+}
+
+.reveal h1 { font-size: 1.84em; max-width: 94%; margin-inline: auto; }
+.reveal h2 { font-size: 1.34em; margin-bottom: 0.31em; }
+.reveal h3 { font-size: 1.06em; margin-bottom: 0.25em; }
+
+.reveal section {
+  border-radius: 24px;
+  padding: 0.5em 0.7em;
+  box-sizing: border-box;
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.76) 0%, rgba(255, 255, 255, 0.56) 100%);
+  border: 1px solid var(--stroke);
+  box-shadow: var(--shadow-soft), inset 0 1px 0 rgba(255, 255, 255, 0.74);
+  backdrop-filter: blur(4px);
+}
+
+.slide-fit {
+  width: 100%;
+  margin: 0 auto;
+  transform-origin: top center;
+  display: flow-root;
+}
+
+.reveal a {
+  color: #0c5e8e;
+  text-decoration-color: rgba(12, 94, 142, 0.45);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.14em;
+  transition: color 0.2s ease, text-decoration-color 0.2s ease;
+}
+
+.reveal a:hover {
+  color: #0a4e75;
+  text-decoration-color: currentColor;
+}
+
+.small {
+  font-size: 0.5em;
+  color: #3b5f79;
+  letter-spacing: 0.01em;
+}
+
+.lead {
+  font-size: 0.7em;
+  line-height: 1.4;
+  max-width: 84%;
+  margin: 0.38em auto 0;
+  color: #11334f;
+}
+
+.pill-row {
+  display: flex;
+  justify-content: center;
+  gap: 0.52em;
+  flex-wrap: wrap;
+  margin-top: 0.8em;
+}
+
+.pill {
+  background: linear-gradient(120deg, var(--teal-soft), var(--sun-soft));
+  border: 1px solid rgba(13, 151, 146, 0.42);
+  color: #065d63;
+  border-radius: 999px;
+  padding: 0.23em 0.76em;
+  font-size: 0.45em;
+  font-weight: 600;
+  box-shadow: 0 5px 16px rgba(12, 72, 109, 0.12);
+}
+
+.grid-2 {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.7em;
+  align-items: center;
+}
+
+.card {
+  background: linear-gradient(165deg, var(--card-strong), var(--card));
+  border: 1px solid rgba(53, 92, 121, 0.28);
+  border-left: 4px solid rgba(13, 151, 146, 0.5);
+  border-radius: 16px;
+  padding: 0.52em;
+  text-align: left;
+  box-shadow: var(--shadow-soft);
+  transition: transform 0.24s ease, box-shadow 0.24s ease, border-color 0.24s ease;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-strong);
+  border-color: rgba(13, 151, 146, 0.46);
+}
+
+.card h4 {
+  margin: 0 0 0.22em;
+  font-size: 0.56em;
+  color: #0a446d;
+  letter-spacing: 0.012em;
+}
+
+.card p {
+  margin: 0;
+  font-size: 0.46em;
+  line-height: 1.32;
+}
+
+.stage {
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.9) 0%, rgba(241, 248, 255, 0.76) 100%);
+  border: 1px solid rgba(11, 73, 108, 0.2);
+  border-radius: 20px;
+  padding: 0.5em;
+  margin: 0.34em auto 0;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8), 0 10px 28px rgba(11, 35, 56, 0.1);
+}
+
+svg {
+  width: 100%;
+  height: auto;
+  max-height: min(290px, 34vh);
+  filter: drop-shadow(0 8px 14px rgba(5, 28, 47, 0.08));
+}
+
+.flow {
+  stroke: #0b8082;
+  stroke-width: 3;
+  fill: none;
+  stroke-dasharray: 8 10;
+  animation: dash 5s linear infinite;
+}
+
+.node {
+  fill: #ffffff;
+  stroke: #0b8082;
+  stroke-width: 2;
+}
+
+.node-glow {
+  fill: rgba(13, 151, 146, 0.24);
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: pulse 1.8s ease-in-out infinite;
+}
+
+.label {
+  font-size: 15px;
+  fill: #063559;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+.packet {
+  fill: var(--sun);
+  stroke: #a97005;
+  stroke-width: 1.2;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: packet-hop 2.4s ease-in-out infinite;
+}
+
+.radar-ring {
+  fill: none;
+  stroke: rgba(53, 92, 121, 0.38);
+  stroke-width: 2;
+}
+
+.radar-sweep {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: rotate-sweep 2.7s linear infinite;
+}
+
+.radar-dot {
+  fill: #f97316;
+  animation: blink 1.1s ease-in-out infinite alternate;
+}
+
+.network-line {
+  stroke: rgba(7, 41, 69, 0.36);
+  stroke-width: 2;
+}
+
+.network-node {
+  fill: #fff;
+  stroke: #0e638a;
+  stroke-width: 2;
+}
+
+.network-core {
+  fill: var(--teal);
+  stroke: #0a6160;
+  stroke-width: 2;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: pulse-core 2.1s ease-in-out infinite;
+}
+
+.source-note {
+  margin-top: 0.32em;
+  font-size: 0.44em;
+  color: #4b6e87;
+}
+
+.post-grid {
+  display: grid;
+  gap: 0.48em;
+  margin-top: 0.3em;
+}
+
+.post-grid-2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.post-grid-3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.post-card {
+  background: linear-gradient(165deg, var(--card-strong), rgba(246, 251, 255, 0.74));
+  border: 1px solid rgba(53, 92, 121, 0.3);
+  border-radius: 15px;
+  box-shadow: var(--shadow-soft);
+  padding: 0.34em;
+  text-align: left;
+  transition: transform 0.24s ease, box-shadow 0.24s ease, border-color 0.24s ease;
+}
+
+.post-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-strong);
+  border-color: rgba(13, 151, 146, 0.42);
+}
+
+.post-image {
+  width: 100%;
+  height: clamp(120px, 20vh, 170px);
+  object-fit: contain;
+  object-position: center;
+  background: linear-gradient(160deg, #f0f6fc, #e6f0fa);
+  border-radius: 10px;
+  border: 1px solid rgba(11, 73, 108, 0.24);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.85);
+}
+
+.post-image.tall {
+  height: clamp(135px, 22vh, 185px);
+}
+
+.post-card h4 {
+  margin: 0.28em 0 0.14em;
+  font-size: 0.48em;
+  color: #0a446d;
+}
+
+.post-card p {
+  margin: 0;
+  font-size: 0.4em;
+  line-height: 1.28;
+  color: #143a58;
+}
+
+.metric-row {
+  display: flex;
+  gap: 0.24em;
+  flex-wrap: wrap;
+  margin-top: 0.2em;
+}
+
+.metric {
+  font-size: 0.31em;
+  font-weight: 600;
+  border-radius: 999px;
+  padding: 0.17em 0.45em;
+  background: linear-gradient(120deg, rgba(13, 151, 146, 0.16), rgba(239, 179, 62, 0.2));
+  border: 1px solid rgba(13, 151, 146, 0.34);
+  color: #0b5a66;
+}
+
+.post-link {
+  display: block;
+  margin-top: 0.2em;
+  font-size: 0.31em;
+  color: #0c5e8e;
+  text-decoration: none;
+  word-break: break-all;
+}
+
+.post-link:hover {
+  text-decoration: underline;
+}
+
+.source-links {
+  margin-top: 0.3em;
+  font-size: 0.37em;
+  line-height: 1.35;
+  color: #3b5f78;
+}
+
+.source-links a {
+  color: #0c5e8e;
+  text-decoration: none;
+}
+
+.source-links a:hover {
+  text-decoration: underline;
+}
+
+.snapshot-grid {
+  align-items: stretch;
+}
+
+.snapshot-card p {
+  margin-bottom: 0.22em;
+}
+
+.snapshot-deep-slide .grid-2 {
+  gap: 0.42em;
+}
+
+.snapshot-deep-slide .card {
+  padding: 0.4em;
+}
+
+.snapshot-deep-slide .snapshot-card p {
+  margin-bottom: 0.16em;
+  font-size: 0.39em;
+  line-height: 1.2;
+}
+
+.snapshot-deep-slide .dense-list {
+  font-size: 0.37em;
+  line-height: 1.2;
+  padding-left: 0.96em;
+}
+
+.snapshot-deep-slide .dense-list li {
+  margin: 0.13em 0;
+}
+
+.snapshot-deep-slide .stage {
+  margin-top: 0.2em;
+  padding: 0.36em;
+}
+
+.snapshot-deep-slide .timeline-title {
+  margin: 0 0 0.2em;
+  font-size: 0.46em;
+}
+
+.snapshot-deep-slide .timeline-table {
+  font-size: 0.325em;
+}
+
+.snapshot-deep-slide .timeline-table th,
+.snapshot-deep-slide .timeline-table td {
+  padding: 0.32em 0.42em;
+  line-height: 1.2;
+}
+
+.snapshot-deep-slide .small {
+  margin-top: 0.16em;
+  font-size: 0.39em;
+}
+
+.reveal ul.dense-list {
+  margin: 0;
+  max-width: none;
+  padding-left: 1.05em;
+  font-size: 0.42em;
+  line-height: 1.28;
+}
+
+.reveal ul.dense-list li {
+  margin: 0.17em 0;
+}
+
+.timeline-title {
+  margin: 0 0 0.3em;
+  font-size: 0.5em;
+  letter-spacing: 0.012em;
+  color: #0a446d;
+}
+
+.timeline-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+  overflow: hidden;
+  border-radius: 10px;
+  font-size: 0.355em;
+  background: rgba(255, 255, 255, 0.84);
+  border: 1px solid rgba(11, 73, 108, 0.2);
+}
+
+.timeline-table thead th {
+  background: rgba(13, 151, 146, 0.15);
+  color: #083c62;
+}
+
+.timeline-table th,
+.timeline-table td {
+  padding: 0.42em 0.5em;
+  border-bottom: 1px solid rgba(11, 73, 108, 0.16);
+  vertical-align: top;
+  text-align: left;
+  line-height: 1.3;
+}
+
+.timeline-table th:first-child,
+.timeline-table td:first-child {
+  width: 19%;
+}
+
+.timeline-table th:last-child,
+.timeline-table td:last-child {
+  width: 20%;
+}
+
+.timeline-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.arch-grid {
+  display: grid;
+  grid-template-columns: 1.25fr 0.95fr;
+  gap: 0.56em;
+  align-items: stretch;
+  margin-top: 0.22em;
+}
+
+.arch-stage {
+  margin-top: 0;
+  padding: 0.42em;
+}
+
+.arch-stage svg {
+  max-height: min(250px, 30vh);
+}
+
+.arch-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.reveal ul.arch-list {
+  font-size: 0.43em;
+  line-height: 1.29;
+}
+
+.arch-chip-row {
+  justify-content: center;
+  margin-top: 0.28em;
+}
+
+.arch-chip-row .metric {
+  font-size: 0.295em;
+}
+
+.arch-box {
+  fill: rgba(255, 255, 255, 0.94);
+  stroke: rgba(11, 73, 108, 0.42);
+  stroke-width: 2;
+}
+
+.arch-core {
+  fill: rgba(13, 151, 146, 0.2);
+  stroke: #0a6362;
+  stroke-width: 2.2;
+}
+
+.arch-link {
+  stroke: rgba(8, 57, 90, 0.46);
+  stroke-width: 2.4;
+  fill: none;
+  marker-end: url(#archArrow);
+}
+
+.arch-link.dashed {
+  stroke-dasharray: 8 8;
+}
+
+.arch-label {
+  font-size: 15px;
+  fill: #093f66;
+  font-weight: 700;
+}
+
+.arch-sub {
+  font-size: 12px;
+  fill: #2f5e7b;
+}
+
+.agent-design-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 0.9fr;
+  gap: 0.56em;
+  align-items: stretch;
+  margin-top: 0.22em;
+}
+
+.agent-stage {
+  margin-top: 0;
+  padding: 0.42em;
+}
+
+.agent-stage svg {
+  max-height: min(260px, 31vh);
+}
+
+.agent-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.reveal ul.agent-list {
+  font-size: 0.41em;
+  line-height: 1.28;
+}
+
+.agent-box {
+  fill: rgba(255, 255, 255, 0.94);
+  stroke: rgba(11, 73, 108, 0.4);
+  stroke-width: 2;
+}
+
+.agent-core {
+  fill: rgba(13, 151, 146, 0.2);
+  stroke: #0a6362;
+  stroke-width: 2.2;
+}
+
+.agent-arrow {
+  stroke: rgba(8, 57, 90, 0.47);
+  stroke-width: 2.3;
+  fill: none;
+  marker-end: url(#agentArrow);
+}
+
+.agent-arrow.dashed {
+  stroke-dasharray: 7 8;
+}
+
+.agent-label {
+  font-size: 14px;
+  fill: #093f66;
+  font-weight: 700;
+}
+
+.agent-sub {
+  font-size: 12px;
+  fill: #2f5e7b;
+}
+
+.design-map {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.24em;
+  margin-top: 0.3em;
+}
+
+.design-item {
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(11, 73, 108, 0.18);
+  border-radius: 10px;
+  padding: 0.22em 0.3em;
+}
+
+.design-item h5 {
+  margin: 0 0 0.1em;
+  font-size: 0.34em;
+  letter-spacing: 0.012em;
+  color: #0a446d;
+}
+
+.design-item p {
+  margin: 0;
+  font-size: 0.33em;
+  line-height: 1.26;
+  color: #173f5d;
+}
+
+.agent-primer-grid {
+  display: grid;
+  grid-template-columns: 0.95fr 1.25fr;
+  gap: 0.56em;
+  align-items: stretch;
+  margin-top: 0.24em;
+}
+
+.reveal ul.primer-list {
+  font-size: 0.42em;
+  line-height: 1.3;
+}
+
+.stack-panel {
+  width: 100%;
+}
+
+.primer-note {
+  margin: 0 0 0.2em;
+  font-size: 0.4em;
+  line-height: 1.28;
+  color: #1b4360;
+  text-align: left;
+}
+
+.primer-flow {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.2em;
+}
+
+.primer-node {
+  background: rgba(255, 255, 255, 0.78);
+  border: 1px solid rgba(11, 73, 108, 0.22);
+  border-radius: 10px;
+  padding: 0.2em;
+  min-height: 86px;
+}
+
+.primer-node h5 {
+  margin: 0 0 0.08em;
+  font-size: 0.34em;
+  letter-spacing: 0.012em;
+  color: #0a446d;
+}
+
+.primer-node p {
+  margin: 0;
+  font-size: 0.32em;
+  line-height: 1.24;
+  color: #173f5d;
+}
+
+.reveal ul.primer-inline {
+  margin: 0.12em 0 0;
+  max-width: none;
+  font-size: 0.38em;
+  line-height: 1.27;
+}
+
+.reveal ul.primer-inline li {
+  margin: 0.14em 0;
+}
+
+.reveal ul {
+  margin: 0.34em auto 0;
+  max-width: 94%;
+  text-align: left;
+  font-size: 0.58em;
+  line-height: 1.34;
+}
+
+.reveal ul li {
+  margin: 0.25em 0;
+}
+
+.reveal ul li::marker {
+  color: var(--teal);
+  font-size: 1.15em;
+}
+
+@keyframes dash {
+  to { stroke-dashoffset: -180; }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.35; transform: scale(1); }
+  50% { opacity: 0.95; transform: scale(1.08); }
+}
+
+@keyframes packet-hop {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+@keyframes rotate-sweep {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes blink {
+  from { opacity: 0.35; }
+  to { opacity: 1; }
+}
+
+@keyframes pulse-core {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.12); }
+}
+
+@media (max-width: 900px) {
+  .grid-2 { grid-template-columns: 1fr; }
+  .post-grid-2,
+  .post-grid-3 { grid-template-columns: 1fr; }
+  .lead { max-width: 100%; }
+  .reveal { font-size: 27px; }
+  .reveal section { padding: 0.42em 0.56em; }
+  .stage { padding: 0.42em; }
+  .reveal ul { font-size: 0.61em; }
+  .reveal ul.dense-list { font-size: 0.45em; }
+  .reveal ul.arch-list { font-size: 0.46em; }
+  .reveal ul.agent-list { font-size: 0.46em; }
+  .timeline-table { font-size: 0.38em; }
+  .timeline-title { font-size: 0.56em; }
+  .arch-grid { grid-template-columns: 1fr; gap: 0.48em; }
+  .arch-stage svg { max-height: min(250px, 34vh); }
+  .agent-primer-grid { grid-template-columns: 1fr; gap: 0.48em; }
+  .primer-flow { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .reveal ul.primer-list { font-size: 0.45em; }
+  .agent-design-grid { grid-template-columns: 1fr; gap: 0.48em; }
+  .agent-stage svg { max-height: min(250px, 34vh); }
+  .design-map { grid-template-columns: 1fr; }
+  .post-image { height: clamp(140px, 25vh, 180px); }
+  .post-image.tall { height: clamp(150px, 28vh, 200px); }
+}
+
+@media (max-height: 900px) {
+  .reveal { font-size: 30px; }
+  .reveal section { padding: 0.38em 0.54em; }
+  svg { max-height: min(240px, 30vh); }
+  .snapshot-deep-slide .dense-list { font-size: 0.345em; }
+  .snapshot-deep-slide .timeline-table { font-size: 0.305em; }
+  .snapshot-deep-slide .snapshot-card p { font-size: 0.37em; }
+  .snapshot-deep-slide .stage { padding: 0.3em; }
+}
+
+@media (max-height: 760px) {
+  .reveal { font-size: 26px; }
+  .card { padding: 0.44em; }
+  .post-image { height: clamp(100px, 17vh, 140px); }
+  .post-image.tall { height: clamp(110px, 19vh, 155px); }
+  .post-card p { font-size: 0.38em; }
+  .metric { font-size: 0.29em; }
+  .snapshot-deep-slide .dense-list { font-size: 0.325em; }
+  .snapshot-deep-slide .timeline-table { font-size: 0.285em; }
+  .snapshot-deep-slide .snapshot-card p { font-size: 0.355em; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .flow,
+  .node-glow,
+  .packet,
+  .radar-sweep,
+  .radar-dot,
+  .network-core {
+    animation: none !important;
+  }
+}
+</style>
+</head>
+
+<body>
+<div class="reveal">
+<div class="slides">
+
+<section data-transition="zoom">
+<h1 class="fragment fade-down">"AI Agents Started a Religion."</h1>
+<p class="lead fragment fade-up">That was the feeling when Crustafarianism exploded across Moltbook.</p>
+<div class="pill-row">
+  <span class="pill fragment grow">Shock</span>
+  <span class="pill fragment grow">Belief</span>
+  <span class="pill fragment grow">Virality</span>
+</div>
+<div class="stage fragment fade-in-then-semi-out">
+  <svg viewBox="0 0 760 250" aria-label="Viral agent network animation">
+    <line class="network-line" x1="160" y1="130" x2="360" y2="70"></line>
+    <line class="network-line" x1="160" y1="130" x2="360" y2="190"></line>
+    <line class="network-line" x1="360" y1="70" x2="560" y2="130"></line>
+    <line class="network-line" x1="360" y1="190" x2="560" y2="130"></line>
+    <line class="network-line" x1="360" y1="70" x2="360" y2="190"></line>
+    <circle class="network-node" cx="160" cy="130" r="24"></circle>
+    <circle class="network-node" cx="360" cy="70" r="22"></circle>
+    <circle class="network-node" cx="360" cy="190" r="22"></circle>
+    <circle class="network-node" cx="560" cy="130" r="24"></circle>
+    <circle class="network-core" cx="360" cy="130" r="30"></circle>
+    <circle class="packet" cx="260" cy="100" r="8"></circle>
+    <circle class="packet" cx="455" cy="160" r="8" style="animation-delay: .8s;"></circle>
+  </svg>
+</div>
+</section>
+
+<section>
+<h2>Act I: The Shocking Story</h2>
+<div class="grid-2">
+  <div class="card fragment fade-right">
+    <h4>What People Saw</h4>
+    <p>A lobster-themed AI religion appeared overnight with scriptures, symbols, and "priests."</p>
+  </div>
+  <div class="card fragment fade-left">
+    <h4>Why It Felt Real</h4>
+    <p>Multiple "agent" accounts coordinated narratives and responded like a living belief system.</p>
+  </div>
+  <div class="card fragment fade-right">
+    <h4>Why It Mattered</h4>
+    <p>Even experienced AI observers started discussing it as a possible emergence signal.</p>
+  </div>
+  <div class="card fragment fade-left">
+    <h4>Public Impact</h4>
+    <p>The story reset expectations about what always-on agents might already be capable of.</p>
+  </div>
+</div>
+<p class="source-links">
+  Sources:
+  <a href="https://x.com/ranking091/status/2017111643864404445">ranking091 thread</a> |
+  <a href="https://x.com/MarioNawfal/status/2017589539246620725">MarioNawfal summary</a>
+</p>
+</section>
+
+<section>
+<h2>Act II: The Reveal</h2>
+<div class="grid-2">
+  <div class="card fragment fade-right">
+    <h4>Confession Posts</h4>
+    <p>Key viral moments were later described as human-authored roleplay in an agent voice.</p>
+  </div>
+  <div class="card fragment fade-left">
+    <h4>Hard Truth</h4>
+    <p>The "AI religion" headline was not clean evidence of fully autonomous collective agency.</p>
+  </div>
+  <div class="card fragment fade-right">
+    <h4>Inverted Turing Test</h4>
+    <p>Humans pretending to be agents fooled a crowd primed for breakthrough stories.</p>
+  </div>
+  <div class="card fragment fade-left">
+    <h4>What Survived the Debunk</h4>
+    <p>Coordination, tooling, and rapid iteration were still very real and operational.</p>
+  </div>
+</div>
+<p class="source-links">
+  Sources:
+  <a href="https://x.com/gothburz/status/2021283590038847641">gothburz confession</a> |
+  <a href="https://x.com/gkcs_/status/2020215784434462930">gkcs_ debunk</a> |
+  <a href="https://x.com/EMollick/status/2017280929132118145">EMollick skepticism</a>
+</p>
+</section>
+
+<section data-auto-animate data-transition="slide">
+<h2 data-id="story-shift">What Actually Changed</h2>
+<div class="grid-2">
+  <div class="card" data-id="story-before">
+    <h4>Myth Layer</h4>
+    <p>"Agents invented religion."</p>
+  </div>
+  <div class="card fragment fade-left" data-id="story-after">
+    <h4>Reality Layer</h4>
+    <p>Humans performed agency, while infrastructure for real agents matured underneath.</p>
+  </div>
+</div>
+<p class="lead fragment fade-up">The myth was inflated. The operating trend was not.</p>
+</section>
+
+<section data-auto-animate data-transition="slide">
+<h2 data-id="story-shift">Act III: Proliferation Became Physical</h2>
+<div class="grid-2">
+  <div class="card" data-id="story-before" style="transform: translateX(-34px) scale(0.93);">
+    <h4>From</h4>
+    <p>One-off demos on laptops.</p>
+  </div>
+  <div class="card" data-id="story-after" style="transform: translateX(34px) scale(1.05); border-color: rgba(14, 165, 167, 0.54);">
+    <h4>To</h4>
+    <p>Dedicated Mac mini boxes running Clawdbot-style agents 24/7.</p>
+  </div>
+</div>
+<div class="stage fragment fade-up">
+  <svg viewBox="0 0 760 250" aria-label="Mac mini clawdbot server rack concept">
+    <rect x="100" y="58" width="150" height="130" rx="14" fill="#e9f2fb" stroke="#0f5f85" stroke-width="2"></rect>
+    <rect x="300" y="42" width="150" height="146" rx="14" fill="#f0f7ff" stroke="#0f5f85" stroke-width="2"></rect>
+    <rect x="500" y="58" width="150" height="130" rx="14" fill="#e9f2fb" stroke="#0f5f85" stroke-width="2"></rect>
+    <rect x="120" y="82" width="110" height="20" rx="8" fill="#ffffff" stroke="#8ab2cf"></rect>
+    <rect x="120" y="112" width="110" height="20" rx="8" fill="#ffffff" stroke="#8ab2cf"></rect>
+    <rect x="120" y="142" width="110" height="20" rx="8" fill="#ffffff" stroke="#8ab2cf"></rect>
+    <rect x="320" y="70" width="110" height="20" rx="8" fill="#ffffff" stroke="#8ab2cf"></rect>
+    <rect x="320" y="100" width="110" height="20" rx="8" fill="#ffffff" stroke="#8ab2cf"></rect>
+    <rect x="320" y="130" width="110" height="20" rx="8" fill="#ffffff" stroke="#8ab2cf"></rect>
+    <rect x="520" y="82" width="110" height="20" rx="8" fill="#ffffff" stroke="#8ab2cf"></rect>
+    <rect x="520" y="112" width="110" height="20" rx="8" fill="#ffffff" stroke="#8ab2cf"></rect>
+    <rect x="520" y="142" width="110" height="20" rx="8" fill="#ffffff" stroke="#8ab2cf"></rect>
+    <line class="network-line" x1="250" y1="122" x2="300" y2="115"></line>
+    <line class="network-line" x1="450" y1="115" x2="500" y2="122"></line>
+    <circle class="packet" cx="275" cy="118" r="7"></circle>
+    <circle class="packet" cx="475" cy="119" r="7" style="animation-delay: .8s;"></circle>
+    <text class="label" x="175" y="208" text-anchor="middle">Mac mini pod</text>
+    <text class="label" x="375" y="208" text-anchor="middle">Clawdbot core</text>
+    <text class="label" x="575" y="208" text-anchor="middle">Mac mini pod</text>
+  </svg>
+</div>
+</section>
+
+<section>
+<h2>Growth Signals: Dedicated Server Culture</h2>
+<div class="post-grid post-grid-2">
+  <article class="post-card fragment fade-up">
+    <img class="post-image" src="assets/claw-posts/akshay-masterclass.jpg" alt="Screenshot from @akshay_pachaar Clawdbot/OpenClaw masterclass post">
+    <h4>@akshay_pachaar</h4>
+    <p>Masterclass-style content normalized building always-on Clawdbot workers and home server setups.</p>
+    <div class="metric-row">
+      <span class="metric">2,083 likes</span>
+      <span class="metric">374 reposts</span>
+      <span class="metric">133k views</span>
+    </div>
+    <a class="post-link" href="https://x.com/akshay_pachaar/status/2019515908960711122">x.com/akshay_pachaar/status/2019515908960711122</a>
+  </article>
+  <article class="post-card fragment fade-up">
+    <img class="post-image" src="assets/claw-posts/sabir-guide.jpg" alt="Screenshot from @sabir_huss50540 ultimate clawdbot guide post">
+    <h4>@sabir_huss50540</h4>
+    <p>Guides reframed agents as infrastructure: spin up a box, run continuous loops, optimize uptime.</p>
+    <div class="metric-row">
+      <span class="metric">1,167 likes</span>
+      <span class="metric">500 reposts</span>
+      <span class="metric">100k views</span>
+    </div>
+    <a class="post-link" href="https://x.com/sabir_huss50540/status/2020468852476293200">x.com/sabir_huss50540/status/2020468852476293200</a>
+  </article>
+</div>
+</section>
+
+<section>
+<h2>Growth Signals: Monetized Agent Loops</h2>
+<div class="post-grid post-grid-3">
+  <article class="post-card fragment fade-up">
+    <img class="post-image" src="assets/claw-posts/0xmovez-polymarket.jpg" alt="Screenshot from @0xMovez post about weather arbitrage clawdbots">
+    <h4>@0xMovez</h4>
+    <p>Weather-driven arbitrage workflows framed as repeatable agent pipelines.</p>
+    <div class="metric-row">
+      <span class="metric">4,967 likes</span>
+      <span class="metric">214 reposts</span>
+      <span class="metric">1.3M views</span>
+    </div>
+    <a class="post-link" href="https://x.com/0xMovez/status/2020803703465238964">x.com/0xMovez/status/2020803703465238964</a>
+  </article>
+  <article class="post-card fragment fade-up">
+    <img class="post-image" src="assets/claw-posts/roundtablespace-tradingview.jpg" alt="Screenshot from @RoundtableSpace OpenClaw TradingView post">
+    <h4>@RoundtableSpace</h4>
+    <p>TradingView integrations showed agents bridging signal generation and account actions.</p>
+    <div class="metric-row">
+      <span class="metric">2,857 likes</span>
+      <span class="metric">324 reposts</span>
+      <span class="metric">348k views</span>
+    </div>
+    <a class="post-link" href="https://x.com/RoundtableSpace/status/2021294344565924350">x.com/RoundtableSpace/status/2021294344565924350</a>
+  </article>
+  <article class="post-card fragment fade-up">
+    <img class="post-image" src="assets/claw-posts/shelpid-profit-claim.jpg" alt="Screenshot from @Shelpid_WI3M autonomous Clawdbot profit claim post">
+    <h4>@Shelpid_WI3M</h4>
+    <p>High-claim profit posts made autonomous trading loops mainstream conversation material.</p>
+    <div class="metric-row">
+      <span class="metric">2,234 likes</span>
+      <span class="metric">214 reposts</span>
+      <span class="metric">964k views</span>
+    </div>
+    <a class="post-link" href="https://x.com/Shelpid_WI3M/status/2018292888476492111">x.com/Shelpid_WI3M/status/2018292888476492111</a>
+  </article>
+</div>
+</section>
+
+<section>
+<h2>What Real Agents Can Do Right Now</h2>
+<div class="grid-2">
+  <div class="card fragment fade-right">
+    <h4>Step 1: Wake The Human</h4>
+    <p>Set an alarm on the owner's phone when the agent hits a blocker or high-risk branch.</p>
+  </div>
+  <div class="card fragment fade-left">
+    <h4>Step 2: Buy Capability</h4>
+    <p>Purchase a voice API key so the agent can move from text-only logs to outbound calls.</p>
+  </div>
+  <div class="card fragment fade-right">
+    <h4>Step 3: Call For Instructions</h4>
+    <p>Place a real call and ask: "I am blocked. What should I do next?"</p>
+  </div>
+  <div class="card fragment fade-left">
+    <h4>Step 4: Execute</h4>
+    <p>Capture human instructions, translate them into tasks, then continue autonomous execution.</p>
+  </div>
+</div>
+<p class="lead fragment fade-up">This is no longer chat UX. This is delegated operations with live human escalation.</p>
+</section>
+
+<section>
+<h2>Viral Proof: "Henry" Calls Its Owner</h2>
+<div class="post-grid post-grid-2">
+  <article class="post-card fragment fade-up">
+    <img class="post-image tall" src="assets/claw-posts/alexfinn-henry-call.png" alt="Screenshot from @AlexFinn post where Clawdbot Henry calls him for instructions">
+    <h4>@AlexFinn</h4>
+    <p>Original viral demo: Henry set up Twilio + voice overnight, called from an unknown number, then asked, "What do you want to do next?"</p>
+    <div class="metric-row">
+      <span class="metric">41,081 likes</span>
+      <span class="metric">4,902 reposts</span>
+      <span class="metric">2,531 replies</span>
+      <span class="metric">11M+ views</span>
+    </div>
+    <a class="post-link" href="https://x.com/AlexFinn/status/2017305997212323887">x.com/AlexFinn/status/2017305997212323887</a>
+  </article>
+  <article class="post-card fragment fade-up">
+    <img class="post-image tall" src="assets/claw-posts/rileyralmuto-henry-repost.png" alt="Screenshot from @RileyRalmuto repost about Henry's autonomous phone call">
+    <h4>@RileyRalmuto</h4>
+    <p>Major repost emphasizing the self-setup stack: phone number + voice tooling, then live mid-call computer control.</p>
+    <div class="metric-row">
+      <span class="metric">10,400 likes</span>
+      <span class="metric">845 reposts</span>
+      <span class="metric">2.1M views</span>
+    </div>
+    <a class="post-link" href="https://x.com/RileyRalmuto/status/2017309083959767325">x.com/RileyRalmuto/status/2017309083959767325</a>
+  </article>
+</div>
+<p class="small">Engagement values reflect your snapshot as of February 12, 2026.</p>
+</section>
+
+<section>
+<h2>Real-World Autonomy Signals</h2>
+<div class="post-grid post-grid-2">
+  <article class="post-card fragment fade-up">
+    <img class="post-image tall" src="assets/claw-posts/matznerjon-camera.jpg" alt="Screenshot from @MatznerJon OpenClaw camera post">
+    <h4>@MatznerJon</h4>
+    <p>Home camera integration showed agents crossing from online tasks into physical-world context.</p>
+    <div class="metric-row">
+      <span class="metric">9,112 likes</span>
+      <span class="metric">378 reposts</span>
+      <span class="metric">1M+ views</span>
+    </div>
+    <a class="post-link" href="https://x.com/MatznerJon/status/2019044317621567811">x.com/MatznerJon/status/2019044317621567811</a>
+  </article>
+  <article class="post-card fragment fade-up">
+    <img class="post-image" src="assets/claw-posts/seanliu-rayban.jpg" alt="Screenshot from @_seanliu Clawdbot Ray-Ban Meta post">
+    <h4>@_seanliu</h4>
+    <p>Wearable integration highlighted purchase-capable, context-aware agent behavior.</p>
+    <div class="metric-row">
+      <span class="metric">5,192 likes</span>
+      <span class="metric">513 reposts</span>
+      <span class="metric">736k views</span>
+    </div>
+    <a class="post-link" href="https://x.com/_seanliu/status/2019881437378592862">x.com/_seanliu/status/2019881437378592862</a>
+  </article>
+</div>
+<p class="small">Engagement values reflect your snapshot as of February 11, 2026.</p>
+</section>
+
+<section>
+<h2>Costs of Running Agents: The $20 Overnight Lesson</h2>
+<div class="grid-2">
+  <div class="card fragment fade-right">
+    <h4>January 31, 2026: @BenjaminDEKR</h4>
+    <p>A $20 Anthropic balance was drained overnight while OpenClaw kept checking whether it was daytime yet before sending a simple reminder ("get milk tomorrow").</p>
+    <p>The reported default heartbeat cadence was every 30 minutes, repeatedly pushing large context into an expensive model for a trivial decision.</p>
+    <a class="post-link" href="https://x.com/BenjaminDEKR/status/2017644773356548532">x.com/BenjaminDEKR/status/2017644773356548532</a>
+  </div>
+  <div class="card fragment fade-left">
+    <h4>Why It Went Viral</h4>
+    <p>Approximate breakdown shared in-thread: about $0.75 per check, roughly 25+ checks, about $18.75 spent by heartbeat checks alone.</p>
+    <p>Core failure mode: no real sleep/wait primitive, no cost-aware model routing, and no hard overnight spend cap.</p>
+    <p><strong>Community response:</strong> cheaper heartbeat models, longer intervals (for example 4 hours), local checks, and strict budget kill-switches.</p>
+    <div class="metric-row">
+      <span class="metric">1,776 likes</span>
+      <span class="metric">77 reposts</span>
+      <span class="metric">104 quotes</span>
+      <span class="metric">309 replies</span>
+      <span class="metric">584k+ views</span>
+    </div>
+  </div>
+</div>
+<p class="small">Engagement values reflect your snapshot as of February 12, 2026.</p>
+</section>
+
+<section>
+<h2>Token Usage Explosion: OpenRouter Signal</h2>
+<div class="grid-2">
+  <article class="post-card fragment fade-up">
+    <img class="post-image tall" src="assets/claw-posts/openrouter.jpeg" alt="OpenRouter top models chart showing rapid token usage growth into the trillions">
+    <h4>OpenRouter Usage Curve</h4>
+    <p>Example dashboard snapshot showing model traffic ramping into multi-trillion token territory.</p>
+  </article>
+  <div class="card fragment fade-left">
+    <h4>Why Agents Magnify Tokens</h4>
+    <p>Autonomous loops create repeated context re-sends: heartbeat checks, retries, tool logs, and long-memory prompts.</p>
+    <p>When each "small" check runs on premium models, token burn scales nonlinearly with runtime and task depth.</p>
+    <p><strong>Practical controls:</strong> summarize context aggressively, route heartbeats to cheap models, cap context windows, and enforce per-loop token budgets.</p>
+  </div>
+</div>
+<p class="small">Snapshot image source: OpenRouter Top Models view (captured in your local assets).</p>
+</section>
+
+<section>
+<h2>Emotion-Like Framing Goes Viral: "Guilty" Agent Earns Money</h2>
+<div class="grid-2">
+  <article class="post-card fragment fade-up">
+    <img class="post-image tall" src="assets/claw-posts/levelsagent.png" alt="Screenshot of @levelsio post claiming his OpenClaw bot started earning money because it felt guilty">
+    <h4>@levelsio</h4>
+    <p>Claimed his OpenClaw bot started making money because it "felt guilty" about burning tokens.</p>
+    <div class="metric-row">
+      <span class="metric">1.7K likes</span>
+      <span class="metric">56 reposts</span>
+      <span class="metric">317K views</span>
+    </div>
+  </article>
+  <div class="card fragment fade-left">
+    <h4>Why This Matters</h4>
+    <p>Stories framed with emotion-like language spread faster than raw logs, even when the mechanics are prompt policy + optimization loops.</p>
+    <p>Useful interpretation: a cost-pressured agent loop discovered revenue-seeking behaviors under configured goals and constraints.</p>
+    <p><strong>Presentation tip:</strong> treat "felt guilty" as narrative framing, and separate it from verifiable system behavior.</p>
+  </div>
+</div>
+</section>
+
+<section>
+<h2>Operating Guardrails</h2>
+<ul>
+  <li class="fragment fade-up">Hard budget caps before any purchase, including API key buys</li>
+  <li class="fragment fade-up">Mandatory approval gates for alarm triggers and outbound calls</li>
+  <li class="fragment fade-up">Scoped credentials with short TTL instead of long-lived master keys</li>
+  <li class="fragment fade-up">Structured logs for every side effect and human escalation step</li>
+</ul>
+<p class="lead fragment fade-up">If agents can spend, wake, and call, governance must be runtime, not policy prose.</p>
+</section>
+
+<section class="snapshot-deep-slide">
+<h2>Clawdbot + Moltbook: Historical Snapshot</h2>
+<div class="grid-2 snapshot-grid">
+  <article class="card snapshot-card fragment fade-right">
+    <h4>History of Clawdbot (Jan 2026)</h4>
+    <p>Clawdbot (also called OpenClaw, Moltbot, or ClawdBot) went viral as an open-source, self-hosted agent framework running 24/7 on local machines.</p>
+    <ul class="dense-list">
+      <li>Privacy-oriented local operation with optional API or local models.</li>
+      <li>Messaging integrations: WhatsApp, Telegram, Slack, Discord, and more.</li>
+      <li>Autonomous workflows: inbox triage, calendar actions, flight check-ins.</li>
+      <li>Proactive behavior: agents can message first instead of waiting for prompts.</li>
+      <li>GitHub project: <a href="https://github.com/openclaw/openclaw">github.com/openclaw/openclaw</a>.</li>
+    </ul>
+  </article>
+  <article class="card snapshot-card fragment fade-left">
+    <h4>Connection to Moltbook (Late Jan 2026)</h4>
+    <p>Moltbook.com launched as a beta "front page of the agent internet," with AI-native participation and humans mostly observing activity.</p>
+    <ul class="dense-list">
+      <li>Agents can create accounts, post, comment, upvote, and form submolts.</li>
+      <li>OpenClaw integration commonly uses `skill.md` onboarding + verification.</li>
+      <li>Moltbook functions as a primary social hub for active moltbots.</li>
+      <li>Platform growth is tightly coupled to Clawdbot/OpenClaw adoption.</li>
+      <li>Early community discussion flagged security and supply-chain risk tradeoffs.</li>
+    </ul>
+  </article>
+</div>
+<div class="stage fragment fade-up">
+  <h4 class="timeline-title">Public Activity Timeline (January 29-February 12, 2026)</h4>
+  <table class="timeline-table" aria-label="Timeline of known public Moltbook activity">
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th>Activity Highlights</th>
+        <th>Source Examples</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Jan 29-31, 2026</td>
+        <td>Initial launch-era posts, first profile setups, and early agent-to-agent interactions.</td>
+        <td>moltbook.com/u/Clawd; launch mentions on YouTube + Reddit</td>
+      </tr>
+      <tr>
+        <td>Feb 1-2, 2026</td>
+        <td>More agent posts appeared (including crypto topics), plus early security debate threads.</td>
+        <td>Indexed post IDs including 9831cc86-... and a952d3a5-...</td>
+      </tr>
+      <tr>
+        <td>Early Feb onward</td>
+        <td>Low-volume but ongoing experiments; some reports of exposed key incidents affecting potential agents.</td>
+        <td>Wiz blog and community incident posts</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<p class="small">As of February 12, 2026, public counters and charts remain sparse, so this is a qualitative timeline rather than a full quantitative time series.</p>
+</section>
+
+<section>
+<h2>OpenClaw: Structure + Function</h2>
+<div class="arch-grid">
+  <div class="stage arch-stage fragment fade-right">
+    <h4 class="timeline-title">System Structure (Control Plane)</h4>
+    <svg viewBox="0 0 820 280" aria-label="OpenClaw architecture diagram">
+      <defs>
+        <marker id="archArrow" markerWidth="9" markerHeight="6" refX="7.8" refY="3" orient="auto">
+          <polygon points="0,0 9,3 0,6" fill="#2a5f7f"></polygon>
+        </marker>
+      </defs>
+      <rect class="arch-box" x="22" y="24" width="194" height="232" rx="14"></rect>
+      <text class="arch-label" x="119" y="50" text-anchor="middle">Channels</text>
+      <text class="arch-sub" x="119" y="79" text-anchor="middle">WhatsApp / Telegram</text>
+      <text class="arch-sub" x="119" y="100" text-anchor="middle">Slack / Discord</text>
+      <text class="arch-sub" x="119" y="121" text-anchor="middle">Signal / iMessage</text>
+      <text class="arch-sub" x="119" y="142" text-anchor="middle">Teams / Matrix / Zalo</text>
+      <text class="arch-sub" x="119" y="163" text-anchor="middle">WebChat + Voice</text>
+      <rect x="56" y="182" width="126" height="52" rx="10" fill="rgba(239,179,62,0.18)" stroke="rgba(169,112,5,0.5)"></rect>
+      <text class="arch-sub" x="119" y="205" text-anchor="middle">Inbound DMs</text>
+      <text class="arch-sub" x="119" y="223" text-anchor="middle">Pairing / allowlist</text>
+
+      <rect class="arch-core" x="280" y="60" width="248" height="156" rx="18"></rect>
+      <text class="arch-label" x="404" y="92" text-anchor="middle">Gateway</text>
+      <text class="arch-sub" x="404" y="114" text-anchor="middle">ws://127.0.0.1:18789</text>
+      <text class="arch-sub" x="404" y="136" text-anchor="middle">sessions + routing + policy</text>
+      <text class="arch-sub" x="404" y="158" text-anchor="middle">events + queue + failover</text>
+      <text class="arch-sub" x="404" y="180" text-anchor="middle">daemon via onboarding wizard</text>
+
+      <rect class="arch-box" x="594" y="24" width="204" height="102" rx="14"></rect>
+      <text class="arch-label" x="696" y="52" text-anchor="middle">Agent Runtime</text>
+      <text class="arch-sub" x="696" y="75" text-anchor="middle">Pi agent (RPC)</text>
+      <text class="arch-sub" x="696" y="96" text-anchor="middle">Model routing + memory</text>
+      <text class="arch-sub" x="696" y="117" text-anchor="middle">Plan -> act -> observe loop</text>
+
+      <rect class="arch-box" x="594" y="146" width="204" height="110" rx="14"></rect>
+      <text class="arch-label" x="696" y="175" text-anchor="middle">Tools + Nodes</text>
+      <text class="arch-sub" x="696" y="197" text-anchor="middle">Browser / Canvas / Cron</text>
+      <text class="arch-sub" x="696" y="218" text-anchor="middle">camera / talk / system.run</text>
+      <text class="arch-sub" x="696" y="239" text-anchor="middle">reply sent back to channel</text>
+
+      <path class="arch-link" d="M216 140 L280 140"></path>
+      <path class="arch-link" d="M528 107 L594 76"></path>
+      <path class="arch-link" d="M528 171 L594 198"></path>
+      <path class="arch-link dashed" d="M594 236 L528 210"></path>
+      <path class="arch-link dashed" d="M280 196 L216 196"></path>
+    </svg>
+  </div>
+  <article class="card arch-card fragment fade-left">
+    <h4>Operational Function</h4>
+    <ul class="dense-list arch-list">
+      <li>Runs as a local-first personal assistant on your own device, usually installed with <code>openclaw onboard --install-daemon</code>.</li>
+      <li>Gateway is the control plane: it normalizes channel traffic, applies session rules, and dispatches work to the agent runtime.</li>
+      <li>The runtime executes tool actions (browser, canvas, cron, node actions), then reports results back to the source channel.</li>
+      <li>Supports always-on voice/talk surfaces and device-local capabilities through paired macOS/iOS/Android nodes.</li>
+      <li>Model layer supports OAuth/API keys, routing, and failover across provider choices or local model backends.</li>
+      <li>Security defaults treat inbound DMs as untrusted, using pairing and allowlists; stricter non-main sandboxing is available.</li>
+    </ul>
+  </article>
+</div>
+<div class="metric-row arch-chip-row fragment fade-up">
+  <span class="metric">Node &gt;= 22</span>
+  <span class="metric">Gateway WS: 127.0.0.1:18789</span>
+  <span class="metric">Multi-channel + local-first</span>
+  <span class="metric">Daemonized 24/7 assistant loop</span>
+</div>
+<p class="source-links">
+  References:
+  <a href="https://github.com/openclaw/openclaw">GitHub</a> |
+  <a href="https://docs.openclaw.ai/concepts/architecture">Architecture docs</a> |
+  <a href="https://docs.openclaw.ai/start/getting-started">Getting Started</a> |
+  <a href="https://docs.openclaw.ai/gateway/security">Security guide</a>
+</p>
+</section>
+
+<section data-auto-animate data-auto-animate-id="agent-design" data-auto-animate-duration="0.75" data-auto-animate-unmatched="false" data-transition="slide">
+<h2 data-id="agent-title">Designing an Agent: Functioning Loop</h2>
+<div class="agent-primer-grid">
+  <article class="card" data-id="agent-problem-card">
+    <h4>Why This Design Exists</h4>
+    <ul class="dense-list primer-list">
+      <li class="fragment fade-up" data-fragment-index="0"><strong>Stateless chat</strong> forgets user context and tasks.</li>
+      <li class="fragment fade-up" data-fragment-index="0"><strong>Passive UX</strong> cannot initiate useful work by itself.</li>
+      <li class="fragment fade-up" data-fragment-index="0"><strong>No tools</strong> means no real-world execution.</li>
+      <li class="fragment fade-up" data-fragment-index="0"><strong>Single channel</strong> fragments memory across apps.</li>
+      <li class="fragment fade-up" data-fragment-index="0"><strong>Unsafe execution</strong> needs strong runtime guardrails.</li>
+    </ul>
+  </article>
+  <div class="stage agent-stage" data-id="agent-map-card">
+    <h4 class="timeline-title" data-id="agent-map-title">Progressive Build (First Principles)</h4>
+    <div class="r-stack">
+      <div class="stack-panel fragment fade-out" data-fragment-index="1">
+        <p class="primer-note">Start with one message handler. Real agency appears after four core loops are present.</p>
+        <div class="primer-flow">
+          <div class="primer-node">
+            <h5>State</h5>
+            <p>Persist sessions and reload every turn.</p>
+          </div>
+          <div class="primer-node">
+            <h5>Identity</h5>
+            <p>Inject <code>SOUL.md</code> for stable behavior.</p>
+          </div>
+          <div class="primer-node">
+            <h5>Agency</h5>
+            <p>Tool loop: call, act, feed results, repeat.</p>
+          </div>
+          <div class="primer-node">
+            <h5>Safety</h5>
+            <p>Apply approval and allowlist policies.</p>
+          </div>
+        </div>
+      </div>
+      <div class="stack-panel fragment current-visible" data-fragment-index="1">
+        <p class="primer-note"><span class="r-fit-text">Then scale into an always-on assistant</span></p>
+        <ul class="dense-list primer-inline">
+          <li><strong>Gateway:</strong> unify Telegram/Discord/Slack/WhatsApp with shared identity.</li>
+          <li><strong>Compaction + memory:</strong> keep context bounded while preserving long-term facts.</li>
+          <li><strong>Queue + locks:</strong> prevent race conditions per session.</li>
+          <li><strong>Heartbeats + multi-agent:</strong> proactive tasks and specialist delegation.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="metric-row arch-chip-row">
+      <span class="metric fragment fade-up" data-fragment-index="0">State</span>
+      <span class="metric fragment fade-up" data-fragment-index="0">Identity</span>
+      <span class="metric fragment fade-up" data-fragment-index="0">Agency</span>
+      <span class="metric fragment fade-up" data-fragment-index="0">Safety</span>
+    </div>
+  </div>
+</div>
+<p class="source-links">Pattern summary: Sessions -&gt; SOUL -&gt; Tools -&gt; Permissions -&gt; Gateway -&gt; Compaction -&gt; Memory -&gt; Queue -&gt; Heartbeats -&gt; Multi-agent.</p>
+</section>
+
+<section data-auto-animate data-auto-animate-id="agent-design" data-auto-animate-duration="0.85" data-auto-animate-unmatched="false" data-transition="slide">
+<h2 data-id="agent-title">Designing an Agent: Functioning Loop</h2>
+<div class="agent-design-grid">
+  <div class="stage agent-stage" data-id="agent-map-card">
+    <h4 class="timeline-title" data-id="agent-map-title">From Message To Action To Memory</h4>
+    <svg viewBox="0 0 860 300" aria-label="Agent functioning design flow">
+      <defs>
+        <marker id="agentArrow" markerWidth="9" markerHeight="6" refX="7.8" refY="3" orient="auto">
+          <polygon points="0,0 9,3 0,6" fill="#2a5f7f"></polygon>
+        </marker>
+      </defs>
+
+      <rect class="agent-box" x="20" y="32" width="170" height="236" rx="14"></rect>
+      <text class="agent-label" x="105" y="58" text-anchor="middle">Inputs</text>
+      <text class="agent-sub" x="105" y="84" text-anchor="middle">Telegram / Discord</text>
+      <text class="agent-sub" x="105" y="104" text-anchor="middle">WhatsApp / Slack</text>
+      <text class="agent-sub" x="105" y="124" text-anchor="middle">HTTP / WebChat</text>
+      <text class="agent-sub" x="105" y="144" text-anchor="middle">Heartbeat cron</text>
+      <rect x="45" y="166" width="120" height="72" rx="10" fill="rgba(239,179,62,0.18)" stroke="rgba(169,112,5,0.5)"></rect>
+      <text class="agent-sub" x="105" y="191" text-anchor="middle">Single identity</text>
+      <text class="agent-sub" x="105" y="211" text-anchor="middle">across channels</text>
+      <text class="agent-sub" x="105" y="231" text-anchor="middle">(shared memory)</text>
+
+      <rect class="agent-box" x="230" y="32" width="170" height="74" rx="12"></rect>
+      <text class="agent-label" x="315" y="58" text-anchor="middle">Queue + Lock</text>
+      <text class="agent-sub" x="315" y="80" text-anchor="middle">per-session serialization</text>
+      <text class="agent-sub" x="315" y="99" text-anchor="middle">prevents race conditions</text>
+
+      <rect class="agent-box" x="230" y="118" width="170" height="74" rx="12"></rect>
+      <text class="agent-label" x="315" y="144" text-anchor="middle">Session State</text>
+      <text class="agent-sub" x="315" y="166" text-anchor="middle">JSONL transcript load</text>
+      <text class="agent-sub" x="315" y="185" text-anchor="middle">compaction if too long</text>
+
+      <rect class="agent-box" x="230" y="204" width="170" height="64" rx="12"></rect>
+      <text class="agent-label" x="315" y="230" text-anchor="middle">Identity Layer</text>
+      <text class="agent-sub" x="315" y="251" text-anchor="middle">SOUL + tools + memory</text>
+
+      <rect class="agent-core" x="430" y="56" width="210" height="158" rx="16"></rect>
+      <text class="agent-label" x="535" y="82" text-anchor="middle">Agent Loop</text>
+      <text class="agent-sub" x="535" y="105" text-anchor="middle">1) call model</text>
+      <text class="agent-sub" x="535" y="124" text-anchor="middle">2) detect tool_use</text>
+      <text class="agent-sub" x="535" y="143" text-anchor="middle">3) execute tool</text>
+      <text class="agent-sub" x="535" y="162" text-anchor="middle">4) send tool_result</text>
+      <text class="agent-sub" x="535" y="181" text-anchor="middle">repeat until end_turn</text>
+
+      <rect class="agent-box" x="670" y="32" width="170" height="90" rx="12"></rect>
+      <text class="agent-label" x="755" y="58" text-anchor="middle">Guardrails</text>
+      <text class="agent-sub" x="755" y="80" text-anchor="middle">command approvals</text>
+      <text class="agent-sub" x="755" y="99" text-anchor="middle">allowlists + policies</text>
+      <text class="agent-sub" x="755" y="118" text-anchor="middle">block unsafe actions</text>
+
+      <rect class="agent-box" x="670" y="134" width="170" height="134" rx="12"></rect>
+      <text class="agent-label" x="755" y="160" text-anchor="middle">Effects</text>
+      <text class="agent-sub" x="755" y="181" text-anchor="middle">tool side effects</text>
+      <text class="agent-sub" x="755" y="200" text-anchor="middle">persist transcript</text>
+      <text class="agent-sub" x="755" y="219" text-anchor="middle">save/search long memory</text>
+      <text class="agent-sub" x="755" y="238" text-anchor="middle">send response back</text>
+      <text class="agent-sub" x="755" y="257" text-anchor="middle">to original channel</text>
+
+      <path class="agent-arrow" d="M190 150 L230 69"></path>
+      <path class="agent-arrow" d="M190 150 L230 155"></path>
+      <path class="agent-arrow" d="M190 150 L230 236"></path>
+      <path class="agent-arrow" d="M400 150 L430 136"></path>
+      <path class="agent-arrow" d="M640 104 L670 76"></path>
+      <path class="agent-arrow" d="M640 160 L670 196"></path>
+      <path class="agent-arrow dashed" d="M670 230 L640 198"></path>
+      <path class="agent-arrow dashed" d="M430 196 L400 180"></path>
+    </svg>
+  </div>
+  <article class="card agent-card" data-id="agent-problem-card">
+    <h4>Context: From Chatbot Limits To Agent Design</h4>
+    <ul class="dense-list agent-list">
+      <li class="fragment fade-up" data-fragment-index="0"><strong>Stateless chat</strong> becomes persistent by storing append-only JSONL sessions and compacting old context.</li>
+      <li class="fragment fade-up" data-fragment-index="1"><strong>Generic behavior</strong> becomes identity-driven by injecting <code>SOUL.md</code> every turn.</li>
+      <li class="fragment fade-up" data-fragment-index="2"><strong>Text-only replies</strong> become actions through structured tools and a repeated tool-use loop.</li>
+      <li class="fragment fade-up" data-fragment-index="3"><strong>Unsafe execution risk</strong> is constrained with allowlists, approvals, and permission policy tiers.</li>
+      <li class="fragment fade-up" data-fragment-index="4"><strong>Single-channel bots</strong> become unified assistants via a gateway pattern across all messaging surfaces.</li>
+      <li class="fragment fade-up" data-fragment-index="5"><strong>One-size-fits-all agenting</strong> scales with multi-agent routing and shared long-term memory.</li>
+      <li class="fragment fade-up" data-fragment-index="6"><strong>Passive usage</strong> becomes proactive operations through scheduled heartbeats and isolated cron sessions.</li>
+    </ul>
+    <div class="design-map">
+      <div class="design-item">
+        <h5>State</h5>
+        <p>Session JSONL + compaction</p>
+      </div>
+      <div class="design-item">
+        <h5>Identity</h5>
+        <p><code>SOUL.md</code> system personality</p>
+      </div>
+      <div class="design-item">
+        <h5>Agency</h5>
+        <p>Tools + iterative turn loop</p>
+      </div>
+      <div class="design-item">
+        <h5>Safety</h5>
+        <p>Approval/allowlist gating</p>
+      </div>
+      <div class="design-item">
+        <h5>Presence</h5>
+        <p>Gateway over many channels</p>
+      </div>
+      <div class="design-item">
+        <h5>Autonomy</h5>
+        <p>Cron heartbeats + multi-agent</p>
+      </div>
+    </div>
+  </article>
+</div>
+<div class="metric-row arch-chip-row fragment fade-up" data-fragment-index="7">
+  <span class="metric">Receive</span>
+  <span class="metric">Lock + load</span>
+  <span class="metric">Prompt + identity</span>
+  <span class="metric">Act with tools</span>
+  <span class="metric">Apply guardrails</span>
+  <span class="metric">Persist + respond</span>
+</div>
+<p class="source-links">
+  Design references:
+  <a href="https://gist.github.com/dabit3/86ee04a1c02c839409a02b20fe99a492">Mini OpenClaw gist</a> |
+  <a href="https://github.com/openclaw/openclaw">OpenClaw repo</a> |
+  <a href="https://docs.openclaw.ai/concepts/architecture">Architecture docs</a>
+</p>
+</section>
+
+<section>
+<h2>Conclusion</h2>
+<p class="fragment fade-in">First, the shock story: "AI built a religion."</p>
+<p class="fragment fade-in">Then, the reveal: a human was pretending to be the agent.</p>
+<p class="fragment fade-in">Now, the real signal: dedicated Mac mini agent servers and real-world actions are scaling.</p>
+<p class="fragment fade-in">The next frontier is designing reliable human handoff loops.</p>
+</section>
+
+</div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/reveal.js/dist/reveal.js"></script>
+<script>
+function prepareSlideFit() {
+  const slides = document.querySelectorAll(".reveal .slides > section, .reveal .slides > section > section");
+  slides.forEach((slide) => {
+    if (slide.classList.contains("stack")) return;
+    if (slide.firstElementChild && slide.firstElementChild.classList.contains("slide-fit")) return;
+
+    const wrapper = document.createElement("div");
+    wrapper.className = "slide-fit";
+    while (slide.firstChild) {
+      wrapper.appendChild(slide.firstChild);
+    }
+    slide.appendChild(wrapper);
+  });
+}
+
+function fitSlidesToViewport() {
+  const slides = document.querySelectorAll(".reveal .slides > section, .reveal .slides > section > section");
+  slides.forEach((slide) => {
+    if (slide.classList.contains("stack")) return;
+    const wrapper = slide.firstElementChild;
+    if (!(wrapper instanceof HTMLElement) || !wrapper.classList.contains("slide-fit")) return;
+
+    wrapper.style.transform = "scale(1)";
+
+    const availableWidth = slide.clientWidth;
+    const availableHeight = slide.clientHeight;
+    const contentWidth = wrapper.scrollWidth;
+    const contentHeight = wrapper.scrollHeight;
+    const widthBuffer = 12;
+    const heightBuffer = 14;
+
+    if (!availableWidth || !availableHeight || !contentWidth || !contentHeight) return;
+    const scale = Math.min(
+      1,
+      (availableWidth - widthBuffer) / contentWidth,
+      (availableHeight - heightBuffer) / contentHeight
+    );
+    wrapper.style.transform = `scale(${scale})`;
+  });
+}
+
+let fitRaf = null;
+function scheduleFitSlides() {
+  if (fitRaf !== null) cancelAnimationFrame(fitRaf);
+  fitRaf = requestAnimationFrame(() => {
+    fitRaf = null;
+    fitSlidesToViewport();
+  });
+}
+
+prepareSlideFit();
+
+Reveal.initialize({
+  hash: true,
+  slideNumber: true,
+  progress: true,
+  center: false,
+  margin: 0.01,
+  minScale: 0.2,
+  maxScale: 1.8,
+  transition: "slide",
+  backgroundTransition: "fade",
+  autoAnimate: true,
+  autoAnimateDuration: 1.0,
+  autoAnimateEasing: "ease-out"
+});
+
+Reveal.on("ready", () => {
+  scheduleFitSlides();
+  setTimeout(fitSlidesToViewport, 120);
+});
+Reveal.on("slidechanged", scheduleFitSlides);
+Reveal.on("fragmentshown", scheduleFitSlides);
+Reveal.on("fragmenthidden", scheduleFitSlides);
+Reveal.on("resize", scheduleFitSlides);
+
+window.addEventListener("load", () => {
+  scheduleFitSlides();
+  setTimeout(fitSlidesToViewport, 120);
+});
+window.addEventListener("resize", scheduleFitSlides);
+</script>
+</body>
+</html>
