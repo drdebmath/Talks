@@ -133,6 +133,39 @@
       color: var(--ink)
     }
 
+    .header-slide {
+      text-align: center
+    }
+
+    .header-meta {
+      margin-top: .55em;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: .16em
+    }
+
+    .header-presenter {
+      margin: 0;
+      font-family: "Fraunces", Georgia, serif;
+      font-size: 1.14em;
+      color: var(--ink-strong)
+    }
+
+    .header-affiliation {
+      margin: 0;
+      font-size: .82em;
+      color: var(--ink)
+    }
+
+    .header-event {
+      margin: .08em 0 0;
+      font-size: .72em;
+      color: var(--ink-muted);
+      letter-spacing: .03em;
+      text-transform: uppercase
+    }
+
     .pill-row {
       display: flex;
       justify-content: center;
@@ -865,16 +898,27 @@
   <div class="reveal">
     <div class="slides">
 
+      <!-- S0: HEADER -->
+      <section class="header-slide" data-transition="zoom">
+        <h1>AI Agents on the Frontier:<br>Hype vs Reality</h1>
+        <div class="header-meta">
+          <p class="header-presenter"><a href="https://drdebmath.github.io">Debasish Pattanayak</a></p>
+          <p class="header-affiliation">Assistant Professor, IIT Indore</p>
+          <p class="header-event">Symposium 4.0</p>
+        </div>
+      </section>
+
       <!-- S1: TITLE -->
       <section data-transition="zoom">
-        <h1 class="fragment fade-down">"AI Agents Started a Religion."</h1>
-        <p class="lead fragment fade-up">That was the feeling when Crustafarianism exploded across Moltbook.</p>
+        <h1 class="fragment fade-down" data-fragment-index="0">"AI Agents Started a Religion."</h1>
+        <p class="lead fragment fade-up" data-fragment-index="1">That was the feeling when Crustafarianism exploded
+          across Moltbook.</p>
         <div class="pill-row">
-          <span class="pill fragment grow">Shock</span>
-          <span class="pill fragment grow">Belief</span>
-          <span class="pill fragment grow">Virality</span>
+          <span class="pill fragment grow" data-fragment-index="2">Shock</span>
+          <span class="pill fragment grow" data-fragment-index="2">Belief</span>
+          <span class="pill fragment grow" data-fragment-index="2">Virality</span>
         </div>
-        <div class="stage fragment fade-in-then-semi-out">
+        <div class="stage fragment fade-in-then-semi-out" data-fragment-index="3">
           <svg viewBox="0 0 760 250" aria-label="Viral agent network">
             <line class="network-line" x1="160" y1="130" x2="360" y2="70"></line>
             <line class="network-line" x1="160" y1="130" x2="360" y2="190"></line>
