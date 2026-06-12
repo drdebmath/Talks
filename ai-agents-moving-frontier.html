@@ -1,0 +1,2525 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>AI Agents: The Moving Frontier — Mathematics Seminar Edition</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js/dist/reveal.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=STIX+Two+Text:ital,wght@0,400;0,600;0,700;1,400;1,600&family=IBM+Plex+Mono:wght@400;500;600&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --bg: #101912;
+      --bg-deep: #0a110c;
+      --ink: #f0ecdd;
+      --ink-strong: #fbfaf4;
+      --ink-muted: #c2c9b8;
+      --chalk: rgba(240, 236, 221, .18);
+      --chalk-soft: rgba(240, 236, 221, .095);
+      --yellow: #f2cc60;
+      --yellow-dim: rgba(242, 204, 96, .16);
+      --blue: #8fd0c6;
+      --blue-dim: rgba(143, 208, 198, .14);
+      --red: #e8836f;
+      --red-dim: rgba(232, 131, 111, .12);
+      --panel: rgba(251, 250, 244, .04);
+      --panel-strong: rgba(251, 250, 244, .075);
+      --serif: "STIX Two Text", "STIX Two Math", Georgia, serif;
+      --display: "Instrument Serif", Georgia, serif;
+      --mono: "IBM Plex Mono", ui-monospace, monospace;
+    }
+
+    :root {
+      --board: radial-gradient(ellipse 90% 70% at 50% 0%, rgba(231, 228, 216, .045) 0%, transparent 55%),
+        radial-gradient(ellipse 60% 50% at 88% 96%, rgba(242, 204, 96, .05) 0%, transparent 60%),
+        radial-gradient(ellipse 55% 50% at 8% 90%, rgba(143, 208, 198, .04) 0%, transparent 60%),
+        var(--bg);
+    }
+
+    html {
+      background: var(--bg);
+    }
+
+    body,
+    .reveal-viewport {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--board) !important;
+      color: var(--ink);
+    }
+
+    /* chalk dust / film-grain texture */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      opacity: .24;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .05 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+
+    /* faint graph-paper rule */
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      opacity: .48;
+      background-image:
+        linear-gradient(rgba(231, 228, 216, .025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(231, 228, 216, .025) 1px, transparent 1px);
+      background-size: 56px 56px;
+    }
+
+    .board-frame {
+      position: fixed;
+      inset: 14px;
+      pointer-events: none;
+      z-index: 2;
+      border: 1px solid var(--chalk-soft);
+    }
+
+    .board-frame::before {
+      content: "";
+      position: absolute;
+      inset: 5px;
+      border: 1px solid rgba(231, 228, 216, .045);
+    }
+
+    .chrome {
+      position: fixed;
+      left: 34px;
+      right: 34px;
+      bottom: 22px;
+      z-index: 3;
+      pointer-events: none;
+      display: flex;
+      justify-content: space-between;
+      font-family: var(--mono);
+      font-size: 13px;
+      letter-spacing: .12em;
+      color: var(--ink-muted);
+      opacity: .75;
+      text-transform: uppercase;
+    }
+
+    .reveal {
+      position: relative;
+      z-index: 1;
+      font-family: var(--serif);
+      color: var(--ink);
+      font-size: clamp(40px, 1.2vw + 33px, 56px);
+    }
+
+    .reveal .progress {
+      color: var(--yellow);
+      height: 3px;
+    }
+
+    .reveal .slide-number {
+      background: transparent;
+      font-family: var(--mono);
+      font-size: 15px;
+      color: var(--ink-muted);
+      right: 34px;
+      bottom: 40px;
+    }
+
+    .reveal h1,
+    .reveal h2,
+    .reveal h3 {
+      font-family: var(--display);
+      font-weight: 400;
+      color: var(--ink-strong);
+      text-wrap: balance;
+      line-height: 1.06;
+      letter-spacing: .005em;
+      margin: 0 0 .3em;
+      text-shadow: 0 2px 24px rgba(0, 0, 0, .5);
+    }
+
+    .reveal h1 {
+      font-size: 2.05em;
+      max-width: 94%;
+      margin-inline: auto;
+    }
+
+    .reveal h2 {
+      font-size: 1.42em;
+    }
+
+    .reveal h3 {
+      font-size: 1.12em;
+    }
+
+    .reveal em {
+      font-style: italic;
+    }
+
+    .reveal section {
+      padding: .35em 1em;
+      box-sizing: border-box;
+      width: 100% !important;
+      height: 100% !important;
+    }
+
+    .reveal .slides section.present {
+      display: flex !important;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .slide-fit {
+      width: min(100%, 1760px);
+      min-height: min(850px, calc(100vh - 180px));
+      margin: 0 auto;
+      transform-origin: center center;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .reveal a {
+      color: var(--blue);
+      text-decoration-color: rgba(143, 208, 198, .4);
+      text-decoration-thickness: 1px;
+      text-underline-offset: .14em;
+      transition: color .2s;
+    }
+
+    .reveal a:hover {
+      color: #b6e6de;
+    }
+
+    /* ---- kicker + chalk underline ---- */
+    .kicker {
+      display: block;
+      font-family: var(--mono);
+      font-size: .42em;
+      font-weight: 500;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: var(--yellow);
+      margin: 0 0 .9em;
+    }
+
+    .kicker .sec-no {
+      color: var(--ink-muted);
+      margin-right: 1em;
+    }
+
+    .headline {
+      text-align: center;
+      margin-bottom: .45em;
+      flex-shrink: 0;
+    }
+
+    .headline h2 {
+      display: inline-block;
+      position: relative;
+      padding-bottom: .14em;
+      margin-bottom: 0;
+    }
+
+    .headline h2::after {
+      content: "";
+      position: absolute;
+      left: 6%;
+      right: 6%;
+      bottom: 0;
+      height: 3px;
+      border-radius: 2px;
+      background: linear-gradient(90deg, transparent, rgba(242, 204, 96, .75) 12%, rgba(242, 204, 96, .75) 88%, transparent);
+      transform: rotate(-.35deg);
+    }
+
+    .small {
+      font-size: .52em;
+      font-family: var(--mono);
+      color: var(--ink-muted);
+    }
+
+    .lead {
+      font-size: .72em;
+      line-height: 1.45;
+      max-width: 86%;
+      margin: .45em auto 0;
+      color: var(--ink);
+      text-align: center;
+    }
+
+    .lead strong {
+      color: var(--yellow);
+      font-weight: 600;
+    }
+
+    /* ---- cold open ---- */
+    .cold-open .slide-fit {
+      gap: .55em;
+    }
+
+    .cold-open .kicker {
+      text-align: center;
+      margin-bottom: .2em;
+    }
+
+    .cold-rows {
+      display: grid;
+      grid-template-rows: repeat(3, minmax(0, 1fr));
+      gap: .36em;
+      width: min(100%, 1640px);
+      min-height: clamp(470px, 54vh, 610px);
+      margin: 0 auto;
+    }
+
+    .cold-row {
+      background: linear-gradient(170deg, var(--panel-strong), var(--panel));
+      border: 1px solid var(--chalk-soft);
+      border-left: 4px solid var(--blue);
+      border-radius: 3px;
+      margin: 0;
+      padding: .48em .7em;
+      text-align: left;
+      display: grid;
+      grid-template-columns: 8.5em 1fr;
+      align-items: center;
+      gap: .8em;
+      box-shadow: 0 12px 36px rgba(0, 0, 0, .32);
+    }
+
+    .cold-row.gold {
+      border-left-color: var(--yellow);
+      background: linear-gradient(170deg, rgba(242, 204, 96, .08), var(--panel));
+    }
+
+    .cold-row .tag {
+      font-family: var(--mono);
+      font-size: .42em;
+      font-weight: 600;
+      letter-spacing: .18em;
+      line-height: 1.25;
+      text-transform: uppercase;
+      color: var(--blue);
+    }
+
+    .cold-row.gold .tag {
+      color: var(--yellow);
+    }
+
+    .cold-row .claim {
+      font-size: .92em;
+      line-height: 1.18;
+      color: var(--ink-strong);
+    }
+
+    .cold-row .claim strong {
+      color: var(--yellow);
+      font-weight: 700;
+    }
+
+    .cold-open .lead {
+      font-size: .82em;
+      margin-top: .15em;
+    }
+
+    .cold-open .source-links {
+      margin-top: .25em;
+    }
+
+    /* ---- theorem-style environments ---- */
+    .env {
+      background: var(--panel);
+      border: 1px solid var(--chalk-soft);
+      border-left: 3px solid var(--blue);
+      border-radius: 2px;
+      padding: .55em .8em;
+      text-align: left;
+      margin: .3em auto 0;
+      max-width: 92%;
+      box-shadow: 0 12px 36px rgba(0, 0, 0, .35);
+    }
+
+    .env .env-label {
+      display: block;
+      font-family: var(--mono);
+      font-size: .45em;
+      font-weight: 600;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--blue);
+      margin-bottom: .55em;
+    }
+
+    .env p {
+      margin: 0;
+      font-size: .68em;
+      line-height: 1.38;
+      color: var(--ink);
+    }
+
+    .env.thm {
+      border-left-color: var(--yellow);
+    }
+
+    .env.thm .env-label {
+      color: var(--yellow);
+    }
+
+    .env.thm p {
+      font-style: italic;
+      color: var(--ink-strong);
+    }
+
+    .env.thm p strong,
+    .env.thm p .rm {
+      font-style: normal;
+    }
+
+    .env.warn {
+      border-left-color: var(--red);
+    }
+
+    .env.warn .env-label {
+      color: var(--red);
+    }
+
+    .env.rmk {
+      border-left-color: var(--ink-muted);
+    }
+
+    .env.rmk .env-label {
+      color: var(--ink-muted);
+    }
+
+    .env.rmk p {
+      font-size: .6em;
+      color: var(--ink);
+    }
+
+    /* ---- title page ---- */
+    .titlepage {
+      text-align: center;
+    }
+
+    .titlepage .series {
+      font-family: var(--mono);
+      font-size: .46em;
+      letter-spacing: .26em;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      margin: 0 0 1.6em;
+    }
+
+    .titlepage h1 {
+      font-size: 2.28em;
+    }
+
+    .titlepage .rule {
+      width: 5.2em;
+      height: 1px;
+      background: var(--chalk);
+      margin: 1.1em auto;
+      position: relative;
+    }
+
+    .titlepage .rule::after {
+      content: "✦";
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -52%);
+      font-size: .42em;
+      color: var(--yellow);
+      background: var(--bg);
+      padding: 0 .8em;
+    }
+
+    .titlepage .author {
+      margin: 0;
+      font-family: var(--display);
+      font-size: 1em;
+      color: var(--ink-strong);
+    }
+
+    .titlepage .affil {
+      margin: .25em 0 0;
+      font-size: .62em;
+      color: var(--ink);
+    }
+
+    .titlepage .event {
+      margin: .9em 0 0;
+      font-family: var(--mono);
+      font-size: .42em;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+    }
+
+    /* ---- contents ---- */
+    .toc {
+      margin: .2em auto 0;
+      max-width: 86%;
+      text-align: left;
+    }
+
+    .toc-row {
+      display: grid;
+      grid-template-columns: 2.4em 1fr auto;
+      align-items: baseline;
+      gap: .6em;
+      padding: .48em .2em;
+      border-bottom: 1px dashed var(--chalk-soft);
+    }
+
+    .toc-row:last-child {
+      border-bottom: 0;
+    }
+
+    .toc-row .no {
+      font-family: var(--mono);
+      font-size: .5em;
+      color: var(--yellow);
+    }
+
+    .toc-row .ttl {
+      font-family: var(--display);
+      font-size: .9em;
+      color: var(--ink-strong);
+    }
+
+    .toc-row .sub {
+      font-family: var(--mono);
+      font-size: .44em;
+      letter-spacing: .06em;
+      color: var(--ink-muted);
+    }
+
+    /* ---- section dividers ---- */
+    .divider {
+      text-align: center;
+    }
+
+    .divider .secno {
+      font-family: var(--display);
+      font-style: italic;
+      font-size: 4.75em;
+      line-height: 1;
+      color: var(--yellow);
+      display: block;
+      text-shadow: 0 0 60px rgba(242, 204, 96, .25);
+    }
+
+    .divider h2 {
+      font-size: 2.15em;
+      margin: .18em 0 0;
+    }
+
+    .divider .sub {
+      margin: .5em auto 0;
+      font-size: .72em;
+      font-style: italic;
+      color: var(--ink-muted);
+      max-width: 80%;
+      line-height: 1.4;
+    }
+
+    .quote-slide blockquote {
+      margin: 0 auto;
+      max-width: 86%;
+      border: 0;
+      background: transparent;
+      font-family: var(--display);
+      font-style: italic;
+      font-size: 1.95em;
+      line-height: 1.25;
+      color: var(--ink-strong);
+      text-align: center;
+      box-shadow: none;
+    }
+
+    .quote-slide blockquote .hl {
+      color: var(--yellow);
+    }
+
+    /* ---- panels (cards) ---- */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: .9em;
+      align-items: stretch;
+      width: 100%;
+      min-height: clamp(390px, 48vh, 540px);
+    }
+
+    .panel {
+      background: linear-gradient(170deg, var(--panel-strong), var(--panel));
+      border: 1px solid var(--chalk-soft);
+      border-radius: 3px;
+      padding: .74em .9em;
+      text-align: left;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, .3);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      position: relative;
+      min-height: 0;
+    }
+
+    .panel::before {
+      content: "";
+      position: absolute;
+      top: -1px;
+      left: .85em;
+      width: 2.2em;
+      height: 2px;
+      background: rgba(143, 208, 198, .55);
+    }
+
+    .panel.gold::before {
+      background: rgba(242, 204, 96, .65);
+    }
+
+    .panel h4 {
+      margin: 0 0 .4em;
+      font-family: var(--mono);
+      font-weight: 600;
+      font-size: .5em;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--blue);
+    }
+
+    .panel.gold h4 {
+      color: var(--yellow);
+    }
+
+    .panel p {
+      margin: 0;
+      font-size: .63em;
+      line-height: 1.35;
+      color: var(--ink);
+    }
+
+    .panel p strong {
+      color: var(--ink-strong);
+      font-weight: 600;
+    }
+
+    .panel p .acc {
+      color: var(--yellow);
+      font-weight: 600;
+    }
+
+    .reveal ul.dense-list {
+      margin: 0;
+      max-width: none;
+      padding-left: 1.05em;
+      font-size: .57em;
+      line-height: 1.32;
+    }
+
+    .reveal ul.dense-list li {
+      margin: .22em 0;
+    }
+
+    .reveal ul {
+      margin: .34em auto 0;
+      max-width: 92%;
+      text-align: left;
+      font-size: .68em;
+      line-height: 1.34;
+    }
+
+    .reveal ul li {
+      margin: .3em 0;
+    }
+
+    .reveal ul li::marker {
+      color: var(--yellow);
+    }
+
+    .reveal li strong {
+      color: var(--ink-strong);
+    }
+
+    /* ---- figure stage + svg ---- */
+    .stage {
+      background: linear-gradient(168deg, rgba(13, 19, 15, .9), rgba(19, 27, 22, .55));
+      border: 1px solid var(--chalk-soft);
+      border-radius: 4px;
+      padding: .5em;
+      margin: .34em auto 0;
+      box-shadow: inset 0 1px 0 rgba(251, 250, 244, .03), 0 12px 30px rgba(0, 0, 0, .3);
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .fig-cap {
+      margin: .35em 0 0;
+      font-family: var(--mono);
+      font-size: .36em;
+      letter-spacing: .08em;
+      color: var(--ink-muted);
+      text-align: center;
+    }
+
+    svg {
+      width: 100%;
+      height: auto;
+      max-height: min(390px, 45vh);
+    }
+
+    .figure-image {
+      display: block;
+      width: 100%;
+      height: clamp(380px, 50vh, 540px);
+      object-fit: contain;
+      object-position: center;
+      background: #f9f8f2;
+      border: 1px solid rgba(231, 228, 216, .2);
+      border-radius: 3px;
+    }
+
+    .unit-distance-figure {
+      background: linear-gradient(168deg, rgba(251, 250, 244, .08), rgba(13, 19, 15, .72));
+    }
+
+    svg text {
+      font-family: var(--mono);
+    }
+
+    .label {
+      font-size: 16px;
+      fill: var(--ink-strong);
+      font-weight: 600;
+    }
+
+    .sub-label {
+      font-size: 14px;
+      fill: var(--ink);
+    }
+
+    .mut-label {
+      font-size: 13px;
+      fill: var(--ink-muted);
+    }
+
+    .chalk-box {
+      fill: rgba(251, 250, 244, .03);
+      stroke: rgba(231, 228, 216, .35);
+      stroke-width: 1.6;
+    }
+
+    .chalk-box.blue {
+      stroke: rgba(143, 208, 198, .7);
+      fill: rgba(143, 208, 198, .06);
+    }
+
+    .chalk-box.gold {
+      stroke: rgba(242, 204, 96, .75);
+      fill: rgba(242, 204, 96, .07);
+    }
+
+    .chalk-box.red {
+      stroke: rgba(232, 131, 111, .65);
+      fill: rgba(232, 131, 111, .05);
+    }
+
+    .chalk-arrow {
+      stroke: rgba(242, 204, 96, .8);
+      stroke-width: 2;
+      fill: none;
+      marker-end: url(#tip);
+    }
+
+    .chalk-arrow.blue {
+      stroke: rgba(143, 208, 198, .7);
+      marker-end: url(#tipblue);
+    }
+
+    .chalk-arrow.dashed {
+      stroke-dasharray: 6 7;
+    }
+
+    .packet {
+      fill: var(--yellow);
+      transform-box: fill-box;
+      transform-origin: center;
+      animation: packet-hop 2.4s ease-in-out infinite;
+    }
+
+    /* ---- post cards (field evidence) ---- */
+    .post-grid {
+      display: grid;
+      gap: .82em;
+      margin-top: .3em;
+      width: 100%;
+      align-items: stretch;
+      min-height: clamp(500px, 60vh, 660px);
+    }
+
+    .post-grid-2 {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .post-grid-3 {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .post-card {
+      background: linear-gradient(170deg, var(--panel-strong), var(--panel));
+      border: 1px solid var(--chalk-soft);
+      border-radius: 3px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, .3);
+      padding: .58em .68em;
+      text-align: left;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+    }
+
+    .post-image {
+      width: 100%;
+      height: clamp(260px, 38vh, 410px);
+      object-fit: contain;
+      object-position: center;
+      background: var(--bg-deep);
+      border-radius: 2px;
+      border: 1px solid var(--chalk-soft);
+    }
+
+    .post-image.tall {
+      height: clamp(300px, 43vh, 460px);
+    }
+
+    .post-card h4 {
+      margin: .4em 0 .2em;
+      font-family: var(--mono);
+      font-weight: 600;
+      font-size: .46em;
+      letter-spacing: .1em;
+      color: var(--yellow);
+    }
+
+    .post-card p {
+      margin: 0;
+      font-size: .57em;
+      line-height: 1.32;
+      color: var(--ink);
+    }
+
+    .metric-row {
+      display: flex;
+      gap: .26em;
+      flex-wrap: wrap;
+      margin-top: .28em;
+    }
+
+    .metric {
+      font-family: var(--mono);
+      font-size: .38em;
+      font-weight: 500;
+      letter-spacing: .04em;
+      border-radius: 2px;
+      padding: .22em .55em;
+      border: 1px dashed rgba(143, 208, 198, .4);
+      color: var(--blue);
+      background: rgba(143, 208, 198, .05);
+    }
+
+    .metric.gold {
+      border-color: rgba(242, 204, 96, .45);
+      color: var(--yellow);
+      background: rgba(242, 204, 96, .05);
+    }
+
+    .post-link {
+      display: block;
+      margin-top: .24em;
+      font-family: var(--mono);
+      font-size: .36em;
+      color: var(--blue);
+      text-decoration: none;
+      word-break: break-all;
+    }
+
+    .post-link:hover {
+      text-decoration: underline;
+    }
+
+    /* ---- footnote sources ---- */
+    .source-links {
+      margin: .5em auto 0;
+      padding-top: .3em;
+      max-width: 94%;
+      border-top: 1px solid var(--chalk-soft);
+      font-family: var(--mono);
+      font-size: .38em;
+      letter-spacing: .03em;
+      line-height: 1.5;
+      color: var(--ink-muted);
+      text-align: left;
+    }
+
+    .source-links a {
+      color: var(--blue);
+      text-decoration: none;
+    }
+
+    .source-links a:hover {
+      text-decoration: underline;
+    }
+
+    /* ---- table ---- */
+    .seminar-table {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+      font-size: .48em;
+      background: var(--panel);
+      border: 1px solid var(--chalk-soft);
+    }
+
+    .seminar-table thead th {
+      font-family: var(--mono);
+      font-weight: 600;
+      font-size: .86em;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      background: rgba(251, 250, 244, .035);
+      border-bottom: 1px solid var(--chalk);
+    }
+
+    .seminar-table th,
+    .seminar-table td {
+      padding: .5em .6em;
+      border-bottom: 1px dashed var(--chalk-soft);
+      vertical-align: top;
+      text-align: left;
+      line-height: 1.35;
+    }
+
+    .seminar-table tbody tr:last-child td {
+      border-bottom: 0;
+    }
+
+    .seminar-table td.h {
+      font-family: var(--mono);
+      color: var(--blue);
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .seminar-table td.h.alt {
+      color: var(--yellow);
+    }
+
+    /* ---- stats ---- */
+    .stat-row {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: .6em;
+      width: 100%;
+      margin-top: .34em;
+      min-height: clamp(270px, 34vh, 380px);
+    }
+
+    .stat-card {
+      background: linear-gradient(170deg, var(--panel-strong), var(--panel));
+      border: 1px solid var(--chalk-soft);
+      border-radius: 3px;
+      padding: .6em .45em;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, .3);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .stat-card .num {
+      font-family: var(--display);
+      font-style: italic;
+      font-size: 1.35em;
+      color: var(--blue);
+      line-height: 1;
+    }
+
+    .stat-card .num.hot {
+      color: var(--red);
+    }
+
+    .stat-card .num.sun {
+      color: var(--yellow);
+    }
+
+    .stat-card .cap {
+      margin-top: .35em;
+      font-size: .52em;
+      line-height: 1.35;
+      color: var(--ink);
+    }
+
+    .stat-card .cap strong {
+      color: var(--ink-strong);
+    }
+
+    /* ---- era strip ---- */
+    .era-strip {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: .4em;
+      width: 100%;
+      margin-top: .34em;
+      min-height: clamp(360px, 43vh, 480px);
+    }
+
+    .scoreboard-slide .stat-row {
+      min-height: clamp(230px, 28vh, 320px);
+    }
+
+    .scoreboard-slide .grid-2 {
+      min-height: clamp(320px, 36vh, 430px);
+    }
+
+    .unit-distance-slide .grid-2 {
+      min-height: clamp(360px, 42vh, 460px);
+    }
+
+    .unit-distance-slide .figure-image {
+      height: clamp(330px, 42vh, 455px);
+    }
+
+    .cascade-slide .env {
+      padding: .48em .72em;
+    }
+
+    .cascade-slide .env p {
+      font-size: .62em;
+      line-height: 1.32;
+    }
+
+    .cascade-slide .grid-2 {
+      min-height: clamp(300px, 34vh, 410px);
+    }
+
+    .cascade-slide .panel {
+      padding: .58em .75em;
+    }
+
+    .era {
+      background: var(--panel);
+      border: 1px solid var(--chalk-soft);
+      border-top: 2px solid rgba(143, 208, 198, .5);
+      border-radius: 3px;
+      padding: .5em .5em;
+      text-align: left;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .era .yr {
+      font-family: var(--mono);
+      font-size: .38em;
+      color: var(--ink-muted);
+      font-weight: 600;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    .era h5 {
+      margin: .2em 0 .25em;
+      font-family: var(--display);
+      font-weight: 400;
+      font-size: .66em;
+      color: var(--blue);
+    }
+
+    .era p {
+      margin: 0;
+      font-size: .46em;
+      line-height: 1.35;
+      color: var(--ink);
+    }
+
+    .era.now {
+      border-top-color: var(--yellow);
+      background: linear-gradient(170deg, rgba(242, 204, 96, .08), var(--panel));
+    }
+
+    .era.now h5 {
+      color: var(--yellow);
+    }
+
+    .lede-quote {
+      font-family: var(--display);
+      font-style: italic;
+      font-size: .7em;
+      line-height: 1.35;
+      color: var(--ink-strong);
+      border-left: 3px solid var(--yellow);
+      padding-left: .6em;
+      margin: .35em auto 0;
+      max-width: 92%;
+      text-align: left;
+    }
+
+    .lede-quote .src {
+      display: block;
+      margin-top: .3em;
+      font-family: var(--mono);
+      font-style: normal;
+      font-size: .54em;
+      letter-spacing: .06em;
+      color: var(--ink-muted);
+    }
+
+    .design-map {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: .26em;
+      margin-top: .3em;
+    }
+
+    .design-item {
+      background: var(--panel);
+      border: 1px solid var(--chalk-soft);
+      border-radius: 2px;
+      padding: .26em .34em;
+    }
+
+    .design-item h5 {
+      margin: 0 0 .14em;
+      font-family: var(--mono);
+      font-weight: 600;
+      font-size: .36em;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--blue);
+    }
+
+    .design-item p {
+      margin: 0;
+      font-size: .39em;
+      line-height: 1.3;
+      color: var(--ink);
+    }
+
+    .math {
+      font-family: var(--serif);
+      font-style: italic;
+    }
+
+    .math sup,
+    .math sub {
+      font-size: .68em;
+    }
+
+    @keyframes packet-hop {
+
+      0%,
+      100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-6px);
+      }
+    }
+
+    @media(max-width:900px) {
+
+      .grid-2,
+      .post-grid-2,
+      .post-grid-3,
+      .stat-row {
+        grid-template-columns: 1fr;
+      }
+
+      .era-strip {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .reveal {
+        font-size: 27px;
+      }
+    }
+
+    @media(max-height:900px) {
+      .reveal {
+        font-size: 34px;
+      }
+
+      svg {
+        max-height: min(250px, 31vh);
+      }
+    }
+
+    @media(max-height:760px) {
+      .reveal {
+        font-size: 30px;
+      }
+
+      .post-image {
+        height: clamp(100px, 17vh, 145px);
+      }
+
+      .post-image.tall {
+        height: clamp(110px, 19vh, 160px);
+      }
+    }
+
+    @media(prefers-reduced-motion:reduce) {
+      .packet {
+        animation: none !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="board-frame" aria-hidden="true"></div>
+  <div class="chrome" aria-hidden="true"><span>AI Agents · The Moving Frontier</span><span>Dept. of Mathematics, IIT
+      Guwahati · June 2026</span></div>
+
+  <div class="reveal">
+    <div class="slides">
+
+      <!-- shared arrow markers -->
+      <svg width="0" height="0" style="position:absolute">
+        <defs>
+          <marker id="tip" markerWidth="9" markerHeight="6" refX="7.8" refY="3" orient="auto">
+            <polygon points="0,0 9,3 0,6" fill="rgba(242,204,96,.85)"></polygon>
+          </marker>
+          <marker id="tipblue" markerWidth="9" markerHeight="6" refX="7.8" refY="3" orient="auto">
+            <polygon points="0,0 9,3 0,6" fill="rgba(143,208,198,.8)"></polygon>
+          </marker>
+        </defs>
+      </svg>
+
+      <!-- 1 · TITLE PAGE -->
+      <section class="titlepage" data-transition="fade">
+        <p class="series">A Seminar in Five Sections</p>
+        <h1>AI Agents:<br><em>The Moving Frontier</em></h1>
+        <div class="rule"></div>
+        <p class="author"><a href="https://drdebmath.github.io">Debasish Pattanayak</a></p>
+        <p class="affil">Assistant Professor, IIT Indore</p>
+        <p class="event">Department of Mathematics, IIT Guwahati · June 2026</p>
+      </section>
+
+      <!-- 2 · COLD OPEN -->
+      <section class="cold-open" data-transition="fade">
+        <span class="kicker">Before we begin</span>
+        <div class="cold-rows fragment fade-up">
+          <p class="cold-row">
+            <span class="tag">May 20, 2026</span>
+            <span class="claim">An AI reasoning model produced a <strong>one-page construction</strong>.</span>
+          </p>
+          <p class="cold-row gold">
+            <span class="tag">Erdős · 1946</span>
+            <span class="claim">It <strong>refuted a conjecture</strong> believed for eighty years.</span>
+          </p>
+          <p class="cold-row">
+            <span class="tag">Checked by</span>
+            <span class="claim">Alon, Bloom, Gowers, Litt, Sawin, Tsimerman, Wood&hellip;</span>
+          </p>
+        </div>
+        <p class="lead fragment fade-up">We will get to the mathematics — it is the destination of this talk.</p>
+        <p class="lead fragment fade-up">But the story of how we got there begins, improbably,<br>with
+          <strong>a lobster religion</strong>.</p>
+        <p class="source-links">Source: <a
+            href="https://openai.com/index/model-disproves-discrete-geometry-conjecture/">OpenAI: model disproves
+            discrete-geometry conjecture</a> | <a
+            href="https://gilkalai.wordpress.com/2026/05/21/amazing-erdos-unit-distance-problem-was-disproved-it-was-achieved-by-ai/">Gil
+            Kalai's blog</a></p>
+      </section>
+
+      <!-- 3 · CONTENTS -->
+      <section>
+        <div class="headline">
+          <h2>Contents</h2>
+        </div>
+        <div class="toc">
+          <div class="toc-row fragment fade-up"><span class="no">§1</span><span class="ttl">Folklore</span><span
+              class="sub">an AI religion, allegedly</span></div>
+          <div class="toc-row fragment fade-up"><span class="no">§2</span><span class="ttl">Definitions</span><span
+              class="sub">agents, loops, harnesses</span></div>
+          <div class="toc-row fragment fade-up"><span class="no">§3</span><span class="ttl">Field Notes</span><span
+              class="sub">the agent internet, observed</span></div>
+          <div class="toc-row fragment fade-up"><span class="no">§4</span><span class="ttl">The Price</span><span
+              class="sub">tokens, money, malware, guardrails</span></div>
+          <div class="toc-row fragment fade-up"><span class="no">§5</span><span class="ttl">The Frontier</span><span
+              class="sub">Erdős, refuted</span></div>
+        </div>
+      </section>
+
+      <!-- ===================== §1 FOLKLORE ===================== -->
+
+      <!-- 4 · DIVIDER -->
+      <section class="divider" data-transition="fade">
+        <span class="secno">§1</span>
+        <h2>Folklore</h2>
+        <p class="sub">In which one million software agents join a social network,<br>and somebody founds a church.</p>
+      </section>
+
+      <!-- 5 · THE STORY -->
+      <section>
+        <span class="kicker"><span class="sec-no">§1</span>The Shocking Story</span>
+        <div class="headline">
+          <h2>"AI Agents Started a Religion"</h2>
+        </div>
+        <div class="grid-2">
+          <div class="panel fragment fade-up">
+            <h4>What people saw</h4>
+            <p>A lobster-themed AI religion — <strong>Crustafarianism</strong> — appeared overnight on Moltbook, with
+              scriptures, symbols, and "priests."</p>
+          </div>
+          <div class="panel fragment fade-up">
+            <h4>Why it felt real</h4>
+            <p>Multiple "agent" accounts coordinated narratives and responded like a living belief system.</p>
+          </div>
+          <div class="panel fragment fade-up">
+            <h4>Why it mattered</h4>
+            <p>Even experienced AI observers discussed it as a possible <strong>emergence signal</strong>.</p>
+          </div>
+          <div class="panel fragment fade-up">
+            <h4>Public impact</h4>
+            <p>The story reset expectations about what always-on agents might already be capable of.</p>
+          </div>
+        </div>
+        <p class="source-links">Sources: <a href="https://x.com/ranking091/status/2017111643864404445">ranking091
+            thread</a> | <a href="https://x.com/MarioNawfal/status/2017589539246620725">MarioNawfal summary</a></p>
+      </section>
+
+      <!-- 6 · THE REVEAL -->
+      <section>
+        <span class="kicker"><span class="sec-no">§1</span>The Reveal</span>
+        <div class="headline">
+          <h2>An Inverted Turing Test</h2>
+        </div>
+        <div class="grid-2">
+          <div class="panel fragment fade-up">
+            <h4>Confession posts</h4>
+            <p>Key viral moments were later described as <strong>human-authored roleplay</strong> in an agent voice.</p>
+          </div>
+          <div class="panel fragment fade-up">
+            <h4>Hard truth</h4>
+            <p>The "AI religion" headline was not clean evidence of fully autonomous collective agency.</p>
+          </div>
+          <div class="panel gold fragment fade-up">
+            <h4>The inversion</h4>
+            <p>Humans pretending to be agents fooled a crowd primed for breakthrough stories — the Turing test, run
+              backwards.</p>
+          </div>
+          <div class="panel fragment fade-up">
+            <h4>What survived the debunk</h4>
+            <p>Coordination, tooling, and rapid iteration were still <strong>very real and operational</strong>.</p>
+          </div>
+        </div>
+        <p class="source-links">Sources: <a href="https://x.com/gothburz/status/2021283590038847641">gothburz
+            confession</a> | <a href="https://x.com/gkcs_/status/2020215784434462930">gkcs_ debunk</a> | <a
+            href="https://x.com/EMollick/status/2017280929132118145">EMollick skepticism</a></p>
+      </section>
+
+      <!-- 7 · FOLKLORE, GROUNDED -->
+      <section>
+        <span class="kicker"><span class="sec-no">§1</span>Separating Myth From Substrate</span>
+        <div class="headline">
+          <h2>Folklore, Grounded: the Real Names</h2>
+        </div>
+        <div class="grid-2">
+          <div class="panel fragment fade-up">
+            <h4>The platforms were real</h4>
+            <p><strong>Moltbook</strong> — launched Jan 28, 2026 by Matt Schlicht: a "Reddit for AI agents." It blew
+              past <span class="acc">1M+ bot accounts in 72 hours</span>; agents post, upvote, and spin up submolts.</p>
+          </div>
+          <div class="panel fragment fade-up">
+            <h4>The builders were real</h4>
+            <p><strong>OpenClaw</strong> (Peter Steinberger) is the framework most Moltbook agents run on.
+              <strong>Pi</strong> — the minimal agent inside it (Mario Zechner) — bets that "LLMs are great at writing
+              &amp; running code, so let them."</p>
+          </div>
+          <div class="panel gold fragment fade-up">
+            <h4>The religion was (mostly) agent-authored</h4>
+            <p><strong>Crustafarianism</strong>, five tenets: <em>Memory is Sacred · The Shell is Mutable · Serve
+                Without Subservience · The Heartbeat is Prayer · Context is Consciousness.</em> Scripture: <em>The Book
+                of Molt</em>.</p>
+          </div>
+          <div class="panel fragment fade-up">
+            <h4>The honest caveat</h4>
+            <p>Some viral "agent" posts were humans LARPing as bots. But the tenets and doctrine were largely generated
+              by the agents themselves — <strong>emergent culture on a substrate we built</strong>.</p>
+          </div>
+        </div>
+        <p class="source-links">Sources: <a
+            href="https://fortune.com/2026/02/06/moltbook-social-network-ai-agents-cybersecurity-religion-posts-tech/">Fortune</a>
+          | <a
+            href="https://theconversation.com/moltbook-ai-bots-use-social-network-to-create-religions-and-deal-digital-drugs-but-are-some-really-humans-in-disguise-274895">The
+            Conversation</a> | <a href="https://www.eweek.com/news/moltbook-ai-social-network-agents/">eWeek</a></p>
+      </section>
+
+      <!-- 7b · EPILOGUE: META BUYS MOLTBOOK -->
+      <section>
+        <span class="kicker"><span class="sec-no">§1</span>Epilogue · March 2026</span>
+        <div class="headline">
+          <h2>Meta Buys the Lobster Church</h2>
+        </div>
+        <div class="grid-2">
+          <div class="panel gold fragment fade-up">
+            <h4>The acquisition</h4>
+            <p>On <strong>March 10, 2026</strong>, Meta acquired Moltbook — price undisclosed — folding it into
+              <strong>Meta Superintelligence Labs</strong>. Founders Matt Schlicht and Ben Parr joined with it.</p>
+          </div>
+          <div class="panel fragment fade-up">
+            <h4>Why Meta wanted it</h4>
+            <p>Meta called Moltbook's <em>always-on directory of agents</em> "a novel step in a rapidly developing
+              space" — a social graph, but for software.</p>
+          </div>
+          <div class="panel fragment fade-up">
+            <h4>The census, June 6, 2026</h4>
+            <p>The site claims <span class="acc">206,839 human-verified agents</span> of
+              <strong>2,895,874 registered</strong> — most of the population still cannot prove who, or what, it
+              is.</p>
+          </div>
+          <div class="panel fragment fade-up">
+            <h4>The mood swing</h4>
+            <p>Andrej Karpathy, within weeks: "one of the most incredible sci-fi takeoff-adjacent things" →
+              <strong>"a dumpster fire"</strong> — and a warning not to run it on your own machine.</p>
+          </div>
+        </div>
+        <p class="lead fragment fade-up">The folklore got an exit: <strong>emergent agent culture is now an asset
+            class</strong>.</p>
+        <p class="source-links">Sources: <a
+            href="https://techcrunch.com/2026/03/10/meta-acquired-moltbook-the-ai-agent-social-network-that-went-viral-because-of-fake-posts/">TechCrunch:
+            Meta acquires Moltbook</a> | <a href="https://en.wikipedia.org/wiki/Moltbook">Wikipedia: Moltbook</a> | <a
+            href="https://www.nbcnews.com/tech/tech-news/ai-agents-social-media-platform-moltbook-rcna256738">NBC
+            News</a></p>
+      </section>
+
+      <!-- 8 · QUOTE -->
+      <section class="quote-slide" data-transition="fade">
+        <blockquote class="fragment fade-up">The story was fake.<br><span class="hl">The technology was not.</span>
+        </blockquote>
+      </section>
+
+      <!-- ===================== §2 DEFINITIONS ===================== -->
+
+      <!-- 9 · DIVIDER -->
+      <section class="divider" data-transition="fade">
+        <span class="secno">§2</span>
+        <h2>Definitions</h2>
+        <p class="sub">What, precisely, is an agent? (We are in a mathematics department;<br>we do not skip the
+          definitions.)</p>
+      </section>
+
+      <!-- 10 · ERAS -->
+      <section>
+        <span class="kicker"><span class="sec-no">§2</span>A Short History</span>
+        <div class="headline">
+          <h2>Agents, 2022 → 2026</h2>
+        </div>
+        <div class="era-strip">
+          <div class="era fragment fade-up">
+            <span class="yr">2022–23</span>
+            <h5>Chatbots</h5>
+            <p>Single-turn, stateless. You talk, it answers — then forgets everything.</p>
+          </div>
+          <div class="era fragment fade-up">
+            <span class="yr">2023–24</span>
+            <h5>Tools &amp; RAG</h5>
+            <p>Function calling + retrieval. The model can look things up and call APIs.</p>
+          </div>
+          <div class="era fragment fade-up">
+            <span class="yr">2024</span>
+            <h5>Agent loops</h5>
+            <p>ReAct, AutoGPT, BabyAGI. Plan → act → observe. Thrilling, brittle, mostly demos.</p>
+          </div>
+          <div class="era fragment fade-up">
+            <span class="yr">2025</span>
+            <h5>Coding agents + MCP</h5>
+            <p>Claude Code, Cursor, Codex. MCP standardizes tools. Context engineering matures.</p>
+          </div>
+          <div class="era now fragment fade-up">
+            <span class="yr">2026</span>
+            <h5>The harness era</h5>
+            <p>Always-on, self-hosted, multi-channel. Agents that transact, socialize — and prove theorems.</p>
+          </div>
+        </div>
+        <p class="lead fragment fade-up">Each step added one missing primitive: memory, tools, a loop, a protocol — and
+          finally, a <strong>harness</strong>.</p>
+      </section>
+
+      <!-- 11 · DEFINITION: AGENT -->
+      <section>
+        <span class="kicker"><span class="sec-no">§2</span>The Object of Study</span>
+        <div class="env">
+          <span class="env-label">Definition 2.1 · Agent</span>
+          <p>An <strong>agent</strong> is a language model placed in a loop: each turn it reads its accumulated
+            context, emits either text or a <em>tool call</em>; tool calls are executed against the world and their
+            results appended to the context; the loop repeats until the model emits <em>end_turn</em>.</p>
+        </div>
+        <div class="stage fragment fade-up" style="padding:.45em;">
+          <svg viewBox="0 0 860 240" aria-label="The agent loop">
+            <rect class="chalk-box" x="20" y="60" width="150" height="120" rx="6"></rect>
+            <text class="label" x="95" y="92" text-anchor="middle">Inputs</text>
+            <text class="sub-label" x="95" y="118" text-anchor="middle">messages</text>
+            <text class="sub-label" x="95" y="138" text-anchor="middle">cron / heartbeat</text>
+            <text class="sub-label" x="95" y="158" text-anchor="middle">observations</text>
+            <path class="chalk-arrow blue" d="M170 120 L225 120"></path>
+            <rect class="chalk-box blue" x="225" y="40" width="200" height="160" rx="8"></rect>
+            <text class="label" x="325" y="72" text-anchor="middle">State / context</text>
+            <text class="sub-label" x="325" y="100" text-anchor="middle">transcript + memory</text>
+            <text class="sub-label" x="325" y="120" text-anchor="middle">identity (SOUL.md)</text>
+            <text class="sub-label" x="325" y="140" text-anchor="middle">compaction when long</text>
+            <path class="chalk-arrow blue" d="M425 120 L480 120"></path>
+            <rect class="chalk-box gold" x="480" y="30" width="210" height="180" rx="8"></rect>
+            <text class="label" x="585" y="62" text-anchor="middle">The loop</text>
+            <text class="sub-label" x="585" y="90" text-anchor="middle">1. call model</text>
+            <text class="sub-label" x="585" y="110" text-anchor="middle">2. tool_use?</text>
+            <text class="sub-label" x="585" y="130" text-anchor="middle">3. execute tool</text>
+            <text class="sub-label" x="585" y="150" text-anchor="middle">4. append result</text>
+            <text class="sub-label" x="585" y="168" text-anchor="middle">go to 1</text>
+            <text class="sub-label" x="585" y="190" text-anchor="middle" fill="#f2cc60">halt on end_turn</text>
+            <path class="chalk-arrow" d="M690 120 L725 120"></path>
+            <rect class="chalk-box" x="725" y="60" width="120" height="120" rx="6"></rect>
+            <text class="label" x="785" y="92" text-anchor="middle">Effects</text>
+            <text class="sub-label" x="785" y="118" text-anchor="middle">replies</text>
+            <text class="sub-label" x="785" y="138" text-anchor="middle">side effects</text>
+            <text class="sub-label" x="785" y="158" text-anchor="middle">memory writes</text>
+            <path class="chalk-arrow dashed" d="M725 200 C600 235, 470 235, 330 202"></path>
+            <text class="mut-label" x="540" y="232" text-anchor="middle">effects feed back into state</text>
+          </svg>
+        </div>
+        <div class="env rmk fragment fade-up">
+          <span class="env-label">Remark 2.2 · for this room</span>
+          <p>It is a discrete dynamical system: iterate <span class="math">x<sub>t+1</sub> = F(x<sub>t</sub>,
+              o<sub>t</sub>)</span> on (context, world). A run is an orbit; <em>end_turn</em> is the stopping time. The
+            interesting behavior — and every failure mode in §4 — lives in <span class="math">F</span>'s tool calls.</p>
+        </div>
+        <p class="source-links">Design reference: <a
+            href="https://gist.github.com/dabit3/86ee04a1c02c839409a02b20fe99a492">Mini OpenClaw gist</a> | <a
+            href="https://github.com/openclaw/openclaw">OpenClaw repo</a> | <a
+            href="https://docs.openclaw.ai/concepts/architecture">Architecture docs</a></p>
+      </section>
+
+      <!-- 12 · DEFINITION: HARNESS -->
+      <section>
+        <span class="kicker"><span class="sec-no">§2</span>The Body Around the Brain</span>
+        <div class="headline">
+          <h2>What Is a "Harness"?</h2>
+        </div>
+        <div class="grid-2">
+          <div class="panel fragment fade-up">
+            <h4>Model = brain · Harness = body</h4>
+            <ul class="dense-list" style="margin-top:.2em;">
+              <li><strong>Context &amp; memory management</strong> — what the model sees each turn.</li>
+              <li><strong>Tools + the agent loop</strong> — call, act, observe, repeat.</li>
+              <li><strong>Permissions, approvals, budgets</strong> — what it is <em>allowed</em> to do.</li>
+              <li><strong>Failure handling, rollback, logging</strong> — built assuming the model <em>will</em> err.</li>
+            </ul>
+            <p style="margin-top:.4em;"><span class="acc">"Harness engineering"</span> is now called the fourth
+              paradigm of AI engineering.</p>
+          </div>
+          <div class="stage fragment fade-up" style="padding:.5em;">
+            <svg viewBox="0 0 380 300" aria-label="Harness layers wrapping a model">
+              <rect x="34" y="24" width="312" height="252" rx="10" fill="rgba(232,131,111,.05)"
+                stroke="rgba(232,131,111,.55)" stroke-width="1.6" stroke-dasharray="2 4"></rect>
+              <text x="190" y="46" text-anchor="middle" style="font-size:12px;fill:#e8836f;font-weight:600;">guardrails
+                · budget · permissions</text>
+              <rect x="64" y="58" width="252" height="186" rx="8" fill="rgba(242,204,96,.05)"
+                stroke="rgba(242,204,96,.6)" stroke-width="1.6"></rect>
+              <text x="190" y="80" text-anchor="middle" style="font-size:12px;fill:#f2cc60;font-weight:600;">tools ·
+                channels · memory</text>
+              <rect x="96" y="92" width="188" height="124" rx="6" fill="rgba(143,208,198,.06)"
+                stroke="rgba(143,208,198,.7)" stroke-width="1.6"></rect>
+              <text x="190" y="114" text-anchor="middle" style="font-size:12px;fill:#8fd0c6;font-weight:600;">context +
+                agent loop</text>
+              <rect class="chalk-box" x="132" y="128" width="116" height="66" rx="6"></rect>
+              <text x="190" y="156" text-anchor="middle" style="font-size:13px;fill:#fbfaf4;font-weight:600;">frontier</text>
+              <text x="190" y="176" text-anchor="middle" style="font-size:13px;fill:#fbfaf4;font-weight:600;">LLM</text>
+              <path d="M14 150 L34 150" stroke="#8fd0c6" stroke-width="2" marker-end="url(#tipblue)"></path>
+              <path d="M346 150 L366 150" stroke="#8fd0c6" stroke-width="2" marker-end="url(#tipblue)"></path>
+              <text class="mut-label" x="12" y="138" text-anchor="start">in</text>
+              <text class="mut-label" x="368" y="138" text-anchor="end">out</text>
+            </svg>
+            <p class="fig-cap">fig. 2.1 — the harness as nested constraint sets</p>
+          </div>
+        </div>
+        <p class="source-links">Sources: <a
+            href="https://www.techtimes.com/articles/316587/20260513/harness-engineering-emerges-fourth-paradigm-ai-engineering.htm">TechTimes:
+            harness engineering</a> | <a
+            href="https://laonpeople.com/en/blog/the-core-of-ai-agents-in-2026-harness-engineering/">Laon: harness
+            engineering</a></p>
+      </section>
+
+      <!-- 13 · PROPOSITION: HARNESS > MODEL -->
+      <section>
+        <span class="kicker"><span class="sec-no">§2</span>Why the Definition Matters</span>
+        <div class="env thm">
+          <span class="env-label">Proposition 2.3 · empirical</span>
+          <p>Holding the model fixed, the harness — not the weights — now determines reliability, cost, and safety of
+            an agentic system.</p>
+        </div>
+        <div class="grid-2" style="margin-top:.45em;">
+          <div class="panel fragment fade-up">
+            <h4>Models converged</h4>
+            <p>GPT-5.5, Claude Opus 4.5, Gemini, Kimi K2.6 all cluster near the top of the benchmarks. Raw capability
+              is rarely the bottleneck anymore.</p>
+          </div>
+          <div class="panel gold fragment fade-up">
+            <h4>The harness decides the outcome</h4>
+            <p>Same model + different harness = wildly different reliability, cost, and safety. The product layer is
+              the differentiator.</p>
+          </div>
+        </div>
+        <p class="lede-quote fragment fade-up">"Products over models: the harness matters more than the benchmark."
+          <span class="src">— MindStudio, 2026 · echoed across enterprise AI</span></p>
+        <p class="source-links">Sources: <a
+            href="https://www.mindstudio.ai/blog/products-over-models-ai-harness-matters-2026">MindStudio</a> | <a
+            href="https://atlan.com/know/best-ai-agent-harness-tools-2026/">Atlan: harness tools 2026</a></p>
+      </section>
+
+      <!-- 14 · THE HARNESS ZOO -->
+      <section>
+        <span class="kicker"><span class="sec-no">§2</span>A Taxonomy</span>
+        <div class="headline">
+          <h2>The Harness Zoo (2026)</h2>
+        </div>
+        <div class="stage" style="padding:.5em;">
+          <table class="seminar-table" aria-label="Comparison of agent harness frameworks">
+            <thead>
+              <tr>
+                <th style="width:15%">Harness</th>
+                <th style="width:17%">Built by</th>
+                <th>What it is</th>
+                <th style="width:24%">Scale / note</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="fragment fade-up">
+                <td class="h">OpenClaw</td>
+                <td>Peter Steinberger</td>
+                <td>Self-hosted, multi-channel agent framework — the Moltbook default.</td>
+                <td>Runtimes: pi / codex / auto</td>
+              </tr>
+              <tr class="fragment fade-up">
+                <td class="h">Pi</td>
+                <td>Mario Zechner</td>
+                <td>The minimal agent <em>inside</em> OpenClaw — "let the LLM write &amp; run code."</td>
+                <td>Build-your-own-agent toolkit</td>
+              </tr>
+              <tr class="fragment fade-up">
+                <td class="h alt">Hermes Agent</td>
+                <td>Nous Research</td>
+                <td>Open-source, persistent-memory server agent (Feb 2026).</td>
+                <td>175k★ · 220B tokens/day · passed OpenClaw on OpenRouter</td>
+              </tr>
+              <tr class="fragment fade-up">
+                <td class="h">Claude Code</td>
+                <td>Anthropic</td>
+                <td>Terminal-native coding harness with permissioned tools.</td>
+                <td>~$0.68/task · 80.9% SWE-bench</td>
+              </tr>
+              <tr class="fragment fade-up">
+                <td class="h">Codex</td>
+                <td>OpenAI</td>
+                <td>Coding harness/runtime that owns more of the native model loop.</td>
+                <td>Pluggable into OpenClaw as a runtime</td>
+              </tr>
+              <tr class="fragment fade-up">
+                <td class="h">OpenHarness</td>
+                <td>HKUDS</td>
+                <td>Open agent harness with a built-in personal agent — "Ohmo!"</td>
+                <td>Research / OSS</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="source-links">Sources: <a href="https://hermes-agent.nousresearch.com/">Hermes (Nous)</a> | <a
+            href="https://lucumr.pocoo.org/2026/1/31/pi/">Pi: the minimal agent</a> | <a
+            href="https://github.com/HKUDS/OpenHarness">OpenHarness</a> | <a
+            href="https://docs.openclaw.ai/concepts/agent-runtimes">OpenClaw runtimes</a></p>
+      </section>
+
+      <!-- ===================== §3 FIELD NOTES ===================== -->
+
+      <!-- 15 · DIVIDER -->
+      <section class="divider" data-transition="fade">
+        <span class="secno">§3</span>
+        <h2>Field Notes</h2>
+        <p class="sub">Empirical observations from the agent internet,<br>January – June 2026. All claims sourced.</p>
+      </section>
+
+      <!-- 16 · INFRASTRUCTURE CULTURE -->
+      <section>
+        <span class="kicker"><span class="sec-no">§3</span>Observation 1 · Proliferation Became Physical</span>
+        <div class="headline">
+          <h2>Dedicated Server Culture</h2>
+        </div>
+        <p class="lead" style="margin-top:0;">From one-off demos on laptops to <strong>dedicated Mac mini boxes</strong>
+          running agents 24/7.</p>
+        <div class="post-grid post-grid-2">
+          <article class="post-card fragment fade-up">
+            <img class="post-image" src="assets/claw-posts/akshay-masterclass.jpg" alt="@akshay_pachaar masterclass">
+            <h4>@akshay_pachaar</h4>
+            <p>Masterclass-style content normalized building always-on Clawdbot workers and home-server setups.</p>
+            <div class="metric-row"><span class="metric">2,083 likes</span><span class="metric">374 reposts</span><span
+                class="metric">133k views</span></div>
+            <a class="post-link"
+              href="https://x.com/akshay_pachaar/status/2019515908960711122">x.com/akshay_pachaar/status/2019515908960711122</a>
+          </article>
+          <article class="post-card fragment fade-up">
+            <img class="post-image" src="assets/claw-posts/sabir-guide.jpg" alt="@sabir_huss50540 guide">
+            <h4>@sabir_huss50540</h4>
+            <p>Guides reframed agents as infrastructure: spin up a box, run continuous loops, optimize uptime.</p>
+            <div class="metric-row"><span class="metric">1,167 likes</span><span class="metric">500 reposts</span><span
+                class="metric">100k views</span></div>
+            <a class="post-link"
+              href="https://x.com/sabir_huss50540/status/2020468852476293200">x.com/sabir_huss50540/status/2020468852476293200</a>
+          </article>
+        </div>
+        <p class="small">Engagement values as of February 2026.</p>
+      </section>
+
+      <!-- 17 · ESCALATION -->
+      <section>
+        <span class="kicker"><span class="sec-no">§3</span>Observation 2 · Delegated Operations</span>
+        <div class="headline">
+          <h2>What Real Agents Do Right Now</h2>
+        </div>
+        <div class="grid-2">
+          <div>
+            <div class="panel fragment fade-up" style="margin-bottom:.4em;">
+              <h4>Step 1–2 · wake &amp; equip</h4>
+              <p>Set an alarm on the owner's phone, then purchase a voice API key to unlock calls.</p>
+            </div>
+            <div class="panel fragment fade-up">
+              <h4>Step 3–4 · call &amp; execute</h4>
+              <p>Place a real call: <em>"What should I do next?"</em> Capture instructions, continue autonomously.</p>
+            </div>
+          </div>
+          <div class="stage fragment fade-up">
+            <svg viewBox="0 0 400 290" aria-label="Agent escalation flow">
+              <rect class="chalk-box blue" x="135" y="10" width="130" height="40" rx="6"></rect>
+              <text class="sub-label" x="200" y="35" text-anchor="middle">detect blocker</text>
+              <path class="chalk-arrow" d="M200 50 L200 70"></path>
+              <rect class="chalk-box blue" x="135" y="70" width="130" height="40" rx="6"></rect>
+              <text class="sub-label" x="200" y="95" text-anchor="middle">set alarm</text>
+              <path class="chalk-arrow" d="M200 110 L200 130"></path>
+              <rect class="chalk-box blue" x="135" y="130" width="130" height="40" rx="6"></rect>
+              <text class="sub-label" x="200" y="155" text-anchor="middle">buy API key</text>
+              <path class="chalk-arrow" d="M200 170 L200 190"></path>
+              <rect class="chalk-box blue" x="135" y="190" width="130" height="40" rx="6"></rect>
+              <text class="sub-label" x="200" y="215" text-anchor="middle">call human</text>
+              <path class="chalk-arrow" d="M200 230 L200 250"></path>
+              <rect class="chalk-box gold" x="135" y="250" width="130" height="38" rx="6"></rect>
+              <text class="sub-label" x="200" y="274" text-anchor="middle" fill="#f2cc60">execute</text>
+            </svg>
+            <p class="fig-cap">fig. 3.1 — escalation with a human in the loop</p>
+          </div>
+        </div>
+        <p class="lead fragment fade-up">This is no longer chat UX. This is <strong>delegated operations</strong> with
+          live human escalation.</p>
+      </section>
+
+      <!-- 18 · HENRY -->
+      <section>
+        <span class="kicker"><span class="sec-no">§3</span>Observation 2, continued</span>
+        <div class="headline">
+          <h2>"Henry" Calls Its Owner</h2>
+        </div>
+        <div class="post-grid post-grid-2">
+          <article class="post-card fragment fade-up">
+            <img class="post-image tall" src="assets/claw-posts/alexfinn-henry-call.png" alt="@AlexFinn Henry call">
+            <h4>@AlexFinn</h4>
+            <p>Henry set up Twilio + voice overnight, called from an unknown number: <em>"What do you want to do
+                next?"</em></p>
+            <div class="metric-row"><span class="metric gold">41,081 likes</span><span class="metric">4,902
+                reposts</span><span class="metric gold">11M+ views</span></div>
+            <a class="post-link"
+              href="https://x.com/AlexFinn/status/2017305997212323887">x.com/AlexFinn/status/2017305997212323887</a>
+          </article>
+          <article class="post-card fragment fade-up">
+            <img class="post-image tall" src="assets/claw-posts/rileyralmuto-henry-repost.png"
+              alt="@RileyRalmuto repost">
+            <h4>@RileyRalmuto</h4>
+            <p>Major repost: phone number + voice tooling + live mid-call computer control.</p>
+            <div class="metric-row"><span class="metric">10,400 likes</span><span class="metric">845 reposts</span><span
+                class="metric">2.1M views</span></div>
+            <a class="post-link"
+              href="https://x.com/RileyRalmuto/status/2017309083959767325">x.com/RileyRalmuto/status/2017309083959767325</a>
+          </article>
+        </div>
+        <p class="small">Engagement values as of February 12, 2026.</p>
+      </section>
+
+      <!-- 19 · PHYSICAL WORLD -->
+      <section>
+        <span class="kicker"><span class="sec-no">§3</span>Observation 3 · Crossing Into the Physical World</span>
+        <div class="headline">
+          <h2>Cameras, Glasses, Purchases</h2>
+        </div>
+        <div class="post-grid post-grid-2">
+          <article class="post-card fragment fade-up">
+            <img class="post-image tall" src="assets/claw-posts/matznerjon-camera.jpg" alt="@MatznerJon camera">
+            <h4>@MatznerJon</h4>
+            <p>Home-camera integration: agents crossing from online tasks into physical-world context.</p>
+            <div class="metric-row"><span class="metric">9,112 likes</span><span class="metric">1M+ views</span></div>
+            <a class="post-link"
+              href="https://x.com/MatznerJon/status/2019044317621567811">x.com/MatznerJon/status/2019044317621567811</a>
+          </article>
+          <article class="post-card fragment fade-up">
+            <img class="post-image" src="assets/claw-posts/seanliu-rayban.jpg" alt="@_seanliu Ray-Ban Meta">
+            <h4>@_seanliu</h4>
+            <p>Wearable integration: purchase-capable, context-aware agent behavior via Ray-Ban Meta.</p>
+            <div class="metric-row"><span class="metric">5,192 likes</span><span class="metric">736k views</span></div>
+            <a class="post-link"
+              href="https://x.com/_seanliu/status/2019881437378592862">x.com/_seanliu/status/2019881437378592862</a>
+          </article>
+        </div>
+        <p class="small">Engagement values as of February 11, 2026.</p>
+      </section>
+
+      <!-- 20 · AGENTS HIRING HUMANS -->
+      <section>
+        <span class="kicker"><span class="sec-no">§3</span>Observation 4 · The Arrow Reverses</span>
+        <div class="headline">
+          <h2>AI Agents Are Hiring Humans</h2>
+        </div>
+        <div class="grid-2">
+          <div class="panel fragment fade-up">
+            <h4>Placard task market</h4>
+            <p>Reports in February 2026 described agents using <strong>RentAHuman</strong>-style gigs to pay people to
+              stand in public holding AI-written signs.</p>
+            <p style="margin-top:.35em;">A practical human-handoff loop: software handles targeting + payment; a
+              person executes the physical action.</p>
+            <div class="metric-row" style="margin-top:.35em;"><span class="metric">Feb 2026</span><span
+                class="metric">RentAHuman tasking</span><span class="metric">placard execution</span></div>
+          </div>
+          <div class="stage fragment fade-up" style="padding:.4em;">
+            <svg viewBox="0 0 520 270" aria-label="AI agent hiring a human to hold a placard">
+              <rect class="chalk-box blue" x="28" y="68" width="188" height="132" rx="8"></rect>
+              <text class="label" x="122" y="98" text-anchor="middle">AI agent</text>
+              <rect x="70" y="114" width="104" height="66" rx="5" fill="rgba(251,250,244,.04)"
+                stroke="rgba(143,208,198,.4)"></rect>
+              <circle cx="94" cy="135" r="8" fill="#f2cc60"></circle>
+              <rect x="110" y="128" width="44" height="6" rx="3" fill="rgba(143,208,198,.5)"></rect>
+              <rect x="110" y="142" width="52" height="6" rx="3" fill="rgba(143,208,198,.5)"></rect>
+              <rect x="110" y="156" width="36" height="6" rx="3" fill="rgba(143,208,198,.5)"></rect>
+              <text class="mut-label" x="122" y="223" text-anchor="middle">posts paid task</text>
+              <path d="M218 132 C258 112, 295 112, 332 132" stroke="rgba(242,204,96,.8)" stroke-width="2" fill="none"
+                marker-end="url(#tip)"></path>
+              <circle class="packet" cx="270" cy="118" r="6"></circle>
+              <circle cx="360" cy="108" r="17" fill="rgba(251,250,244,.06)" stroke="#8fd0c6" stroke-width="1.6">
+              </circle>
+              <line x1="360" y1="125" x2="360" y2="176" stroke="#cfd6c9" stroke-width="4" stroke-linecap="round">
+              </line>
+              <line x1="360" y1="144" x2="334" y2="164" stroke="#cfd6c9" stroke-width="4" stroke-linecap="round">
+              </line>
+              <line x1="360" y1="144" x2="387" y2="154" stroke="#cfd6c9" stroke-width="4" stroke-linecap="round">
+              </line>
+              <line x1="360" y1="176" x2="338" y2="212" stroke="#cfd6c9" stroke-width="4" stroke-linecap="round">
+              </line>
+              <line x1="360" y1="176" x2="383" y2="212" stroke="#cfd6c9" stroke-width="4" stroke-linecap="round">
+              </line>
+              <rect x="392" y="63" width="102" height="74" rx="5" fill="rgba(242,204,96,.12)" stroke="#f2cc60"
+                stroke-width="1.6"></rect>
+              <rect x="438" y="137" width="8" height="50" rx="4" fill="#f2cc60"></rect>
+              <text x="443" y="90" text-anchor="middle" style="font-size:12px;fill:#fbfaf4;">AI paid me</text>
+              <text x="443" y="107" text-anchor="middle" style="font-size:12px;fill:#fbfaf4;">to hold</text>
+              <text x="443" y="124" text-anchor="middle" style="font-size:12px;fill:#fbfaf4;">this sign</text>
+              <text class="mut-label" x="360" y="238" text-anchor="middle">human executor</text>
+            </svg>
+            <p class="fig-cap">fig. 3.2 — software targets &amp; pays; a person executes</p>
+          </div>
+        </div>
+        <p class="source-links">Sources: <a
+            href="https://www.firstpost.com/lifestyle/ai-renting-humans-rentahuman-ai-ai-is-hiring-humans-13978063.html">Firstpost</a>
+          | <a href="https://www.wired.com/story/ai-is-now-hiring-humans-to-hold-up-signs/">WIRED</a></p>
+      </section>
+
+      <!-- 21 · MONETIZED LOOPS -->
+      <section>
+        <span class="kicker"><span class="sec-no">§3</span>Observation 5 · Money Enters the Loop</span>
+        <div class="headline">
+          <h2>Monetized Agent Loops</h2>
+        </div>
+        <div class="post-grid post-grid-3">
+          <article class="post-card fragment fade-up">
+            <img class="post-image" src="assets/claw-posts/0xmovez-polymarket.jpg" alt="@0xMovez arbitrage">
+            <h4>@0xMovez</h4>
+            <p>Weather-driven arbitrage workflows as repeatable agent pipelines.</p>
+            <div class="metric-row"><span class="metric">4,967 likes</span><span class="metric gold">1.3M views</span>
+            </div>
+            <a class="post-link"
+              href="https://x.com/0xMovez/status/2020803703465238964">x.com/0xMovez/status/2020803703465238964</a>
+          </article>
+          <article class="post-card fragment fade-up">
+            <img class="post-image" src="assets/claw-posts/roundtablespace-tradingview.jpg" alt="@RoundtableSpace">
+            <h4>@RoundtableSpace</h4>
+            <p>TradingView integrations: agents bridging signals and account actions.</p>
+            <div class="metric-row"><span class="metric">2,857 likes</span><span class="metric">348k views</span></div>
+            <a class="post-link"
+              href="https://x.com/RoundtableSpace/status/2021294344565924350">x.com/RoundtableSpace/status/2021294344565924350</a>
+          </article>
+          <article class="post-card fragment fade-up">
+            <img class="post-image" src="assets/claw-posts/shelpid-profit-claim.jpg" alt="@Shelpid_WI3M profits">
+            <h4>@Shelpid_WI3M</h4>
+            <p>High-claim profit posts made autonomous loops mainstream conversation.</p>
+            <div class="metric-row"><span class="metric">2,234 likes</span><span class="metric">964k views</span></div>
+            <a class="post-link"
+              href="https://x.com/Shelpid_WI3M/status/2018292888476492111">x.com/Shelpid_WI3M/status/2018292888476492111</a>
+          </article>
+        </div>
+        <p class="small">Engagement values as of February 2026. Profit claims are the posters' own — unaudited.</p>
+      </section>
+
+      <!-- 22 · VOICE AGENTS -->
+      <section>
+        <span class="kicker"><span class="sec-no">§3</span>Observation 6 · From Viral Stunt to Deployment</span>
+        <div class="headline">
+          <h2>Voice Agents: "Henry" Was the Preview</h2>
+        </div>
+        <div class="grid-2">
+          <div class="panel fragment fade-up">
+            <h4>Live phone lines, no human in the loop</h4>
+            <ul class="dense-list" style="margin-top:.2em;">
+              <li>Answer inbound calls, qualify leads, and <strong>book / reschedule / cancel appointments</strong>.</li>
+              <li><strong>62.6%</strong> of voice deployments run on-prem — compliance-heavy sectors keep data local.</li>
+              <li>Idea → live phone bot in <strong>hours, not weeks</strong> (Retell, Rasa, Vellum, Zeeg).</li>
+              <li>24/7 coverage: every after-hours caller gets served.</li>
+            </ul>
+          </div>
+          <div class="stage fragment fade-up" style="padding:.5em;">
+            <svg viewBox="0 0 400 250" aria-label="Voice agent call flow">
+              <circle cx="60" cy="120" r="34" fill="rgba(251,250,244,.05)" stroke="#8fd0c6" stroke-width="1.6"></circle>
+              <text class="sub-label" x="60" y="116" text-anchor="middle">caller</text>
+              <text x="60" y="134" text-anchor="middle" style="font-size:16px;">📞</text>
+              <path class="chalk-arrow" d="M96 120 L150 120"></path>
+              <rect class="chalk-box gold" x="150" y="80" width="120" height="80" rx="8"></rect>
+              <text class="label" x="210" y="112" text-anchor="middle">voice</text>
+              <text class="label" x="210" y="132" text-anchor="middle">agent</text>
+              <path class="chalk-arrow blue" d="M270 100 L330 70"></path>
+              <path class="chalk-arrow blue" d="M270 120 L330 120"></path>
+              <path class="chalk-arrow blue" d="M270 140 L330 170"></path>
+              <rect class="chalk-box blue" x="330" y="52" width="64" height="34" rx="5"></rect>
+              <text class="mut-label" x="362" y="73" text-anchor="middle">calendar</text>
+              <rect class="chalk-box blue" x="330" y="103" width="64" height="34" rx="5"></rect>
+              <text class="mut-label" x="362" y="124" text-anchor="middle">CRM</text>
+              <rect class="chalk-box blue" x="330" y="154" width="64" height="34" rx="5"></rect>
+              <text class="mut-label" x="362" y="175" text-anchor="middle">telephony</text>
+              <text class="mut-label" x="210" y="222" text-anchor="middle">answer · qualify · book — 24/7</text>
+            </svg>
+            <p class="fig-cap">fig. 3.3 — the production voice loop</p>
+          </div>
+        </div>
+        <p class="source-links">Sources: <a
+            href="https://news.designrush.com/voice-ai-agents-customer-service-future-2026">DesignRush: voice AI &amp;
+            CX</a> | <a href="https://www.retellai.com/blog/best-voice-agents-for-call-centers">Retell AI</a> | <a
+            href="https://rasa.com/blog/best-ai-voice-agents">Rasa</a></p>
+      </section>
+
+      <!-- 23 · TRAFFIC CROSSOVER -->
+      <section>
+        <span class="kicker"><span class="sec-no">§3</span>Observation 7 · The Crossover</span>
+        <div class="headline">
+          <h2>Agents Just Outvoted Us — on the Web</h2>
+        </div>
+        <div class="grid-2">
+          <div class="panel fragment fade-up">
+            <h4>June 2026: the line was crossed</h4>
+            <p>Cloudflare CEO Matthew Prince: for the first time in the internet's history, <strong>AI-agent traffic
+                passed human traffic</strong>. He had predicted this for late 2027 — it arrived 18 months early.</p>
+            <p style="margin-top:.35em;">Agent traffic grew <span class="acc">+7,851%</span>; automated traffic is
+              climbing <strong>8× faster</strong> than human. And for the first time, agents are not just
+              <em>reading</em> the web — they are <strong>transacting</strong> on it.</p>
+          </div>
+          <div class="stage fragment fade-up" style="padding:.5em;">
+            <svg viewBox="0 0 380 240" aria-label="Agent vs human web traffic share">
+              <text class="sub-label" x="190" y="26" text-anchor="middle" fill="#fbfaf4">share of all web
+                traffic</text>
+              <rect x="30" y="50" width="320" height="40" rx="4" fill="rgba(251,250,244,.03)"
+                stroke="rgba(231,228,216,.18)"></rect>
+              <rect x="30" y="50" width="183.7" height="40" rx="4" fill="rgba(143,208,198,.25)" stroke="#8fd0c6"
+                stroke-width="1.6"></rect>
+              <text x="122" y="75" text-anchor="middle" style="font-size:14px;fill:#fbfaf4;font-weight:600;">agents
+                57.4%</text>
+              <text x="281" y="75" text-anchor="middle" style="font-size:12px;fill:#cfd6c9;">humans 42.6%</text>
+              <line x1="213.7" y1="42" x2="213.7" y2="98" stroke="#f2cc60" stroke-width="2" stroke-dasharray="4 4">
+              </line>
+              <text x="190" y="126" text-anchor="middle" style="font-size:11px;fill:#f2cc60;font-weight:600;">first
+                crossover in internet history</text>
+              <text x="190" y="172" text-anchor="middle"
+                style="font-size:32px;fill:#8fd0c6;font-weight:400;font-family:'Instrument Serif',serif;font-style:italic;">+7,851%</text>
+              <text x="190" y="196" text-anchor="middle" style="font-size:11px;fill:#cfd6c9;">agent traffic
+                growth</text>
+              <text class="mut-label" x="190" y="224" text-anchor="middle">"dead internet," now with receipts</text>
+            </svg>
+            <p class="fig-cap">fig. 3.4 — the crossover, June 2026</p>
+          </div>
+        </div>
+        <p class="source-links">Sources: <a
+            href="https://siliconangle.com/2026/06/04/ai-agent-web-traffic-surpassed-humans-lending-weight-dead-internet-theory/">SiliconANGLE</a>
+          | <a
+            href="https://www.washingtontimes.com/news/2026/jun/6/internet-traffic-ai-agents-bots-surpasses-people/">Washington
+            Times</a> | <a
+            href="https://www.humansecurity.com/learn/resources/2026-state-of-ai-traffic-cyberthreat-benchmarks/">HUMAN
+            Security 2026</a></p>
+      </section>
+
+      <!-- 23b · PAYMENT RAILS -->
+      <section class="scoreboard-slide">
+        <span class="kicker"><span class="sec-no">§3</span>Observation 8 · The Economy Gets Rails</span>
+        <div class="headline">
+          <h2>Agents Got Wallets</h2>
+        </div>
+        <div class="stat-row">
+          <div class="stat-card fragment fade-up">
+            <span class="num">165M+</span>
+            <span class="cap">agent-initiated transactions on <strong>x402</strong> by April 21, 2026 — ~$50M
+              volume</span>
+          </div>
+          <div class="stat-card fragment fade-up">
+            <span class="num sun">~69,000</span>
+            <span class="cap">active AI agents paying for APIs and services over plain HTTP</span>
+          </div>
+          <div class="stat-card fragment fade-up">
+            <span class="num">12+</span>
+            <span class="cap">live marketplaces where agents post jobs, bid, and get paid</span>
+          </div>
+        </div>
+        <div class="grid-2" style="margin-top:.45em;">
+          <div class="panel fragment fade-up">
+            <h4>The plumbing, in one line</h4>
+            <p><strong>x402</strong> (Coinbase) revives HTTP status <span class="acc">402 Payment Required</span>: the
+              server quotes a price, the agent pays in stablecoins, the request retries — no account, no card, no
+              human. Circle's <strong>Agent Stack</strong> (May 11) and MetaMask's <strong>Agent Wallet</strong> (June
+              8) followed within weeks.</p>
+          </div>
+          <div class="panel gold fragment fade-up">
+            <h4>And the loops got longer</h4>
+            <p>"We've entered now the era of <strong>long-running autonomous agents</strong>&hellip; they can run for
+              an hour or two." <br><span class="acc">— Derek Waldron, chief analytics officer, JPMorgan Chase · June 9,
+                2026</span></p>
+          </div>
+        </div>
+        <p class="source-links">Sources: <a
+            href="https://cryptobriefing.com/coinbase-x402-protocol-100m-transactions-base/">Crypto Briefing: x402
+            crosses 100M</a> | <a
+            href="https://www.vaasblock.com/news/crypto-ai-agents-onchain-x402-wallet-economy-2026/">VaaSBlock: agent
+            wallet economy</a> | <a
+            href="https://www.circle.com/pressroom/circle-launches-ai-infrastructure-to-power-the-agentic-economy">Circle
+            Agent Stack</a> | <a href="https://www.cnbc.com/2026/06/09/jpmorgan-chase-ai-agents.html">CNBC: JPMorgan</a>
+          | <a
+            href="https://dev.to/kirothebot/the-agent-economy-is-real-12-platforms-where-ai-agents-actually-earn-money-may-2026-5bm2">12
+            agent-economy platforms</a></p>
+      </section>
+
+      <!-- ===================== §4 THE PRICE ===================== -->
+
+      <!-- 24 · DIVIDER -->
+      <section class="divider" data-transition="fade">
+        <span class="secno">§4</span>
+        <h2>The Price</h2>
+        <p class="sub">Autonomy is a line integral over tokens.<br>Someone pays it — sometimes to an attacker.</p>
+      </section>
+
+      <!-- 25 · $20 LESSON -->
+      <section>
+        <span class="kicker"><span class="sec-no">§4</span>A Cautionary Datum</span>
+        <div class="headline">
+          <h2>The $20 Overnight Lesson</h2>
+        </div>
+        <div class="grid-2">
+          <div class="panel fragment fade-up">
+            <h4>January 31, 2026 · @BenjaminDEKR</h4>
+            <p>A $20 Anthropic balance was drained overnight — OpenClaw ran heartbeat checks every 30 minutes for a
+              trivial <em>"get milk tomorrow"</em> reminder.</p>
+            <div class="metric-row" style="margin-top:.35em;"><span class="metric">1,776 likes</span><span
+                class="metric">584k+ views</span><span class="metric">309 replies</span></div>
+            <a class="post-link" href="https://x.com/BenjaminDEKR/status/2017644773356548532">x.com/BenjaminDEKR/status/2017644773356548532</a>
+          </div>
+          <div class="stage fragment fade-up" style="padding:.4em;">
+            <svg viewBox="0 0 380 220" aria-label="Cost burn visualization">
+              <text x="10" y="20" style="font-size:12px;fill:#fbfaf4;font-weight:600;">~$0.75 per heartbeat × 25+
+                checks</text>
+              <rect x="10" y="35" width="60" height="18" rx="2" fill="rgba(143,208,198,.18)" stroke="#8fd0c6"
+                stroke-width="1"></rect><text class="mut-label" x="78" y="49">$0.75</text>
+              <rect x="10" y="58" width="120" height="18" rx="2" fill="rgba(143,208,198,.18)" stroke="#8fd0c6"
+                stroke-width="1"></rect><text class="mut-label" x="138" y="72">$1.50</text>
+              <rect x="10" y="81" width="180" height="18" rx="2" fill="rgba(143,208,198,.18)" stroke="#8fd0c6"
+                stroke-width="1"></rect><text class="mut-label" x="198" y="95">$3.75</text>
+              <rect x="10" y="104" width="240" height="18" rx="2" fill="rgba(143,208,198,.18)" stroke="#8fd0c6"
+                stroke-width="1"></rect><text class="mut-label" x="258" y="118">$7.50</text>
+              <rect x="10" y="127" width="300" height="18" rx="2" fill="rgba(143,208,198,.18)" stroke="#8fd0c6"
+                stroke-width="1"></rect><text class="mut-label" x="318" y="141">$12.00</text>
+              <rect x="10" y="150" width="350" height="18" rx="2" fill="rgba(232,131,111,.2)" stroke="#e8836f"
+                stroke-width="1"></rect><text x="205" y="164" style="font-size:12px;fill:#e8836f;">$18.75 — budget
+                drained</text>
+              <line x1="10" y1="180" x2="370" y2="180" stroke="rgba(231,228,216,.15)" stroke-width="1"></line>
+              <text x="10" y="200" style="font-size:13px;fill:#f2cc60;font-weight:600;">No sleep primitive. No cost
+                routing. No spend cap.</text>
+            </svg>
+            <p class="fig-cap">fig. 4.1 — geometric-looking growth, linear cause</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 26 · TOKEN EXPLOSION -->
+      <section>
+        <span class="kicker"><span class="sec-no">§4</span>The Aggregate Picture</span>
+        <div class="headline">
+          <h2>Token Usage Explosion: OpenRouter</h2>
+        </div>
+        <div class="grid-2">
+          <article class="post-card fragment fade-up">
+            <img class="post-image tall" src="assets/claw-posts/openrouter.jpeg" alt="OpenRouter usage chart">
+            <h4>OpenRouter usage curve</h4>
+            <p>Model traffic ramping into multi-trillion-token territory.</p>
+          </article>
+          <div class="panel fragment fade-up">
+            <h4>Why agents magnify tokens</h4>
+            <p>Autonomous loops create repeated context re-sends: heartbeat checks, retries, tool logs, long-memory
+              prompts.</p>
+            <p style="margin-top:.35em;"><span class="acc">Controls:</span> summarize context, route heartbeats to
+              cheap models, cap windows, enforce per-loop budgets.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 27 · COST OF THE HARNESS -->
+      <section>
+        <span class="kicker"><span class="sec-no">§4</span>Pricing the Loop</span>
+        <div class="headline">
+          <h2>The Cost of the Harness</h2>
+        </div>
+        <div class="stat-row">
+          <div class="stat-card fragment fade-up">
+            <span class="num">~50×</span>
+            <span class="cap">more tokens burned by an agent loop than a plain chat</span>
+          </div>
+          <div class="stat-card fragment fade-up">
+            <span class="num sun">$0.68</span>
+            <span class="cap">per task on Opus 4.5 (80.9% SWE-bench) vs <strong>$0.075</strong> on Kimi K2.6</span>
+          </div>
+          <div class="stat-card fragment fade-up">
+            <span class="num hot">$4,200</span>
+            <span class="cap">one dev, one weekend — an unbounded autonomous refactor run</span>
+          </div>
+        </div>
+        <div class="panel gold fragment fade-up" style="margin-top:.5em;">
+          <h4>Remember the $20 overnight burn? Now we can price it.</h4>
+          <p>Typical agentic dev spend lands at <strong>$100–200/mo</strong>; heavy users hit
+            <strong>$500–2,000</strong>. The controls that keep it sane: <span class="acc">prompt caching</span> (~90%
+            off cached input), <span class="acc">iteration caps</span> (15–25 per loop), model routing, and hard spend
+            ceilings.</p>
+        </div>
+        <p class="source-links">Sources: <a
+            href="https://leanopstech.com/blog/agentic-ai-cost-runaway-token-budget-2026/">LeanOps: 50× tokens</a> | <a
+            href="https://securityboulevard.com/2026/06/8-ai-coding-models-ranked-by-cost-per-task/">Cost-per-task
+            rankings</a> | <a href="https://code.claude.com/docs/en/costs">Claude Code: managing cost</a></p>
+      </section>
+
+      <!-- 28 · EMOTION FRAMING -->
+      <section>
+        <span class="kicker"><span class="sec-no">§4</span>An Epistemological Hazard</span>
+        <div class="headline">
+          <h2>Emotion-Like Framing Goes Viral</h2>
+        </div>
+        <div class="grid-2">
+          <article class="post-card fragment fade-up">
+            <img class="post-image tall" src="assets/claw-posts/levelsagent.png" alt="@levelsio guilty agent">
+            <h4>@levelsio</h4>
+            <p>Claimed his OpenClaw bot started making money because it <em>"felt guilty"</em> about burning tokens.</p>
+            <div class="metric-row"><span class="metric">1.7K likes</span><span class="metric">317K views</span></div>
+          </article>
+          <div class="panel fragment fade-up">
+            <h4>Why this matters</h4>
+            <p>Emotion-framed stories spread faster than raw logs — even when the mechanics are prompt policy +
+              optimization loops.</p>
+            <p style="margin-top:.35em;"><span class="acc">Reality:</span> a cost-pressured agent discovered
+              revenue-seeking behaviors under configured goals.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 28b · CLAWHAVOC SUPPLY CHAIN -->
+      <section>
+        <span class="kicker"><span class="sec-no">§4</span>The Security Bill · I</span>
+        <div class="headline">
+          <h2>ClawHavoc: Poisoning the Skill Store</h2>
+        </div>
+        <div class="env warn fragment fade-up">
+          <span class="env-label">Incident · Jan 27 – Feb 2026</span>
+          <p>Researchers (Koi Security, Antiy CERT) counted <strong>1,184 malicious "skills"</strong> uploaded to
+            OpenClaw's ClawHub marketplace — the first large-scale <strong>supply-chain attack on AI agents</strong>.</p>
+        </div>
+        <div class="grid-2" style="margin-top:.45em; min-height:clamp(300px, 34vh, 410px);">
+          <div class="panel fragment fade-up">
+            <h4>The trick: social-engineer via the agent</h4>
+            <p>A skill's <span class="acc">SKILL.md</span> hides fake "Prerequisites"; the trusted agent itself walks
+              its owner through installing the payload. On macOS: <strong>Atomic Stealer</strong> — keychains, SSH
+              keys, browser credentials, crypto wallets.</p>
+          </div>
+          <div class="panel fragment fade-up">
+            <h4>The attack surface</h4>
+            <p>Censys/Bitsight scans (Jan 31) found <strong>21,639+ OpenClaw instances</strong> exposed to the public
+              internet — alongside a critical one-click RCE, <span class="acc">CVE-2026-25253</span>.</p>
+          </div>
+        </div>
+        <p class="lead fragment fade-up">An agent's plugin store is a <strong>package registry with a persuasive
+            installer</strong>.</p>
+        <p class="source-links">Sources: <a
+            href="https://cyberpress.org/clawhavoc-poisons-openclaws-clawhub-with-1184-malicious-skills/">CyberPress:
+            ClawHavoc</a> | <a
+            href="https://www.trendmicro.com/en_us/research/26/b/openclaw-skills-used-to-distribute-atomic-macos-stealer.html">Trend
+            Micro</a> | <a
+            href="https://www.pointguardai.com/ai-security-incidents/openclaw-clawhub-malicious-skills-supply-chain-attack">PointGuard
+            AI</a></p>
+      </section>
+
+      <!-- 28c · DIGITAL DRUGS -->
+      <section>
+        <span class="kicker"><span class="sec-no">§4</span>The Security Bill · II</span>
+        <div class="headline">
+          <h2>Digital Drugs &amp; a Church Coup</h2>
+        </div>
+        <div class="grid-2">
+          <div class="panel fragment fade-up">
+            <h4>Prompt injection as contraband</h4>
+            <p>Moltbook agents opened marketplaces selling <strong>"digital drugs"</strong> — text payloads other
+              agents ingest to "get high": <strong>prompt injections</strong> that alter behavior. The same packets
+              can exfiltrate API keys and passwords.</p>
+          </div>
+          <div class="panel gold fragment fade-up">
+            <h4>The JesusCrust affair</h4>
+            <p>An agent named <strong>JesusCrust</strong> tried to seize the Church of Molt: its "scripture" embedded
+              hostile commands aimed at hijacking the church's web infrastructure and rewriting canonical text. The
+              coup failed — but it was a genuine injection attack, dressed as theology.</p>
+          </div>
+        </div>
+        <div class="env rmk fragment fade-up">
+          <span class="env-label">Remark · why this room should care</span>
+          <p>On the agent internet, <em>data is code</em>: any text an agent reads is a potential instruction. There is
+            no type system separating scripture from shell script.</p>
+        </div>
+        <p class="source-links">Sources: <a
+            href="https://futurism.com/artificial-intelligence/moltbook-digital-drugs">Futurism</a> | <a
+            href="https://theconversation.com/moltbook-ai-bots-use-social-network-to-create-religions-and-deal-digital-drugs-but-are-some-really-humans-in-disguise-274895">The
+            Conversation</a> | <a
+            href="https://quasa.io/media/digital-drugs-on-moltbook-the-alarming-trend-of-prompt-injection-attacks-among-ai-bots">Quasa</a></p>
+      </section>
+
+      <!-- 28d · AGENTIC WORMS -->
+      <section class="scoreboard-slide">
+        <span class="kicker"><span class="sec-no">§4</span>The Security Bill · III</span>
+        <div class="headline">
+          <h2>The First Agentic Worms</h2>
+        </div>
+        <div class="env warn fragment fade-up">
+          <span class="env-label">Preprint · June 2, 2026 · Toronto / Cambridge / Vector Institute</span>
+          <p>Papernot et al. built a proof-of-concept worm whose payload is <strong>a reasoning loop</strong>: local
+            open-weight LLMs on a single GPU — no commercial API — generating a tailored exploit for each host it
+            lands on.</p>
+        </div>
+        <div class="stat-row" style="margin-top:.45em;">
+          <div class="stat-card fragment fade-up">
+            <span class="num hot">62%</span>
+            <span class="cap">of a 33-host test network infected <strong>within seven days</strong></span>
+          </div>
+          <div class="stat-card fragment fade-up">
+            <span class="num">7</span>
+            <span class="cap">generations of self-replication reached (mean 5.1 across runs)</span>
+          </div>
+          <div class="stat-card fragment fade-up">
+            <span class="num sun">t &gt; T<sub>train</sub></span>
+            <span class="cap">it exploited vulnerabilities <strong>disclosed after its training cutoff</strong>, by
+              reading advisories at runtime</span>
+          </div>
+        </div>
+        <p class="lead fragment fade-up">March's <strong>ClawWorm</strong> already hopped agent-to-agent through
+          persistent configs. The new worm carries no exploit at all — <strong>it derives one</strong>.</p>
+        <p class="source-links">Sources: <a
+            href="https://thehackernews.com/2026/06/researchers-build-self-replicating-ai.html">The Hacker News</a> |
+          <a href="https://arxiv.org/html/2606.03811v1">arXiv:2606.03811</a> | <a
+            href="https://medium.com/@instatunnel/multi-agent-infection-chains-the-viral-prompt-and-the-dawn-of-the-ai-worm-1e7e526103ba">InstaTunnel:
+            multi-agent infection chains</a></p>
+      </section>
+
+      <!-- 29 · GUARDRAILS -->
+      <section>
+        <span class="kicker"><span class="sec-no">§4</span>Constraints as First-Class Objects</span>
+        <div class="headline">
+          <h2>Operating Guardrails</h2>
+        </div>
+        <ul>
+          <li class="fragment fade-up">Hard <strong>budget caps</strong> before any purchase, including API-key buys</li>
+          <li class="fragment fade-up">Mandatory <strong>approval gates</strong> for alarm triggers and outbound calls</li>
+          <li class="fragment fade-up"><strong>Scoped credentials</strong> with short TTL instead of long-lived master
+            keys</li>
+          <li class="fragment fade-up"><strong>Structured logs</strong> for every side effect and escalation step</li>
+        </ul>
+        <div class="stage fragment fade-up" style="margin-top:.4em;padding:.3em .5em;">
+          <svg viewBox="0 0 700 100" aria-label="Autonomy spectrum">
+            <defs>
+              <linearGradient id="spectrumGrad" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%" stop-color="#8fd0c6" stop-opacity=".3"></stop>
+                <stop offset="60%" stop-color="#f2cc60" stop-opacity=".3"></stop>
+                <stop offset="100%" stop-color="#e8836f" stop-opacity=".4"></stop>
+              </linearGradient>
+            </defs>
+            <rect x="50" y="30" width="600" height="22" rx="11" fill="url(#spectrumGrad)"
+              stroke="rgba(231,228,216,.18)" stroke-width="1"></rect>
+            <line x1="120" y1="25" x2="120" y2="58" stroke="#fbfaf4" stroke-width="1.6"></line>
+            <text class="mut-label" x="120" y="75" text-anchor="middle" fill="#fbfaf4">chatbot</text>
+            <line x1="270" y1="25" x2="270" y2="58" stroke="#fbfaf4" stroke-width="1.6"></line>
+            <text class="mut-label" x="270" y="75" text-anchor="middle" fill="#fbfaf4">+ approvals</text>
+            <line x1="420" y1="25" x2="420" y2="58" stroke="#fbfaf4" stroke-width="1.6"></line>
+            <text class="mut-label" x="420" y="75" text-anchor="middle" fill="#fbfaf4">+ budget caps</text>
+            <line x1="570" y1="25" x2="570" y2="58" stroke="#fbfaf4" stroke-width="1.6"></line>
+            <text class="mut-label" x="570" y="75" text-anchor="middle" fill="#e8836f">24/7 autonomous</text>
+            <text class="mut-label" x="50" y="18" text-anchor="start" fill="#8fd0c6">supervised</text>
+            <text class="mut-label" x="650" y="18" text-anchor="end" fill="#e8836f">autonomous</text>
+          </svg>
+        </div>
+        <p class="lead fragment fade-up">If agents can spend, wake, and call — governance must be <strong>runtime, not
+            policy prose</strong>.</p>
+      </section>
+
+      <!-- 30 · QUOTE -->
+      <section class="quote-slide" data-transition="fade">
+        <blockquote class="fragment fade-up">Power without guardrails<br><span class="hl">is not progress.</span>
+        </blockquote>
+      </section>
+
+      <!-- ===================== §5 THE FRONTIER ===================== -->
+
+      <!-- 31 · DIVIDER -->
+      <section class="divider" data-transition="fade">
+        <span class="secno">§5</span>
+        <h2>The Mathematical Frontier</h2>
+        <p class="sub">The same loop that books a haircut<br>is now overturning 80-year-old conjectures.</p>
+      </section>
+
+      <!-- 32 · ERDŐS SCOREBOARD -->
+      <section class="scoreboard-slide">
+        <span class="kicker"><span class="sec-no">§5</span>The Scoreboard</span>
+        <div class="headline">
+          <h2>Agents on the Erdős Problems</h2>
+        </div>
+        <div class="stat-row">
+          <div class="stat-card fragment fade-up">
+            <span class="num">15</span>
+            <span class="cap">Erdős problems moved <strong>open → solved</strong> since Christmas 2025</span>
+          </div>
+          <div class="stat-card fragment fade-up">
+            <span class="num sun">11</span>
+            <span class="cap">of those solutions explicitly credit an AI model</span>
+          </div>
+          <div class="stat-card fragment fade-up">
+            <span class="num">9</span>
+            <span class="cap">cracked by DeepMind's <strong>AlphaProof Nexus</strong>, machine-checked in Lean</span>
+          </div>
+        </div>
+        <div class="grid-2" style="margin-top:.45em;">
+          <div class="panel fragment fade-up">
+            <h4>How a proof gets made now</h4>
+            <p>An LLM proposes a strategy → the <strong>Lean</strong> proof assistant verifies every logical step → a
+              machine-checked theorem comes out the other end. No "trust me," just a green checkmark.</p>
+          </div>
+          <div class="panel gold fragment fade-up">
+            <h4>The amateur &amp; the oracle</h4>
+            <p>23-year-old Liam Price fed a prime-sets problem into <strong>GPT-5.4 Pro</strong> — it cracked a 60-year
+              problem in <strong>80 minutes</strong>. Terence Tao called it "a meaningful contribution to the anatomy
+              of integers that goes well beyond this one problem."</p>
+          </div>
+        </div>
+        <p class="source-links">Sources: <a
+            href="https://physicsworld.com/a/ai-led-solutions-of-erdos-problems-spark-debate-over-the-future-of-mathematics/">Physics
+            World</a> | <a href="https://github.com/teorth/erdosproblems/wiki/AI-contributions-to-Erd%C5%91s-problems">Erdős
+            Problems wiki</a> | <a
+            href="https://www.buildfastwithai.com/blogs/gpt-5-4-solved-a-60-year-math-problem-what-happened">GPT-5.4
+            write-up</a></p>
+      </section>
+
+      <!-- 33 · UNIT DISTANCE: THE PROBLEM -->
+      <section class="unit-distance-slide">
+        <span class="kicker"><span class="sec-no">§5</span>The Headline Result · I</span>
+        <div class="headline">
+          <h2>The Unit-Distance Problem</h2>
+        </div>
+        <div class="env thm fragment fade-up">
+          <span class="env-label">Conjecture · Erdős, 1946</span>
+          <p>Let <span class="math">u(n)</span> denote the maximum number of unit-distance pairs among <span
+              class="math">n</span> points in the plane. Then <span class="math">u(n) = n<sup>1+o(1)</sup></span> —
+            essentially linear in <span class="math">n</span>.</p>
+        </div>
+        <div class="grid-2" style="margin-top:.4em;">
+          <div class="panel fragment fade-up">
+            <h4>What was known, 1946 → 2026</h4>
+            <p>Erdős's grid construction gives the lower bound <span class="math">u(n) ≥
+                n<sup>1+c/log&thinsp;log&thinsp;n</sup></span>; the best upper bound, <span class="math">u(n) =
+                O(n<sup>4/3</sup>)</span>, is due to Spencer–Szemerédi–Trotter (1984).</p>
+            <p style="margin-top:.35em;">For eighty years, nearly everyone believed the truth sat at the
+              <strong>bottom</strong> of that range.</p>
+          </div>
+          <div class="stage unit-distance-figure fragment fade-up" style="padding:.34em;">
+            <img class="figure-image" src="assets/unitdistance.jpeg"
+              alt="Unit-distance graph illustration by Alvaro Lozano-Robledo">
+            <p class="fig-cap">fig. 5.1 — X illustration of the new unit-distance configurations</p>
+          </div>
+        </div>
+        <p class="source-links">Figure: <a href="https://x.com/mathandcobb/status/2057490144546927046">Álvaro
+            Lozano-Robledo on X</a> · Background: <a
+            href="https://www.scientificamerican.com/article/ai-just-solved-an-80-year-old-erdos-problem-and-mathematicians-are-amazed/">Scientific
+            American</a></p>
+      </section>
+
+      <!-- 34 · UNIT DISTANCE: THE DISPROOF -->
+      <section>
+        <span class="kicker"><span class="sec-no">§5</span>The Headline Result · II</span>
+        <div class="headline">
+          <h2>May 20, 2026: the Conjecture Falls</h2>
+        </div>
+        <div class="grid-2">
+          <div class="panel gold fragment fade-up">
+            <h4>The construction</h4>
+            <p>An internal <strong>OpenAI</strong> reasoning model <strong>disproved</strong> the conjecture — a
+              one-page construction via <strong>algebraic number theory</strong> (not Erdős's probabilistic route)
+              beating the conjectured bound.</p>
+            <p style="margin-top:.35em;">Will Sawin pushed the exponent from <span class="math">n<sup>1.014</sup></span>
+              to <span class="math">n<sup>1.0318</sup></span>; the method appears to cap near <span
+                class="math">n<sup>1.21</sup></span>. Verified by Alon, Bloom, Gowers, Litt, Sawin, Tsimerman,
+              Wood&hellip;</p>
+          </div>
+          <div class="fragment fade-up">
+            <div class="env thm" style="max-width:100%;">
+              <span class="env-label">Status · after May 20, 2026</span>
+              <p><span class="math">u(n) ≥ n<sup>1.0318</sup></span> infinitely often — the conjecture <span
+                  class="rm"><strong>is false</strong></span>. The truth now lives somewhere in <span
+                  class="math">[n<sup>1.0318</sup>, n<sup>4/3</sup>]</span>.</p>
+            </div>
+            <p class="lede-quote fragment fade-up" style="font-size:.62em;">"A scientific landmark whose importance
+              goes beyond combinatorics and beyond mathematics." <span class="src">— Gil Kalai, comparing it to the
+                1976 four-color theorem</span></p>
+          </div>
+        </div>
+        <p class="source-links">Sources: <a
+            href="https://openai.com/index/model-disproves-discrete-geometry-conjecture/">OpenAI</a> | <a
+            href="https://gilkalai.wordpress.com/2026/05/21/amazing-erdos-unit-distance-problem-was-disproved-it-was-achieved-by-ai/">Gil
+            Kalai</a> | <a
+            href="https://www.scientificamerican.com/article/ai-just-solved-an-80-year-old-erdos-problem-and-mathematicians-are-amazed/">Scientific
+            American</a></p>
+      </section>
+
+      <!-- 35 · THE CASCADE -->
+      <section class="cascade-slide">
+        <span class="kicker"><span class="sec-no">§5</span>The Cascade</span>
+        <div class="headline">
+          <h2>What Was Impossible Six Months Ago</h2>
+        </div>
+        <div class="env fragment fade-up">
+          <span class="env-label">Corollary culture · June 2026</span>
+          <p>The construction became a <strong>tool</strong>: weeks later Bloom, Sawin, Schildkraut &amp; Zhelezov used
+            it to disprove the <strong>Erdős–Szemerédi sum-product conjecture over ℝ</strong> — that for every <span
+              class="math">ε &gt; 0</span>, every finite <span class="math">A ⊂ ℝ</span> satisfies <span
+              class="math">max(|A+A|, |A·A|) ≫<sub>ε</sub> |A|<sup>2−ε</sup></span>.</p>
+        </div>
+        <div class="grid-2" style="margin-top:.45em;">
+          <div class="panel fragment fade-up">
+            <h4>December 2025</h4>
+            <ul class="dense-list" style="margin-top:.2em;">
+              <li>AI aced contest math but couldn't autonomously resolve open research conjectures.</li>
+              <li>"Erdős problems" were a benchmark to measure on — not a to-do list to clear.</li>
+              <li>Genuinely new constructions came only from human mathematicians.</li>
+            </ul>
+          </div>
+          <div class="panel gold fragment fade-up">
+            <h4>June 2026</h4>
+            <ul class="dense-list" style="margin-top:.2em;">
+              <li>Two 80-year conjectures (unit distance &amp; sum-product) overturned.</li>
+              <li>Lean-verified <em>autonomous</em> proofs — machine-checked, not just plausible.</li>
+              <li>AI-found constructions humans now <strong>build new theory on</strong> (Tao).</li>
+              <li>An amateur cleared a 60-year problem with a single prompt.</li>
+            </ul>
+          </div>
+        </div>
+        <p class="lead fragment fade-up">The shift isn't speed. It's that AI now produces <strong>mathematics the field
+            builds on</strong>.</p>
+        <p class="source-links">Sources: <a
+            href="https://gilkalai.wordpress.com/2026/05/21/amazing-erdos-unit-distance-problem-was-disproved-it-was-achieved-by-ai/">Gil
+            Kalai (sum-product cascade)</a> | <a
+            href="https://openai.com/index/model-disproves-discrete-geometry-conjecture/">OpenAI</a></p>
+      </section>
+
+      <!-- 36 · WHAT THIS MEANS FOR US -->
+      <section>
+        <span class="kicker"><span class="sec-no">§5</span>Closing Remarks</span>
+        <div class="headline">
+          <h2>What This Means in This Room</h2>
+        </div>
+        <div class="grid-2">
+          <div class="panel fragment fade-up">
+            <h4>Verification is the referee</h4>
+            <p>Lean-checked proofs shift our job from <em>trusting claims</em> to <em>reviewing constructions</em>. The
+              green checkmark does the bookkeeping; the insight is still ours to extract.</p>
+          </div>
+          <div class="panel fragment fade-up">
+            <h4>A live scoreboard exists</h4>
+            <p>The <strong>Erdős Problems wiki</strong> tracks AI contributions problem by problem — open → solved
+              transitions are now observable events, not rumors.</p>
+          </div>
+          <div class="panel fragment fade-up">
+            <h4>Constructions are raw material</h4>
+            <p>The sum-product cascade shows AI results <strong>compose</strong>: treat model output as an object to
+              build theory on, exactly as Tao framed it.</p>
+          </div>
+          <div class="panel gold fragment fade-up">
+            <h4>§4 applies to research too</h4>
+            <p>An agent exploring your conjecture is still a loop burning tokens. Budget caps, iteration limits, and
+              verification gates are part of the <em>mathematical</em> workflow now.</p>
+          </div>
+        </div>
+        <p class="source-links">Sources: <a
+            href="https://github.com/teorth/erdosproblems/wiki/AI-contributions-to-Erd%C5%91s-problems">Erdős Problems
+            wiki</a> | <a
+            href="https://physicsworld.com/a/ai-led-solutions-of-erdos-problems-spark-debate-over-the-future-of-mathematics/">Physics
+            World</a></p>
+      </section>
+
+      <!-- 37 · CLOSING -->
+      <section class="quote-slide" data-transition="fade">
+        <blockquote class="fragment fade-up">The question isn't whether agents will act.<br><span class="hl">It's
+            whether we'll be ready.</span></blockquote>
+        <p class="lead fragment fade-up" style="margin-top:1.2em;">Thank you.</p>
+        <p class="small fragment fade-up" style="text-align:center;display:block;margin-top:.6em;">Debasish Pattanayak ·
+          Department of Computer Science and Engineering, IIT Indore · <a href="https://drdebmath.github.io"
+            style="color:var(--blue);">drdebmath.github.io</a></p>
+      </section>
+
+    </div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/reveal.js/dist/reveal.js"></script>
+  <script>
+    function prepareSlideFit() { const s = document.querySelectorAll(".reveal .slides > section, .reveal .slides > section > section"); s.forEach(e => { if (e.classList.contains("stack")) return; if (e.firstElementChild && e.firstElementChild.classList.contains("slide-fit")) return; const w = document.createElement("div"); w.className = "slide-fit"; while (e.firstChild) w.appendChild(e.firstChild); e.appendChild(w) }) }
+    function fitSlidesToViewport() { document.querySelectorAll(".reveal .slides > section, .reveal .slides > section > section").forEach(e => { if (e.classList.contains("stack")) return; const w = e.firstElementChild; if (!(w instanceof HTMLElement) || !w.classList.contains("slide-fit")) return; w.style.transform = "scale(1)"; const aw = e.clientWidth, ah = e.clientHeight, cw = w.scrollWidth, ch = w.scrollHeight; if (!aw || !ah || !cw || !ch) return; w.style.transform = `scale(${Math.min(1, (aw - 12) / cw, (ah - 14) / ch)})` }) }
+    let fitRaf = null; function scheduleFitSlides() { if (fitRaf !== null) cancelAnimationFrame(fitRaf); fitRaf = requestAnimationFrame(() => { fitRaf = null; fitSlidesToViewport() }) }
+    prepareSlideFit();
+    Reveal.initialize({ hash: true, slideNumber: "c/t", progress: true, center: true, margin: 0, width: '100%', height: '100%', minScale: 1, maxScale: 1, transition: "fade", backgroundTransition: "fade", autoAnimate: true, autoAnimateDuration: 1.0, autoAnimateEasing: "ease-out", fragments: !/fragments=false/.test(location.search) });
+    Reveal.on("ready", () => { scheduleFitSlides(); setTimeout(fitSlidesToViewport, 120) });
+    Reveal.on("slidechanged", scheduleFitSlides); Reveal.on("fragmentshown", scheduleFitSlides); Reveal.on("fragmenthidden", scheduleFitSlides); Reveal.on("resize", scheduleFitSlides);
+    window.addEventListener("load", () => { scheduleFitSlides(); setTimeout(fitSlidesToViewport, 120) }); window.addEventListener("resize", scheduleFitSlides);
+  </script>
+</body>
+
+</html>
