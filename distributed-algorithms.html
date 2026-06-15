@@ -1,0 +1,1377 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>Introduction to Distributed Algorithms</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <link rel="stylesheet" href="assets/vendor/reveal.css">
+  <link rel="stylesheet" href="assets/vendor/google-fonts.css">
+  <style>
+    :root {
+      --bg: #0c1119;
+      --bg-deep: #070a10;
+      --ink: #dde6ee;
+      --ink-strong: #ffffff;
+      --ink-muted: #8da0b3;
+      --line: rgba(221, 230, 238, .14);
+      --line-soft: rgba(221, 230, 238, .065);
+      --cyan: #5ccfc6;
+      --cyan-dim: rgba(92, 207, 198, .14);
+      --amber: #f2bd5c;
+      --amber-dim: rgba(242, 189, 92, .14);
+      --coral: #ef8169;
+      --coral-dim: rgba(239, 129, 105, .13);
+      --green: #82d39c;
+      --green-dim: rgba(130, 211, 156, .13);
+      --violet: #a9a0f0;
+      --panel: rgba(255, 255, 255, .035);
+      --panel-strong: rgba(255, 255, 255, .062);
+      --display: "Space Grotesk", system-ui, sans-serif;
+      --sans: "Spline Sans", system-ui, sans-serif;
+      --serif: "Newsreader", Georgia, serif;
+      --mono: "JetBrains Mono", ui-monospace, monospace;
+    }
+
+    :root {
+      --board: radial-gradient(ellipse 90% 70% at 50% -8%, rgba(92, 207, 198, .07) 0%, transparent 55%),
+        radial-gradient(ellipse 60% 55% at 92% 100%, rgba(242, 189, 92, .055) 0%, transparent 60%),
+        radial-gradient(ellipse 55% 55% at 4% 96%, rgba(169, 160, 240, .05) 0%, transparent 60%),
+        var(--bg);
+    }
+
+    html { background: var(--bg); }
+
+    body,
+    .reveal-viewport {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--board) !important;
+      color: var(--ink);
+    }
+
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      opacity: .5;
+      background-image:
+        linear-gradient(rgba(221, 230, 238, .022) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(221, 230, 238, .022) 1px, transparent 1px);
+      background-size: 54px 54px;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      opacity: .16;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .05 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+
+    .board-frame {
+      position: fixed;
+      inset: 14px;
+      pointer-events: none;
+      z-index: 2;
+      border: 1px solid var(--line-soft);
+      border-radius: 6px;
+    }
+
+    .chrome {
+      position: fixed;
+      left: 34px;
+      right: 34px;
+      bottom: 22px;
+      z-index: 3;
+      pointer-events: none;
+      display: flex;
+      justify-content: space-between;
+      font-family: var(--mono);
+      font-size: 12px;
+      letter-spacing: .12em;
+      color: var(--ink-muted);
+      opacity: .7;
+      text-transform: uppercase;
+    }
+
+    .reveal {
+      position: relative;
+      z-index: 1;
+      font-family: var(--sans);
+      color: var(--ink);
+      font-size: clamp(40px, 1.2vw + 33px, 56px);
+    }
+
+    .reveal .progress { color: var(--cyan); height: 3px; }
+
+    .reveal .slide-number {
+      background: transparent;
+      font-family: var(--mono);
+      font-size: 14px;
+      color: var(--ink-muted);
+      right: 34px;
+      bottom: 38px;
+    }
+
+    .reveal h1,
+    .reveal h2,
+    .reveal h3 {
+      font-family: var(--display);
+      font-weight: 600;
+      color: var(--ink-strong);
+      text-wrap: balance;
+      line-height: 1.07;
+      letter-spacing: -.01em;
+      margin: 0 0 .3em;
+    }
+
+    .reveal h1 { font-size: 2.0em; max-width: 95%; margin-inline: auto; font-weight: 700; }
+    .reveal h2 { font-size: 1.4em; }
+    .reveal h3 { font-size: 1.08em; }
+    .reveal em { font-style: italic; }
+    .reveal strong { font-weight: 600; }
+
+    .reveal section {
+      padding: .35em 1em;
+      box-sizing: border-box;
+      width: 100% !important;
+      height: 100% !important;
+    }
+
+    .reveal .slides section.present {
+      display: flex !important;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .slide-fit {
+      width: min(100%, 1760px);
+      min-height: 0;
+      margin: 0 auto;
+      box-sizing: border-box;
+      padding-bottom: clamp(44px, 7vh, 72px);
+      transform-origin: center top;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+    }
+
+    .reveal a {
+      color: var(--cyan);
+      text-decoration-color: rgba(92, 207, 198, .4);
+      text-decoration-thickness: 1px;
+      text-underline-offset: .14em;
+      transition: color .2s;
+    }
+    .reveal a:hover { color: #8fe6dd; }
+
+    .kicker {
+      display: block;
+      font-family: var(--mono);
+      font-size: .4em;
+      font-weight: 500;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: var(--cyan);
+      margin: 0 0 .85em;
+    }
+    .kicker .sec-no { color: var(--ink-muted); margin-right: 1em; }
+
+    .headline { text-align: center; margin-bottom: .45em; flex-shrink: 0; }
+    .headline h2 { display: inline-block; position: relative; padding-bottom: .14em; margin-bottom: 0; }
+    .headline h2::after {
+      content: "";
+      position: absolute;
+      left: 4%;
+      right: 4%;
+      bottom: 0;
+      height: 2px;
+      border-radius: 2px;
+      background: linear-gradient(90deg, transparent, var(--cyan) 14%, var(--cyan) 86%, transparent);
+      opacity: .8;
+    }
+
+    .small { font-size: .5em; font-family: var(--mono); color: var(--ink-muted); }
+
+    .lead {
+      font-family: var(--serif);
+      font-size: .76em;
+      line-height: 1.4;
+      max-width: 88%;
+      margin: .5em auto 0;
+      color: var(--ink);
+      text-align: center;
+    }
+    .lead strong { color: var(--amber); font-weight: 500; }
+    .lead .cy { color: var(--cyan); }
+
+    .titlepage { text-align: center; }
+    .titlepage .series {
+      font-family: var(--mono);
+      font-size: .44em;
+      letter-spacing: .28em;
+      text-transform: uppercase;
+      color: var(--cyan);
+      margin: 0 0 1.7em;
+    }
+    .titlepage h1 { font-size: 2.35em; }
+    .titlepage h1 em { font-family: var(--serif); font-style: italic; font-weight: 400; color: var(--cyan); }
+    .titlepage .rule {
+      width: 5.4em;
+      height: 1px;
+      background: var(--line);
+      margin: 1.15em auto;
+      position: relative;
+    }
+    .titlepage .rule::after {
+      content: "◆";
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -52%);
+      font-size: .4em;
+      color: var(--amber);
+      background: var(--bg);
+      padding: 0 .8em;
+    }
+    .titlepage .author { margin: 0; font-family: var(--display); font-weight: 500; font-size: .92em; color: var(--ink-strong); }
+    .titlepage .affil { margin: .25em 0 0; font-size: .58em; color: var(--ink); }
+    .titlepage .event {
+      margin: .95em 0 0;
+      font-family: var(--mono);
+      font-size: .4em;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+    }
+
+    .toc { margin: .2em auto 0; max-width: 90%; text-align: left; }
+    .toc-row {
+      display: grid;
+      grid-template-columns: 2.6em 1fr auto;
+      align-items: baseline;
+      gap: .7em;
+      padding: .46em .2em;
+      border-bottom: 1px dashed var(--line-soft);
+    }
+    .toc-row:last-child { border-bottom: 0; }
+    .toc-row .no { font-family: var(--mono); font-size: .48em; color: var(--amber); }
+    .toc-row .ttl { font-family: var(--display); font-weight: 500; font-size: .86em; color: var(--ink-strong); }
+    .toc-row .sub { font-family: var(--mono); font-size: .42em; letter-spacing: .04em; color: var(--ink-muted); text-align: right; }
+
+    .divider { text-align: center; }
+    .divider .secno {
+      font-family: var(--display);
+      font-weight: 700;
+      font-size: 4.4em;
+      line-height: 1;
+      color: var(--amber);
+      display: block;
+      text-shadow: 0 0 60px rgba(242, 189, 92, .22);
+    }
+    .divider h2 { font-size: 2.05em; margin: .14em 0 0; }
+    .divider .sub {
+      margin: .55em auto 0;
+      font-family: var(--serif);
+      font-size: .72em;
+      font-style: italic;
+      color: var(--ink-muted);
+      max-width: 82%;
+      line-height: 1.4;
+    }
+
+    .quote-slide blockquote {
+      margin: 0 auto;
+      max-width: 88%;
+      border: 0;
+      background: transparent;
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: 1.7em;
+      line-height: 1.28;
+      color: var(--ink-strong);
+      text-align: center;
+      box-shadow: none;
+    }
+    .quote-slide blockquote .hl { color: var(--amber); }
+
+    /* environments */
+    .env {
+      background: var(--panel);
+      border: 1px solid var(--line-soft);
+      border-left: 3px solid var(--cyan);
+      border-radius: 7px;
+      padding: .58em .85em;
+      text-align: left;
+      margin: .3em auto 0;
+      max-width: 94%;
+      box-shadow: 0 12px 34px rgba(0, 0, 0, .3);
+    }
+    .env .env-label {
+      display: block;
+      font-family: var(--mono);
+      font-size: .42em;
+      font-weight: 600;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--cyan);
+      margin-bottom: .5em;
+    }
+    .env p { margin: 0; font-size: .64em; line-height: 1.4; color: var(--ink); }
+    .env p + p { margin-top: .5em; }
+    .env.def { border-left-color: var(--cyan); }
+    .env.def .env-label { color: var(--cyan); }
+    .env.idea { border-left-color: var(--amber); }
+    .env.idea .env-label { color: var(--amber); }
+    .env.idea p { font-family: var(--serif); font-size: .68em; font-style: italic; color: var(--ink-strong); }
+    .env.idea p strong { font-style: normal; color: var(--amber); }
+    .env.rmk { border-left-color: var(--ink-muted); }
+    .env.rmk .env-label { color: var(--ink-muted); }
+    .env.rmk p { font-size: .58em; }
+
+    /* panels */
+    .grid-2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .85em; align-items: stretch; width: 100%; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .8em; align-items: stretch; width: 100%; }
+
+    .panel {
+      background: linear-gradient(170deg, var(--panel-strong), var(--panel));
+      border: 1px solid var(--line-soft);
+      border-radius: 8px;
+      padding: .72em .85em;
+      text-align: left;
+      box-shadow: 0 10px 28px rgba(0, 0, 0, .28);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      position: relative;
+      min-height: 0;
+    }
+    .panel::before { content: ""; position: absolute; top: -1px; left: .85em; width: 2.1em; height: 2px; background: var(--cyan); border-radius: 2px; }
+    .panel.amber::before { background: var(--amber); }
+    .panel.coral::before { background: var(--coral); }
+    .panel.green::before { background: var(--green); }
+    .panel h4 {
+      margin: 0 0 .4em;
+      font-family: var(--mono);
+      font-weight: 600;
+      font-size: .46em;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--cyan);
+    }
+    .panel.amber h4 { color: var(--amber); }
+    .panel.coral h4 { color: var(--coral); }
+    .panel.green h4 { color: var(--green); }
+    .panel p { margin: 0; font-size: .6em; line-height: 1.36; color: var(--ink); }
+    .panel p + p { margin-top: .4em; }
+    .panel p strong { color: var(--ink-strong); font-weight: 600; }
+    .panel p .acc { color: var(--amber); font-weight: 600; }
+    .panel p .cy { color: var(--cyan); font-weight: 600; }
+
+    /* motivation examples */
+    .exgrid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .8em; width: 100%; }
+    .ex {
+      background: linear-gradient(170deg, var(--panel-strong), var(--panel));
+      border: 1px solid var(--line-soft);
+      border-radius: 9px;
+      padding: .7em .8em;
+      text-align: left;
+      box-shadow: 0 10px 28px rgba(0, 0, 0, .26);
+    }
+    .ex .ic { font-size: 1.05em; line-height: 1; }
+    .ex .nm { display: block; font-family: var(--display); font-weight: 600; font-size: .56em; color: var(--ink-strong); margin: .35em 0 .15em; }
+    .ex .ds { display: block; font-size: .47em; line-height: 1.35; color: var(--ink-muted); }
+
+    .split { display: grid; grid-template-columns: 1.1fr .9fr; gap: 1em; align-items: center; width: 100%; }
+    .split.flip { grid-template-columns: .9fr 1.1fr; }
+    .split .col-text { text-align: left; }
+
+    /* figure stage */
+    .stage {
+      background: linear-gradient(168deg, rgba(10, 14, 21, .9), rgba(16, 22, 32, .5));
+      border: 1px solid var(--line-soft);
+      border-radius: 9px;
+      padding: .55em;
+      margin: .3em auto 0;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, .03), 0 12px 30px rgba(0, 0, 0, .3);
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .fig-cap { margin: .4em 0 .1em; font-family: var(--mono); font-size: .34em; letter-spacing: .06em; color: var(--ink-muted); text-align: center; }
+
+    svg { width: 100%; height: auto; max-height: min(440px, 50vh); display: block; }
+    .split svg { max-height: min(430px, 48vh); }
+    svg text { font-family: var(--mono); }
+
+    .s-edge { stroke: var(--line); stroke-width: 2.2; fill: none; }
+    .s-node { fill: rgba(255, 255, 255, .04); stroke: var(--ink-muted); stroke-width: 2; }
+    .s-node.cyan { stroke: var(--cyan); fill: var(--cyan-dim); }
+    .s-node.amber { stroke: var(--amber); fill: var(--amber-dim); }
+    .s-node.coral { stroke: var(--coral); fill: var(--coral-dim); }
+    .s-node.green { stroke: var(--green); fill: var(--green-dim); }
+    .s-msg { stroke: var(--cyan); stroke-width: 2.4; fill: none; marker-end: url(#aC); }
+    .s-msg.amber { stroke: var(--amber); marker-end: url(#aA); }
+    .s-msg.coral { stroke: var(--coral); marker-end: url(#aR); }
+    .s-msg.dashed { stroke-dasharray: 5 6; }
+    .s-id { fill: var(--ink-strong); font-size: 21px; font-weight: 700; text-anchor: middle; }
+    .s-lbl { fill: var(--ink-strong); font-size: 15px; font-weight: 600; }
+    .s-sub { fill: var(--ink); font-size: 13px; }
+    .s-mut { fill: var(--ink-muted); font-size: 12px; }
+    .s-cy { fill: var(--cyan); font-size: 13px; font-weight: 600; }
+    .s-am { fill: var(--amber); font-size: 13px; font-weight: 600; }
+    .s-co { fill: var(--coral); font-size: 13px; font-weight: 600; }
+    .panel-box { fill: rgba(255, 255, 255, .025); stroke: var(--line); stroke-width: 1.4; }
+
+    /* flowing links (centralized vs distributed) */
+    .flow-link { stroke-dasharray: 5 7; animation: flowdash 1.15s linear infinite; }
+    @keyframes flowdash { to { stroke-dashoffset: -24; } }
+
+    .reveal ul { margin: .3em auto 0; max-width: 94%; text-align: left; font-size: .64em; line-height: 1.36; }
+    .reveal ul.dense { font-size: .56em; line-height: 1.34; padding-left: 1.05em; }
+    .reveal ul li { margin: .2em 0; }
+    .reveal ul li strong { color: var(--ink-strong); }
+    .reveal ul li .acc { color: var(--amber); font-weight: 600; }
+    .reveal ul li .cy { color: var(--cyan); font-weight: 600; }
+
+    /* ===== playable animation widget ===== */
+    .anim { width: 100%; display: flex; flex-direction: column; }
+    .anim .stage { margin-top: 0; }
+    .anim-cap {
+      margin: .5em auto 0;
+      font-family: var(--mono);
+      font-size: .4em;
+      line-height: 1.45;
+      color: var(--ink);
+      text-align: center;
+      min-height: 3.1em;
+      max-width: 94%;
+    }
+    .anim-cap .ev-fwd { color: var(--cyan); }
+    .anim-cap .ev-kill { color: var(--coral); }
+    .anim-cap .ev-win { color: var(--amber); font-weight: 700; }
+    .anim-controls {
+      display: flex; gap: .5em; align-items: center; justify-content: center;
+      margin-top: .35em; flex-wrap: wrap;
+    }
+    .btn {
+      font-family: var(--mono); font-size: .38em; font-weight: 600;
+      letter-spacing: .08em; text-transform: uppercase;
+      color: var(--ink); background: var(--panel-strong);
+      border: 1px solid var(--line); border-radius: 7px;
+      padding: .62em 1em; cursor: pointer; transition: all .15s ease;
+    }
+    .btn:hover { border-color: var(--cyan); color: var(--ink-strong); }
+    .btn.primary { color: #06121a; background: var(--cyan); border-color: var(--cyan); }
+    .btn.primary:hover { background: #7be0d7; }
+    .btn:disabled { opacity: .3; cursor: default; border-color: var(--line); color: var(--ink); }
+    .progress-pill {
+      font-family: var(--mono); font-size: .36em; letter-spacing: .1em;
+      color: var(--ink-muted); padding: 0 .3em; min-width: 7em; text-align: center;
+    }
+
+    /* LCR svg */
+    #lcr-svg .ring-guide { fill: none; stroke: var(--line-soft); stroke-width: 1.5; }
+    #lcr-svg .flow-arc { fill: none; stroke: rgba(92,207,198,.3); stroke-width: 1.8; marker-end: url(#aCs); }
+    #lcr-svg .node-ring { fill: rgba(255,255,255,.025); stroke: var(--ink-muted); stroke-width: 2; transition: stroke .4s, fill .4s, stroke-width .4s; }
+    #lcr-svg .node-ring.leader { stroke: var(--amber); stroke-width: 4; fill: var(--amber-dim); }
+    #lcr-svg .node-id { fill: var(--ink-muted); font-size: 15px; font-weight: 600; text-anchor: middle; }
+    #lcr-svg .node-id.leader { fill: var(--amber); }
+    #lcr-svg .tok { transition: transform .6s cubic-bezier(.45,.05,.2,1), opacity .45s ease; }
+    #lcr-svg .tok circle { fill: var(--cyan-dim); stroke: var(--cyan); stroke-width: 2.6; }
+    #lcr-svg .tok text { fill: var(--ink-strong); font-size: 17px; font-weight: 700; text-anchor: middle; dominant-baseline: central; }
+    #lcr-svg .tok.dead { opacity: 0; }
+    #lcr-svg .tok.win circle { fill: var(--amber); stroke: #fff; }
+    #lcr-svg .tok.win text { fill: #2c2000; }
+    #lcr-svg .crown { fill: var(--amber); font-size: 22px; text-anchor: middle; opacity: 0; transition: opacity .4s; }
+    #lcr-svg .crown.show { opacity: 1; }
+    .hud { font-family: var(--mono); fill: var(--ink-muted); font-size: 14px; }
+    .hud .v { fill: var(--cyan); font-weight: 700; }
+    .hud .vr { fill: var(--amber); font-weight: 700; }
+
+    /* flooding svg */
+    .fl-edge { transition: stroke .5s, stroke-width .5s; stroke: var(--line); stroke-width: 2.4; }
+    .fl-edge.tree { stroke: var(--green); stroke-width: 4.5; }
+    .fl-edge.dup { stroke: var(--coral); stroke-width: 3.2; stroke-dasharray: 4 5; animation: flowdash 1.1s linear infinite; }
+    .fl-node { transition: fill .45s, stroke .45s, stroke-width .45s; fill: rgba(255,255,255,.02); stroke: rgba(141,160,179,.55); stroke-width: 2; }
+    .fl-node.recv { fill: var(--cyan-dim); stroke: var(--cyan); }
+    .fl-node.src { fill: var(--amber-dim); stroke: var(--amber); }
+    .fl-node.justnew { stroke-width: 4; }
+    .fl-lbl { fill: var(--ink-strong); font-size: 15px; font-weight: 600; text-anchor: middle; dominant-baseline: central; }
+
+    /* formal environments */
+    .env.thm { border-left-color: var(--amber); }
+    .env.thm .env-label { color: var(--amber); }
+    .env.thm p { font-family: var(--serif); font-size: .68em; font-style: italic; color: var(--ink-strong); }
+    .env.thm p strong, .env.thm p .rm { font-style: normal; color: var(--amber); }
+    .env.proof { border-left-color: var(--ink-muted); background: transparent; box-shadow: none; }
+    .env.proof .env-label { color: var(--ink-muted); }
+    .env.proof p { font-size: .56em; color: var(--ink); }
+    .env.proof .qed { float: right; color: var(--ink-muted); }
+    .env .nb { color: var(--cyan); font-weight: 600; }
+
+    /* bridge-to-prior-lecture callout */
+    .callout {
+      border: 1px dashed rgba(169, 160, 240, .5);
+      background: rgba(169, 160, 240, .06);
+      border-radius: 8px;
+      padding: .5em .85em;
+      margin: .35em auto 0;
+      max-width: 94%;
+      text-align: left;
+    }
+    .callout .tag {
+      font-family: var(--mono); font-size: .34em; letter-spacing: .16em;
+      text-transform: uppercase; color: var(--violet); display: block; margin-bottom: .3em;
+    }
+    .callout p { margin: 0; font-size: .56em; line-height: 1.42; color: var(--ink); }
+    .callout p strong { color: var(--ink-strong); font-weight: 600; }
+    .callout p em { color: var(--violet); font-style: italic; }
+
+    /* compact pseudocode */
+    .algo {
+      background: linear-gradient(168deg, rgba(7, 10, 16, .85), rgba(14, 19, 28, .5));
+      border: 1px solid var(--line-soft); border-radius: 7px;
+      padding: .62em .85em; text-align: left; margin: .3em auto 0; max-width: 94%;
+      box-shadow: 0 12px 34px rgba(0, 0, 0, .32);
+    }
+    .algo .algo-name {
+      display: block; font-family: var(--mono); font-size: .4em; font-weight: 600;
+      letter-spacing: .14em; text-transform: uppercase; color: var(--amber); margin-bottom: .5em;
+    }
+    .algo code { display: block; font-family: var(--mono); font-size: .45em; line-height: 1.5; white-space: pre; color: var(--ink); }
+    .algo .kw { color: var(--cyan); } .algo .hl { color: var(--amber); } .algo .cm { color: var(--ink-muted); font-style: italic; }
+
+    .depth { color: var(--violet); font-weight: 600; font-family: var(--mono); }
+
+    @media (max-height: 800px) { svg { max-height: 42vh; } }
+    @media (prefers-reduced-motion: reduce) { .flow-link { animation: none; } }
+  </style>
+</head>
+
+<body>
+  <div class="board-frame" aria-hidden="true"></div>
+  <div class="chrome" aria-hidden="true"><span>Introduction to Distributed Algorithms</span><span>Debasish
+      Pattanayak · 2026</span></div>
+
+  <div class="reveal">
+    <div class="slides">
+
+      <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+        <defs>
+          <marker id="aC" markerWidth="9" markerHeight="6" refX="7.6" refY="3" orient="auto">
+            <polygon points="0,0 9,3 0,6" fill="#5ccfc6"></polygon>
+          </marker>
+          <marker id="aCs" markerWidth="8" markerHeight="6" refX="6.5" refY="3" orient="auto">
+            <polygon points="0,0 8,3 0,6" fill="rgba(92,207,198,.55)"></polygon>
+          </marker>
+          <marker id="aA" markerWidth="9" markerHeight="6" refX="7.6" refY="3" orient="auto">
+            <polygon points="0,0 9,3 0,6" fill="#f2bd5c"></polygon>
+          </marker>
+          <marker id="aR" markerWidth="9" markerHeight="6" refX="7.6" refY="3" orient="auto">
+            <polygon points="0,0 9,3 0,6" fill="#ef8169"></polygon>
+          </marker>
+        </defs>
+      </svg>
+
+      <!-- 1 · TITLE -->
+      <section class="titlepage" data-transition="fade">
+        <p class="series">A One-Hour Introduction</p>
+        <h1>Introduction to<br><em>Distributed Algorithms</em></h1>
+        <div class="rule"></div>
+        <p class="author"><a href="https://drdebmath.github.io">Debasish Pattanayak</a></p>
+        <p class="affil">Assistant Professor, IIT Indore</p>
+        <p class="event">From your phone to the cloud — making many computers act as one</p>
+      </section>
+
+      <!-- 2 · MOTIVATION -->
+      <section>
+        <span class="kicker">Why should you care?</span>
+        <div class="headline"><h2>You already use these every day</h2></div>
+        <div class="exgrid">
+          <div class="ex"><span class="ic">💸</span><span class="nm">UPI / payments</span><span class="ds">Your money moves correctly across banks that never share one database.</span></div>
+          <div class="ex"><span class="ic">💬</span><span class="nm">WhatsApp</span><span class="ds">A message reaches everyone in a group, in order, across continents.</span></div>
+          <div class="ex"><span class="ic">🔎</span><span class="nm">Google Search</span><span class="ds">One query is answered by thousands of machines working together.</span></div>
+          <div class="ex"><span class="ic">🎬</span><span class="nm">Netflix / CDNs</span><span class="ds">Video streams from a server near you, not one giant computer.</span></div>
+          <div class="ex"><span class="ic">🎮</span><span class="nm">Online games</span><span class="ds">Many players see a single, consistent game world in real time.</span></div>
+          <div class="ex"><span class="ic">⛓️</span><span class="nm">Blockchains</span><span class="ds">Strangers who trust no one still agree on one shared ledger.</span></div>
+        </div>
+        <p class="lead fragment fade-up">Behind all of them: many computers, no shared memory, talking only by <span class="cy">messages</span> — and somehow agreeing.</p>
+      </section>
+
+      <!-- 3 · CONTENTS -->
+      <section>
+        <div class="headline"><h2>Today's plan</h2></div>
+        <div class="toc">
+          <div class="toc-row fragment fade-up"><span class="no">1</span><span class="ttl">Centralized vs. distributed</span><span class="sub">what changes</span></div>
+          <div class="toc-row fragment fade-up"><span class="no">2</span><span class="ttl">The model — nodes &amp; messages</span><span class="sub">how we describe it</span></div>
+          <div class="toc-row fragment fade-up"><span class="no">3</span><span class="ttl">Measuring cost</span><span class="sub">time &amp; messages</span></div>
+          <div class="toc-row fragment fade-up"><span class="no">4</span><span class="ttl">Talking to everyone — broadcast</span><span class="sub">animated</span></div>
+          <div class="toc-row fragment fade-up"><span class="no">5</span><span class="ttl">Choosing a leader — token ring</span><span class="sub">fully animated</span></div>
+          <div class="toc-row fragment fade-up"><span class="no">6</span><span class="ttl">When nodes can lie</span><span class="sub">a hard problem to end on</span></div>
+        </div>
+      </section>
+
+      <!-- ===================== §1 ===================== -->
+      <section class="divider" data-transition="fade">
+        <span class="secno">1</span>
+        <h2>Centralized vs. Distributed</h2>
+        <p class="sub">The whole subject begins with one structural choice.</p>
+      </section>
+
+      <!-- 4 · CENTRALIZED VS DISTRIBUTED (diagram) -->
+      <section>
+        <span class="kicker"><span class="sec-no">§1</span>Two ways to organize computers</span>
+        <div class="stage">
+          <svg viewBox="0 0 900 360" aria-label="Centralized: clients around one server. Distributed: peers connected to each other.">
+            <text class="s-cy" x="225" y="28" text-anchor="middle" style="font-size:16px">CENTRALIZED</text>
+            <text class="s-am" x="675" y="28" text-anchor="middle" style="font-size:16px">DISTRIBUTED</text>
+            <line x1="450" y1="50" x2="450" y2="330" stroke="var(--line)" stroke-width="1.5" stroke-dasharray="4 6"></line>
+
+            <!-- centralized: hub + 6 clients -->
+            <g>
+              <line class="s-edge flow-link" x1="225" y1="190" x2="120" y2="95"></line>
+              <line class="s-edge flow-link" x1="225" y1="190" x2="330" y2="95"></line>
+              <line class="s-edge flow-link" x1="225" y1="190" x2="100" y2="190"></line>
+              <line class="s-edge flow-link" x1="225" y1="190" x2="350" y2="190"></line>
+              <line class="s-edge flow-link" x1="225" y1="190" x2="120" y2="285"></line>
+              <line class="s-edge flow-link" x1="225" y1="190" x2="330" y2="285"></line>
+              <circle class="s-node cyan" cx="120" cy="95" r="18"></circle>
+              <circle class="s-node cyan" cx="330" cy="95" r="18"></circle>
+              <circle class="s-node cyan" cx="100" cy="190" r="18"></circle>
+              <circle class="s-node cyan" cx="350" cy="190" r="18"></circle>
+              <circle class="s-node cyan" cx="120" cy="285" r="18"></circle>
+              <circle class="s-node cyan" cx="330" cy="285" r="18"></circle>
+              <circle class="s-node amber" cx="225" cy="190" r="34"></circle>
+              <text class="s-id" x="225" y="196" style="font-size:15px">server</text>
+              <text class="s-co" x="225" y="335" text-anchor="middle" style="font-size:13px">one point of failure · simple to reason about</text>
+            </g>
+
+            <!-- distributed: 6 peers in a ring/mesh -->
+            <g>
+              <line class="s-edge flow-link" x1="675" y1="80" x2="565" y2="150"></line>
+              <line class="s-edge flow-link" x1="675" y1="80" x2="785" y2="150"></line>
+              <line class="s-edge flow-link" x1="565" y1="150" x2="600" y2="270"></line>
+              <line class="s-edge flow-link" x1="785" y1="150" x2="750" y2="270"></line>
+              <line class="s-edge flow-link" x1="600" y1="270" x2="750" y2="270"></line>
+              <line class="s-edge flow-link" x1="565" y1="150" x2="785" y2="150"></line>
+              <line class="s-edge flow-link" x1="675" y1="80" x2="600" y2="270"></line>
+              <circle class="s-node amber" cx="675" cy="80" r="20"></circle>
+              <circle class="s-node amber" cx="565" cy="150" r="20"></circle>
+              <circle class="s-node amber" cx="785" cy="150" r="20"></circle>
+              <circle class="s-node amber" cx="600" cy="270" r="20"></circle>
+              <circle class="s-node amber" cx="750" cy="270" r="20"></circle>
+              <text class="s-cy" x="675" y="335" text-anchor="middle" style="font-size:13px">no boss · survives failures · harder to coordinate</text>
+            </g>
+          </svg>
+          <p class="fig-cap">Left: everyone talks to one server. Right: peers talk to each other directly.</p>
+        </div>
+      </section>
+
+      <!-- 5 · THE DIFFERENCE (cards) -->
+      <section>
+        <span class="kicker"><span class="sec-no">§1</span>What actually changes</span>
+        <div class="grid-2">
+          <div class="panel cyan">
+            <h4>Centralized system</h4>
+            <p>One machine holds the truth; everyone asks it. There <strong>is</strong> a global clock and a single memory — the easy world.</p>
+            <p><span class="cy">But:</span> if it's down, everything stops. It can't grow past one machine, and it can't be everywhere at once.</p>
+          </div>
+          <div class="panel amber">
+            <h4>Distributed system</h4>
+            <p>Many machines, each with its <strong>own</strong> memory and clock, cooperating only by sending <strong>messages</strong>.</p>
+            <p><span class="acc">Gains:</span> scale, fault-tolerance, closeness to users. <span class="acc">Price:</span> no one sees the whole picture — coordination becomes the hard part.</p>
+          </div>
+        </div>
+        <div class="env idea fragment fade-up">
+          <span class="env-label">The big idea of this lecture</span>
+          <p>Once you give up a shared clock and shared memory, even <strong>simple-sounding</strong> tasks — “tell everyone,” “pick one leader” — need real algorithms. That's what we'll build today.</p>
+        </div>
+      </section>
+
+      <!-- ===================== §2 ===================== -->
+      <section class="divider" data-transition="fade">
+        <span class="secno">2</span>
+        <h2>The Model</h2>
+        <p class="sub">A simple, precise picture of a distributed system: nodes and messages.</p>
+      </section>
+
+      <!-- 6 · GRAPH MODEL -->
+      <section>
+        <span class="kicker"><span class="sec-no">§2</span>How we draw a distributed system</span>
+        <div class="split">
+          <div class="stage">
+            <svg viewBox="0 0 520 380" aria-label="A network drawn as a graph; a node only sees its neighbours">
+              <line class="s-edge" x1="110" y1="90" x2="260" y2="70"></line>
+              <line class="s-edge" x1="260" y1="70" x2="410" y2="120"></line>
+              <line class="s-edge" x1="110" y1="90" x2="170" y2="220"></line>
+              <line class="s-edge" x1="260" y1="70" x2="250" y2="210"></line>
+              <line class="s-edge" x1="410" y1="120" x2="250" y2="210"></line>
+              <line class="s-edge" x1="410" y1="120" x2="420" y2="270"></line>
+              <line class="s-edge" x1="170" y1="220" x2="250" y2="210"></line>
+              <line class="s-edge" x1="170" y1="220" x2="200" y2="340"></line>
+              <line class="s-edge" x1="250" y1="210" x2="420" y2="270"></line>
+              <line class="s-edge" x1="250" y1="210" x2="200" y2="340"></line>
+              <line class="s-edge" x1="420" y1="270" x2="370" y2="350"></line>
+              <line class="s-edge" x1="200" y1="340" x2="370" y2="350"></line>
+              <circle cx="250" cy="210" r="92" fill="rgba(92,207,198,.06)" stroke="rgba(92,207,198,.3)" stroke-width="1.5" stroke-dasharray="4 6"></circle>
+              <circle class="s-node" cx="110" cy="90" r="22"></circle>
+              <circle class="s-node" cx="260" cy="70" r="22"></circle>
+              <circle class="s-node" cx="410" cy="120" r="22"></circle>
+              <circle class="s-node cyan" cx="250" cy="210" r="26"></circle><text class="s-id" x="250" y="217">v</text>
+              <circle class="s-node" cx="170" cy="220" r="22"></circle>
+              <circle class="s-node" cx="420" cy="270" r="22"></circle>
+              <circle class="s-node" cx="200" cy="340" r="22"></circle>
+              <circle class="s-node" cx="370" cy="350" r="22"></circle>
+              <text class="s-cy" x="250" y="320" text-anchor="middle">v talks only to its neighbours</text>
+            </svg>
+            <p class="fig-cap">A network is a graph: dots = computers, lines = links.</p>
+          </div>
+          <div class="col-text">
+            <div class="env def">
+              <span class="env-label">The graph abstraction</span>
+              <p>A distributed network is an undirected graph <em>G = (V, E)</em>.</p>
+              <p><strong>Nodes</strong> are processes; <strong>edges</strong> are communication links. We write <em>n = |V|</em> and <em>m = |E|</em>.</p>
+              <p>Messages travel only along edges, so information spreads one hop at a time.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 7 · LOCAL VIEW -->
+      <section>
+        <span class="kicker"><span class="sec-no">§2</span>The local view</span>
+        <div class="headline"><h2>What does one node know?</h2></div>
+        <div class="grid-3">
+          <div class="panel cyan">
+            <h4>Its own state</h4>
+            <p>Process <em>v</em> knows <em>id(v)</em>, its incident links, and the messages it has received so far.</p>
+          </div>
+          <div class="panel amber">
+            <h4>Not the whole network</h4>
+            <p>It does <span class="acc">not</span> start with the full graph <em>G</em>, and there is no shared memory to inspect.</p>
+          </div>
+          <div class="panel green">
+            <h4>Useful notation</h4>
+            <p><em>dist(u,v)</em> is hop-distance. The diameter <em>D</em> is the largest such distance in the graph.</p>
+          </div>
+        </div>
+        <div class="env idea fragment fade-up">
+          <span class="env-label">Why identifiers matter</span>
+          <p>Unique IDs come from a totally ordered set and fit in <em>O(log n)</em> bits. They are the <strong>only</strong> thing distinguishing otherwise-identical nodes — a theme that returns in leader election.</p>
+        </div>
+      </section>
+
+      <!-- 8 · WHAT A NODE DOES -->
+      <section>
+        <span class="kicker"><span class="sec-no">§2</span>The life of a node — and how time works</span>
+        <div class="grid-2">
+          <div class="panel cyan">
+            <h4>One synchronous round</h4>
+            <p>Time advances in rounds <em>t = 1, 2, …</em>. In each round every process simultaneously <strong>(i)</strong> sends a message on each incident link, <strong>(ii)</strong> receives that round's incoming messages, <strong>(iii)</strong> updates its state by a transition function.</p>
+            <p>A message sent in round <em>t</em> arrives by round <em>t+1</em>. (Real systems are <em>asynchronous</em>; rounds just keep the ideas clean.)</p>
+          </div>
+          <div class="panel amber">
+            <h4>Configurations &amp; executions</h4>
+            <p>A <strong>configuration</strong> is the tuple of all local states; an <strong>execution</strong> is the sequence <em>C<sub>0</sub>, C<sub>1</sub>, C<sub>2</sub>, …</em> the round function produces.</p>
+            <p>Local computation is <span class="acc">unbounded and free</span> — only communication is counted.</p>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <span class="kicker"><span class="sec-no">§2</span>What changes in the analysis</span>
+        <div class="headline"><h2>A different bottleneck</h2></div>
+        <div class="callout">
+          <span class="tag">Contrast — NP-completeness &amp; beyond (Kanesh)</span>
+          <p>There the scarce resource is <strong>time</strong>, and computation is the adversary. Here computation is <em>free</em> — the bottleneck is <strong>information</strong>: what a node can possibly know from local messages alone.</p>
+        </div>
+        <div class="env idea fragment fade-up">
+          <span class="env-label">Mental model</span>
+          <p>A distributed lower bound usually says: after this many rounds, some node still cannot have learned enough to distinguish two possible worlds.</p>
+        </div>
+      </section>
+
+      <!-- ===================== §3 ===================== -->
+      <section class="divider" data-transition="fade">
+        <span class="secno">3</span>
+        <h2>Measuring Cost</h2>
+        <p class="sub">Two simple questions we ask of every distributed algorithm.</p>
+      </section>
+
+      <!-- 8 · COMPLEXITY -->
+      <section>
+        <span class="kicker"><span class="sec-no">§3</span>The two yardsticks</span>
+        <div class="headline"><h2>How good is an algorithm?</h2></div>
+        <div class="grid-2">
+          <div class="panel cyan">
+            <h4>Round (time) complexity T(n)</h4>
+            <p>Rounds until every process has <strong>halted</strong>, worst-case over all inputs (id assignments, graphs in the class). When information must cross the whole network, this is bounded below by the <strong>diameter</strong> <em>D</em> — the largest hop-distance between any two nodes.</p>
+          </div>
+          <div class="panel amber">
+            <h4>Message complexity M(n)</h4>
+            <p>Total messages sent over the whole execution, again worst-case. (Refine to <em>bit</em> complexity when message size matters.)</p>
+          </div>
+        </div>
+        <p class="lead fragment fade-up">Same <span class="cy">O, Θ, Ω</span> asymptotics as always — but now in <strong>two</strong> resources that can trade off against each other.</p>
+      </section>
+
+      <section>
+        <span class="kicker"><span class="sec-no">§3</span>Lower-bound mindset</span>
+        <div class="headline"><h2>You have played this game before</h2></div>
+        <div class="callout">
+          <span class="tag">Selection lower bounds (Raman)</span>
+          <p>Finding the min <em>and</em> max needs exactly <strong>⌈3n/2⌉ − 2</strong> comparisons. Distributed problems have similar matching upper and lower bounds, but the adversary controls <em>what information can reach whom</em>.</p>
+        </div>
+        <p class="lead fragment fade-up">The technique rhymes: adversary and <span class="cy">indistinguishability</span> arguments. We'll meet one on the ring.</p>
+      </section>
+
+      <!-- ===================== §4 ===================== -->
+      <section class="divider" data-transition="fade">
+        <span class="secno">4</span>
+        <h2>Talking to Everyone</h2>
+        <p class="sub">Concept ① — Broadcast. One node has news; everyone must hear it.</p>
+      </section>
+
+      <!-- 9 · FLOODING IDEA -->
+      <section>
+        <span class="kicker"><span class="sec-no">§4</span>The simplest possible idea</span>
+        <div class="headline"><h2>Broadcast by flooding</h2></div>
+        <div class="env idea">
+          <span class="env-label">The idea</span>
+          <p>The source tells its neighbours. <strong>The first time</strong> a node hears <em>M</em>, it relays to all other neighbours, then goes silent — gossip through a crowd.</p>
+        </div>
+        <div class="algo">
+          <span class="algo-name">Flooding — code at every node v</span>
+          <code><span class="kw">if</span> v is the source:  send <span class="hl">M</span> to all neighbours; halt.
+
+<span class="kw">on first</span> receipt of M from neighbour p:
+    <span class="hl">parent(v) ← p</span>                <span class="cm"># a tree edge</span>
+    send M to all neighbours <span class="kw">except</span> p
+    ignore every later copy of M</code>
+        </div>
+        <p class="lead fragment fade-up">Acting only on the <strong>first</strong> copy halts the flood; the <em>parent</em> pointers form a spanning tree. Watch it run — <span class="cy">press ▶ next</span>.</p>
+      </section>
+
+      <!-- 10 · FLOODING ANIMATION -->
+      <section>
+        <span class="kicker"><span class="sec-no">§4</span>Animated example — press play</span>
+        <div class="headline"><h2>Flooding, round by round</h2></div>
+        <div class="anim" id="flood">
+          <div class="stage">
+            <svg viewBox="0 0 460 300" id="flood-svg" aria-label="Animated flooding broadcast">
+              <line class="fl-edge" data-e="sa" x1="60" y1="150" x2="150" y2="70"></line>
+              <line class="fl-edge" data-e="sb" x1="60" y1="150" x2="150" y2="230"></line>
+              <line class="fl-edge" data-e="ac" x1="150" y1="70" x2="250" y2="110"></line>
+              <line class="fl-edge" data-e="bc" x1="150" y1="230" x2="250" y2="110"></line>
+              <line class="fl-edge" data-e="bd" x1="150" y1="230" x2="250" y2="200"></line>
+              <line class="fl-edge" data-e="ce" x1="250" y1="110" x2="360" y2="150"></line>
+              <line class="fl-edge" data-e="de" x1="250" y1="200" x2="360" y2="150"></line>
+              <g><circle class="fl-node" data-n="s" cx="60" cy="150" r="20"></circle><text class="fl-lbl" x="60" y="150">s</text></g>
+              <g><circle class="fl-node" data-n="a" cx="150" cy="70" r="18"></circle><text class="fl-lbl" x="150" y="70">a</text></g>
+              <g><circle class="fl-node" data-n="b" cx="150" cy="230" r="18"></circle><text class="fl-lbl" x="150" y="230">b</text></g>
+              <g><circle class="fl-node" data-n="c" cx="250" cy="110" r="18"></circle><text class="fl-lbl" x="250" y="110">c</text></g>
+              <g><circle class="fl-node" data-n="d" cx="250" cy="200" r="18"></circle><text class="fl-lbl" x="250" y="200">d</text></g>
+              <g><circle class="fl-node" data-n="e" cx="360" cy="150" r="18"></circle><text class="fl-lbl" x="360" y="150">e</text></g>
+              <text class="hud" id="fl-hud" x="455" y="26" text-anchor="end">round 0</text>
+            </svg>
+          </div>
+          <div class="anim-cap"></div>
+          <div class="anim-controls">
+            <button class="btn" data-act="reset">⏮ Reset</button>
+            <button class="btn" data-act="back">◀ Back</button>
+            <button class="btn primary" data-act="play">▶ Play</button>
+            <button class="btn" data-act="step">Step ▶</button>
+            <span class="progress-pill"></span>
+          </div>
+        </div>
+      </section>
+
+      <!-- 11 · FLOODING RECAP -->
+      <section>
+        <span class="kicker"><span class="sec-no">§4</span>What we just saw — stated precisely</span>
+        <div class="env thm">
+          <span class="env-label">Proposition</span>
+          <p>Synchronous flooding from <em>s</em> reaches every node, finishing in exactly <span class="rm">ecc(s)</span> rounds — the distance to the farthest node, at most the diameter <em>D</em> — and sending at most <span class="rm">2m</span> messages. The parent pointers form a <span class="rm">BFS tree</span> rooted at <em>s</em>.</p>
+        </div>
+        <div class="env proof">
+          <span class="env-label">Proof sketch</span>
+          <p>Induction on <em>d</em>: a node at distance <em>d</em> from <em>s</em> first receives <em>M</em> in round <em>d</em> — a shortest path delivers it by round <em>d</em>, and nothing is faster since each hop costs one round. The last node sits at distance ecc(s). Each edge carries <em>M</em> at most once per direction ⇒ ≤ 2m messages. <span class="qed">∎</span></p>
+        </div>
+      </section>
+
+      <section>
+        <span class="kicker"><span class="sec-no">§4</span>Message count intuition</span>
+        <div class="headline"><h2>Why 2m, not n−1?</h2></div>
+        <div class="env rmk">
+          <span class="env-label">Remark</span>
+          <p>The spanning tree informs all <em>n</em> nodes with only <em>n−1</em> messages. Every <strong>other</strong> message is a <span style="color:var(--coral)">duplicate</span> — a copy arriving where the news already reached.</p>
+          <p>Counting both directions of every edge gives the clean bound <em>2m</em>.</p>
+        </div>
+        <p class="lead fragment fade-up">Broadcast is cheap. Electing <strong>one</strong> leader is where locality starts to bite.</p>
+      </section>
+
+      <!-- ===================== §5 ===================== -->
+      <section class="divider" data-transition="fade">
+        <span class="secno">5</span>
+        <h2>Choosing a Leader</h2>
+        <p class="sub">Concept ② — Leader election. The network must single out exactly one node.</p>
+      </section>
+
+      <!-- 12 · LE PROBLEM + WHY IDS -->
+      <section>
+        <span class="kicker"><span class="sec-no">§5</span>The problem, and a catch</span>
+        <div class="grid-2">
+          <div class="panel">
+            <h4>The problem</h4>
+            <p>Each process has an output variable. In the final configuration <strong>exactly one</strong> process outputs <em>leader</em>; all others output <em>non-leader</em>.</p>
+            <p><span class="cy">Why bother?</span> A leader becomes the coordinator — it holds the lock, sequences events, or starts the next phase. Many protocols begin by electing one.</p>
+            <p>We take the canonical setting: a <strong>ring</strong> of <em>n</em> nodes with unique IDs.</p>
+          </div>
+          <div class="panel amber">
+            <h4>Why IDs are essential</h4>
+            <p>On a ring all nodes are <em>structurally identical</em>. Without distinct names, a deterministic algorithm cannot break the tie — <strong>we'll prove this</strong> at the end of the section.</p>
+            <p>Unique IDs supply the asymmetry; the algorithm only exploits it.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- LCR ALGORITHM + CORRECTNESS LEMMA -->
+      <section>
+        <span class="kicker"><span class="sec-no">§5</span>The algorithm, precisely</span>
+        <div class="split">
+          <div class="col-text">
+            <div class="algo" style="max-width:none;">
+              <span class="algo-name">LCR — unidirectional ring</span>
+              <code><span class="kw">init:</span> send id(v) clockwise.
+
+<span class="kw">on receiving</span> value m:
+    <span class="kw">if</span> m &gt; id(v):  forward m    <span class="cm"># larger survives</span>
+    <span class="kw">if</span> m &lt; id(v):  discard m    <span class="cm"># smaller dies</span>
+    <span class="kw">if</span> m = id(v):  output <span class="hl">leader</span>
+                  <span class="cm"># my id came home</span></code>
+            </div>
+          </div>
+          <div class="col-text">
+            <div class="env idea">
+              <span class="env-label">The plan — LCR</span>
+              <p>Send IDs one way around the ring. A token meeting a <strong>larger</strong> ID is swallowed; the <strong>maximum</strong> ID survives a full lap.</p>
+            </div>
+            <div class="env thm">
+              <span class="env-label">Lemma (correctness)</span>
+              <p>Let <em>v*</em> = arg max id. Then <span class="rm">exactly v*</span> outputs <em>leader</em>.</p>
+            </div>
+          </div>
+        </div>
+        <p class="small fragment fade-up" style="text-align:center;display:block;margin-top:.5em;">We analyze LCR <strong>synchronously</strong> for clarity; Chang–Roberts originally runs <em>asynchronously</em>, with the same message counts.</p>
+      </section>
+
+      <section>
+        <span class="kicker"><span class="sec-no">§5</span>Correctness proof</span>
+        <div class="headline"><h2>Why the maximum ID is the only survivor</h2></div>
+        <div class="grid-2">
+          <div class="env proof">
+            <span class="env-label">Survival</span>
+            <p>A token <em>m</em> is discarded at the first node whose id exceeds it. Since <em>id(v*)</em> is maximum, its token is never discarded.</p>
+          </div>
+          <div class="env proof">
+            <span class="env-label">Election</span>
+            <p>The maximum token is forwarded <em>n</em> times and returns to <em>v*</em>, which sees <em>m = id(v*)</em> and elects. Every other token dies before completing the lap. <span class="qed">∎</span></p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 13 · LCR ANIMATION (centerpiece) -->
+      <section>
+        <span class="kicker"><span class="sec-no">§5</span>Fully animated — token-based leader election</span>
+        <div class="headline"><h2>The biggest ID wins the ring</h2></div>
+        <p class="small" style="text-align:center;display:block;margin:-.2em 0 .3em;">Press <span style="color:var(--cyan)">▶ Play</span> — or <em>Step ▶</em> to advance round by round.</p>
+        <div class="anim" id="lcr">
+          <div class="stage">
+            <svg viewBox="0 0 600 460" id="lcr-svg" aria-label="Animated token-based (LCR) leader election on a ring"></svg>
+          </div>
+          <div class="anim-cap"></div>
+          <div class="anim-controls">
+            <button class="btn" data-act="reset">⏮ Reset</button>
+            <button class="btn" data-act="back">◀ Back</button>
+            <button class="btn primary" data-act="play">▶ Play</button>
+            <button class="btn" data-act="step">Step ▶</button>
+            <span class="progress-pill"></span>
+          </div>
+        </div>
+      </section>
+
+      <!-- 14 · LCR RECAP -->
+      <section>
+        <span class="kicker"><span class="sec-no">§5</span>Cost analysis</span>
+        <div class="headline"><h2>Counting messages on the ring</h2></div>
+        <div class="grid-3">
+          <div class="panel cyan">
+            <h4>Time</h4>
+            <p><strong>Θ(n)</strong> rounds — the winning token needs <em>n</em> hops to close the lap.</p>
+          </div>
+          <div class="panel amber">
+            <h4>Messages — worst case</h4>
+            <p><strong>Θ(n²)</strong>. Adversarial input: IDs <em>decreasing</em> along the travel direction, so the token from the k-th node survives k hops — total <em>1+2+⋯+n = n(n+1)/2</em>.</p>
+          </div>
+          <div class="panel green">
+            <h4>Messages — average</h4>
+            <p><strong>Θ(n&nbsp;log&nbsp;n)</strong> over uniformly random ID orderings (expected total ≈ <em>n·H<sub>n</sub></em>). We counted <em>15</em> in the demo.</p>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <span class="kicker"><span class="sec-no">§5</span>How good can leader election get?</span>
+        <div class="headline"><h2>The tight bound on rings</h2></div>
+        <div class="env thm">
+          <span class="env-label">Theorem — a matching lower bound</span>
+          <p>Every comparison-based ring leader-election algorithm sends <span class="rm">Ω(n log n)</span> messages in the worst case (Frederickson–Lynch 1987; cf. Burns 1980 for asynchronous rings).</p>
+        </div>
+        <p class="lead fragment fade-up">Hirschberg–Sinclair (1980) attains <span class="cy">O(n log n)</span>, so the bound is tight.</p>
+      </section>
+
+      <!-- ANONYMOUS-RING IMPOSSIBILITY -->
+      <section>
+        <span class="kicker"><span class="sec-no">§5</span>Why the IDs were not optional</span>
+        <div class="split">
+          <div class="col-text">
+            <div class="env thm">
+              <span class="env-label">Lemma (Angluin 1980)</span>
+              <p>No <span class="rm">deterministic</span> algorithm elects a leader on an <span class="rm">anonymous</span> ring — even synchronous, even with <em>n</em> known to all.</p>
+            </div>
+            <div class="env proof">
+              <span class="env-label">Proof</span>
+              <p>Induction on the round <em>t</em>. All nodes start in identical states and run identical code; by the ring's symmetry they receive identical messages, so after every round they remain in <strong>identical states</strong>. If one node ever outputs <em>leader</em>, all do at once — never exactly one. <span class="qed">∎</span></p>
+            </div>
+          </div>
+          <div class="col-text">
+            <div class="callout">
+              <span class="tag">An indistinguishability argument (cf. Raman)</span>
+              <p>Same shape as the selection lower bounds: exhibit executions a node <strong>cannot tell apart</strong>, forcing identical behaviour. Here <em>symmetry itself</em> is the adversary.</p>
+            </div>
+            <p class="lead" style="text-align:left;margin-left:0;font-size:.68em;">Two escape hatches: <span class="cy">unique IDs</span> (what LCR uses) or <span class="cy">randomization</span> — break symmetry with high probability.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================== §6 ===================== -->
+      <section class="divider" data-transition="fade">
+        <span class="secno">6</span>
+        <h2>When Nodes Can Lie</h2>
+        <p class="sub">So far everyone was honest. One last problem — to leave you thinking.</p>
+      </section>
+
+      <!-- 15 · BYZANTINE DESCRIPTION (no solution) -->
+      <section>
+        <span class="kicker"><span class="sec-no">§6</span>A famous puzzle</span>
+        <div class="split">
+          <div class="stage">
+            <svg viewBox="0 0 460 400" aria-label="Generals surrounding a city; one is a traitor sending conflicting orders">
+              <circle cx="230" cy="200" r="52" fill="rgba(255,255,255,.03)" stroke="var(--line)" stroke-width="2"></circle>
+              <text class="s-mut" x="230" y="196" text-anchor="middle">enemy</text>
+              <text class="s-mut" x="230" y="212" text-anchor="middle">city</text>
+              <circle class="s-node green" cx="230" cy="70" r="28"></circle><text class="s-id" x="230" y="77" style="font-size:16px">G1</text>
+              <circle class="s-node green" cx="343" cy="135" r="28"></circle><text class="s-id" x="343" y="142" style="font-size:16px">G2</text>
+              <circle class="s-node coral" cx="343" cy="265" r="28"></circle><text class="s-id" x="343" y="272" style="font-size:16px">G3</text>
+              <text class="s-co" x="343" y="312" text-anchor="middle">traitor</text>
+              <circle class="s-node green" cx="230" cy="330" r="28"></circle><text class="s-id" x="230" y="337" style="font-size:16px">G4</text>
+              <circle class="s-node green" cx="117" cy="265" r="28"></circle><text class="s-id" x="117" y="272" style="font-size:16px">G5</text>
+              <circle class="s-node green" cx="117" cy="135" r="28"></circle><text class="s-id" x="117" y="142" style="font-size:16px">G6</text>
+              <path class="s-msg coral dashed" d="M 322 248 Q 280 180 250 92"></path>
+              <text class="s-co" x="300" y="150">“attack”</text>
+              <path class="s-msg coral dashed" d="M 325 285 Q 290 320 256 322"></path>
+              <text class="s-co" x="300" y="312">“retreat”</text>
+            </svg>
+            <p class="fig-cap">A traitor (coral) can tell different generals different things.</p>
+          </div>
+          <div class="col-text">
+            <div class="env def">
+              <span class="env-label">Byzantine Generals (Lamport–Shostak–Pease 1982)</span>
+              <p><em>n</em> processes; up to <em>f</em> are <strong>Byzantine</strong> — arbitrarily faulty, even malicious. A commander holds a value <em>x ∈ {attack, retreat}</em> and sends orders; every correct process must <em>decide</em>.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <span class="kicker"><span class="sec-no">§6</span>Agreement requirements</span>
+        <div class="headline"><h2>What must the correct nodes guarantee?</h2></div>
+        <div class="grid-2">
+          <div class="panel cyan">
+            <h4>Agreement</h4>
+            <p>All correct processes decide the same value, no matter how the faulty processes behave.</p>
+          </div>
+          <div class="panel amber">
+            <h4>Validity</h4>
+            <p>If the commander is correct, every correct process decides the commander's value <em>x</em>.</p>
+          </div>
+        </div>
+        <p class="lead fragment fade-up">For which <em>n, f</em> is this possible? <span class="cy">That is where the next lecture begins.</span></p>
+      </section>
+
+      <!-- 16 · CLOSING -->
+      <section>
+        <span class="kicker"><span class="sec-no">§6</span>Where this leads</span>
+        <div class="headline"><h2>The honest truth about lying nodes</h2></div>
+        <div class="grid-3">
+          <div class="panel coral">
+            <h4>The answer is surprising</h4>
+            <p>Whether agreement is even <strong>possible</strong> turns on <em>n</em> versus the number of liars <em>f</em> — sometimes it simply cannot be done. The proofs are, again, <strong>indistinguishability</strong> arguments. <em>(Next lecture.)</em></p>
+          </div>
+          <div class="panel cyan">
+            <h4>It's everywhere — and verified</h4>
+            <p>Behind <strong>blockchains</strong>, avionics, and fault-tolerant databases. Proving such protocols correct is a prime target for <strong>model checking</strong> (Govind's lecture).</p>
+          </div>
+          <div class="panel green">
+            <h4>You now have the tools</h4>
+            <p>Graph model, rounds, two-resource complexity, broadcast, leader election, and one impossibility proof — enough to read on.</p>
+          </div>
+        </div>
+        <p class="lead fragment fade-up">Three ideas to keep: a precise <span class="cy">model</span>, <strong>broadcast</strong>, and <strong>leader election</strong> — and the habit of asking <em>“is this even possible?”</em></p>
+      </section>
+
+      <!-- 17 · THANKS -->
+      <section class="quote-slide" data-transition="fade">
+        <blockquote class="fragment fade-up">Many computers, no shared memory, only messages —<br><span class="hl">and still, they agree.</span></blockquote>
+        <p class="lead fragment fade-up" style="margin-top:1.1em;">Thank you. Questions?</p>
+        <p class="small fragment fade-up" style="text-align:center;display:block;margin-top:.6em;">Debasish Pattanayak · IIT Indore · <a href="https://drdebmath.github.io" style="color:var(--cyan);">drdebmath.github.io</a></p>
+      </section>
+
+    </div>
+  </div>
+  <script src="assets/vendor/reveal.js"></script>
+  <script>
+    /* ---------- slide auto-fit (shared with other decks) ---------- */
+    function prepareSlideFit() { const s = document.querySelectorAll(".reveal .slides > section, .reveal .slides > section > section"); s.forEach(e => { if (e.classList.contains("stack")) return; if (e.firstElementChild && e.firstElementChild.classList.contains("slide-fit")) return; const w = document.createElement("div"); w.className = "slide-fit"; while (e.firstChild) w.appendChild(e.firstChild); e.appendChild(w) }) }
+    function fitSlidesToViewport() {
+      document.querySelectorAll(".reveal .slides > section, .reveal .slides > section > section").forEach(e => {
+        if (e.classList.contains("stack")) return;
+        const w = e.firstElementChild;
+        if (!(w instanceof HTMLElement) || !w.classList.contains("slide-fit")) return;
+
+        w.style.transform = "scale(1)";
+        const aw = e.clientWidth, ah = e.clientHeight;
+        if (!aw || !ah) return;
+
+        const wr = w.getBoundingClientRect();
+        const kids = Array.from(w.children).filter(el => el.getClientRects().length);
+        let left = 0, right = w.scrollWidth, top = 0, bottom = w.scrollHeight;
+        kids.forEach(el => {
+          const r = el.getBoundingClientRect();
+          left = Math.min(left, r.left - wr.left);
+          right = Math.max(right, r.right - wr.left);
+          top = Math.min(top, r.top - wr.top);
+          bottom = Math.max(bottom, r.bottom - wr.top);
+        });
+
+        const sideReserve = 18, topReserve = 16, bottomReserve = 58;
+        const cw = Math.max(1, right - left);
+        const ch = Math.max(1, bottom - top);
+        const scale = Math.min(1, (aw - sideReserve * 2) / cw, (ah - topReserve - bottomReserve) / ch);
+        w.style.transform = `scale(${scale})`;
+      })
+    }
+    let fitRaf = null; function scheduleFitSlides() { if (fitRaf !== null) cancelAnimationFrame(fitRaf); fitRaf = requestAnimationFrame(() => { fitRaf = null; fitSlidesToViewport() }) }
+    prepareSlideFit();
+
+    /* ---------- tiny SVG helper ---------- */
+    const SVGNS = "http://www.w3.org/2000/svg";
+    function el(tag, attrs, kids) {
+      const n = document.createElementNS(SVGNS, tag);
+      if (attrs) for (const k in attrs) n.setAttribute(k, attrs[k]);
+      if (kids) kids.forEach(c => n.appendChild(c));
+      return n;
+    }
+
+    /* ---------- generic stepper wiring ---------- */
+    const ANIMS = [];
+    function makeStepper(rootId, cfg) {
+      const root = document.getElementById(rootId);
+      if (!root) return;
+      const cap = root.querySelector(".anim-cap");
+      const prog = root.querySelector(".progress-pill");
+      const bPlay = root.querySelector('[data-act=play]');
+      const bStep = root.querySelector('[data-act=step]');
+      const bBack = root.querySelector('[data-act=back]');
+      const bReset = root.querySelector('[data-act=reset]');
+      let i = 0, timer = null;
+      const N = cfg.frames;
+      function draw() {
+        cfg.render(i);
+        cap.innerHTML = cfg.caps[i] || "";
+        prog.textContent = "Step " + (i + 1) + " / " + N;
+        bBack.disabled = (i === 0);
+        bStep.disabled = (i >= N - 1);
+        scheduleFitSlides();
+      }
+      function stop() { if (timer) { clearInterval(timer); timer = null; } bPlay.textContent = "▶ Play"; bPlay.classList.add("primary"); }
+      function play() {
+        if (timer) { stop(); return; }
+        if (i >= N - 1) { i = 0; draw(); }
+        bPlay.textContent = "⏸ Pause"; bPlay.classList.remove("primary");
+        timer = setInterval(() => { if (i >= N - 1) { stop(); return; } i++; draw(); }, cfg.interval || 1300);
+      }
+      bPlay.onclick = play;
+      bStep.onclick = () => { stop(); if (i < N - 1) { i++; draw(); } };
+      bBack.onclick = () => { stop(); if (i > 0) { i--; draw(); } };
+      bReset.onclick = () => { stop(); i = 0; draw(); };
+      const inst = { root, reset() { stop(); i = 0; draw(); }, stop };
+      ANIMS.push(inst);
+      draw();
+      return inst;
+    }
+
+    /* ---------- flooding animation ---------- */
+    function buildFlood() {
+      const svg = document.getElementById("flood-svg");
+      if (!svg) return;
+      const nodeEl = {}, edgeEl = {};
+      svg.querySelectorAll("[data-n]").forEach(e => nodeEl[e.getAttribute("data-n")] = e);
+      svg.querySelectorAll("[data-e]").forEach(e => edgeEl[e.getAttribute("data-e")] = e);
+      const hud = document.getElementById("fl-hud");
+      // cumulative state per frame. Tree edges (green) = first-receipt deliveries;
+      // dup edges (coral) = redundant copies arriving where the news already reached.
+      const recv = [["s"], ["s", "a", "b"], ["s", "a", "b", "c", "d"], ["s", "a", "b", "c", "d", "e"], ["s", "a", "b", "c", "d", "e"]];
+      const fresh = [["s"], ["a", "b"], ["c", "d"], ["e"], []];
+      const tree = [[], ["sa", "sb"], ["sa", "sb", "ac", "bd"], ["sa", "sb", "ac", "bd", "ce"], ["sa", "sb", "ac", "bd", "ce"]];
+      const dup = [[], [], ["bc"], ["bc", "de"], ["bc", "de"]];
+      const msgs = [0, 2, 5, 8, 9];
+      const caps = [
+        "Round 0 — only the source <b>s</b> has the news.",
+        "Round 1 — <span class='ev-fwd'>s sends to a and b</span>. They hear it for the first time. (+2 messages)",
+        "Round 2 — <span class='ev-fwd'>a→c and b→d</span> deliver to new nodes (green tree edges). But <span class='ev-kill'>b→c is a duplicate</span> — c already heard it from a. (+3 = 5 total)",
+        "Round 3 — <span class='ev-fwd'>c→e</span> reaches the last node: everyone knows in <b>3 rounds</b> = ecc(s). Meanwhile <span class='ev-kill'>c→b and d→e are duplicates</span>. (8 total)",
+        "Round 4 — one last duplicate <span class='ev-kill'>e→d</span>, carrying no new info. Total <b>9</b> messages: 5 built the tree, 4 were redundant — worst case ≤ 2m = 14."
+      ];
+      function render(i) {
+        Object.values(nodeEl).forEach(e => e.classList.remove("recv", "src", "justnew"));
+        Object.values(edgeEl).forEach(e => e.classList.remove("tree", "dup"));
+        recv[i].forEach(n => nodeEl[n] && nodeEl[n].classList.add("recv"));
+        nodeEl["s"].classList.add("src");
+        fresh[i].forEach(n => nodeEl[n] && nodeEl[n].classList.add("justnew"));
+        dup[i].forEach(t => edgeEl[t] && edgeEl[t].classList.add("dup"));
+        tree[i].forEach(t => edgeEl[t] && edgeEl[t].classList.add("tree"));
+        hud.innerHTML = "round " + i + "  ·  msgs " + msgs[i];
+      }
+      makeStepper("flood", { frames: 5, render, caps, interval: 1400 });
+    }
+
+    /* ---------- token-ring (LCR) leader election ---------- */
+    function buildLCR() {
+      const svg = document.getElementById("lcr-svg");
+      if (!svg) return;
+      const ids = [2, 7, 4, 1, 5, 3], N = ids.length;
+      const cx = 300, cy = 230, R = 150;
+      const ang = k => (-90 + k * 360 / N) * Math.PI / 180;
+      const pos = ids.map((_, k) => ({ x: cx + R * Math.cos(ang(k)), y: cy + R * Math.sin(ang(k)) }));
+
+      // ring guide
+      svg.appendChild(el("circle", { class: "ring-guide", cx, cy, r: R }));
+      // clockwise flow arcs between adjacent nodes
+      for (let k = 0; k < N; k++) {
+        const a0 = ang(k) + 0.30, a1 = ang(k) + (2 * Math.PI / N) - 0.30;
+        const sx = cx + R * Math.cos(a0), sy = cy + R * Math.sin(a0);
+        const ex = cx + R * Math.cos(a1), ey = cy + R * Math.sin(a1);
+        svg.appendChild(el("path", { class: "flow-arc", d: `M ${sx.toFixed(1)} ${sy.toFixed(1)} A ${R} ${R} 0 0 1 ${ex.toFixed(1)} ${ey.toFixed(1)}` }));
+      }
+      // nodes + id labels (own id shown OUTSIDE the ring)
+      const nodeRing = [];
+      ids.forEach((v, k) => {
+        const ring = el("circle", { class: "node-ring", cx: pos[k].x, cy: pos[k].y, r: 21 });
+        nodeRing.push(ring); svg.appendChild(ring);
+        const lp = { x: cx + (R + 36) * Math.cos(ang(k)), y: cy + (R + 36) * Math.sin(ang(k)) };
+        const lab = el("text", { class: "node-id", x: lp.x, y: lp.y + 5 });
+        lab.textContent = "id " + v; svg.appendChild(lab);
+      });
+      // crown marker (shown above leader)
+      const crown = el("text", { class: "crown" }); crown.textContent = "★"; svg.appendChild(crown);
+      // tokens (one per node, carrying that node's id)
+      const tokEl = ids.map((v, k) => {
+        const g = el("g", { class: "tok" }, [
+          el("circle", { r: 16, cx: 0, cy: 0 }),
+          (() => { const t = el("text", {}); t.textContent = v; return t; })()
+        ]);
+        g.style.transform = `translate(${pos[k].x}px, ${pos[k].y}px)`;
+        svg.appendChild(g); return g;
+      });
+      // HUD
+      const hud = el("text", { class: "hud", x: 16, y: 28 }); svg.appendChild(hud);
+
+      // ---- simulate synchronous LCR into frames ----
+      let toks = ids.map((v, k) => ({ val: v, node: k, alive: true, leader: false }));
+      const frames = [], caps = [], meta = [];
+      const snap = (cap, round, msgs) => {
+        frames.push(toks.map(t => ({ node: t.node, alive: t.alive, leader: t.leader })));
+        caps.push(cap); meta.push({ round, msgs });
+      };
+      let round = 0, msgs = 0;
+      snap("Setup — every node makes a token carrying <b>its own ID</b>, and will pass it clockwise.", 0, 0);
+      while (true) {
+        round++;
+        let moved = 0;
+        toks.forEach(t => { if (t.alive && !t.leader) { t.node = (t.node + 1) % N; moved++; } });
+        msgs += moved;
+        snap("Round " + round + " · <b>send</b> — each surviving token hops one node clockwise.", round, msgs);
+        const ev = [];
+        toks.forEach(t => {
+          if (!t.alive || t.leader) return;
+          const here = ids[t.node];
+          if (t.val === here) { t.leader = true; ev.push("<span class='ev-win'>" + t.val + " returned home → LEADER</span>"); }
+          else if (t.val < here) { t.alive = false; ev.push("<span class='ev-kill'>" + here + " swallows " + t.val + "</span>"); }
+          else { ev.push("<span class='ev-fwd'>" + here + " forwards " + t.val + "</span>"); }
+        });
+        snap("Round " + round + " · <b>compare</b> — " + ev.join(" · ") + ".", round, msgs);
+        if (!toks.some(t => t.alive && !t.leader)) break;
+      }
+
+      function render(i) {
+        const f = frames[i];
+        f.forEach((t, k) => {
+          const g = tokEl[k];
+          g.style.transform = `translate(${pos[t.node].x}px, ${pos[t.node].y}px)`;
+          g.classList.toggle("dead", !t.alive);
+          g.classList.toggle("win", t.leader);
+        });
+        // leader node highlight + crown
+        let leaderNode = -1;
+        f.forEach((t) => { if (t.leader) leaderNode = t.node; });
+        nodeRing.forEach((r, k) => r.classList.toggle("leader", k === leaderNode));
+        svg.querySelectorAll(".node-id").forEach((l, k) => l.classList.toggle("leader", k === leaderNode));
+        if (leaderNode >= 0) {
+          crown.setAttribute("x", pos[leaderNode].x);
+          crown.setAttribute("y", pos[leaderNode].y - 30);
+          crown.classList.add("show");
+        } else crown.classList.remove("show");
+        hud.innerHTML = "Round <tspan class='vr'>" + meta[i].round + "</tspan>   ·   Messages <tspan class='v'>" + meta[i].msgs + "</tspan>";
+      }
+      makeStepper("lcr", { frames: frames.length, render, caps, interval: 1250 });
+    }
+
+    /* ---------- init ---------- */
+    Reveal.initialize({ hash: true, slideNumber: "c/t", progress: true, center: true, margin: 0, width: '100%', height: '100%', minScale: 1, maxScale: 1, transition: "fade", backgroundTransition: "fade", fragments: !/fragments=false/.test(location.search) });
+    Reveal.on("ready", () => {
+      buildFlood(); buildLCR();
+      scheduleFitSlides(); setTimeout(fitSlidesToViewport, 140);
+      // reset animations belonging to the current slide
+      const cur = Reveal.getCurrentSlide();
+      ANIMS.forEach(a => { if (cur && cur.contains(a.root)) a.reset(); else a.stop(); });
+    });
+    Reveal.on("slidechanged", (e) => {
+      ANIMS.forEach(a => { if (e.currentSlide && e.currentSlide.contains(a.root)) a.reset(); else a.stop(); });
+      scheduleFitSlides();
+    });
+    Reveal.on("fragmentshown", scheduleFitSlides); Reveal.on("fragmenthidden", scheduleFitSlides); Reveal.on("resize", scheduleFitSlides);
+    window.addEventListener("load", () => { scheduleFitSlides(); setTimeout(fitSlidesToViewport, 140) });
+    window.addEventListener("resize", scheduleFitSlides);
+  </script>
+</body>
+
+</html>
