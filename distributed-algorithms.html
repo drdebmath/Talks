@@ -9,34 +9,38 @@
   <link rel="stylesheet" href="assets/vendor/google-fonts.css">
   <style>
     :root {
-      --bg: #0c1119;
-      --bg-deep: #070a10;
-      --ink: #dde6ee;
-      --ink-strong: #ffffff;
-      --ink-muted: #8da0b3;
-      --line: rgba(221, 230, 238, .14);
-      --line-soft: rgba(221, 230, 238, .065);
-      --cyan: #5ccfc6;
-      --cyan-dim: rgba(92, 207, 198, .14);
-      --amber: #f2bd5c;
-      --amber-dim: rgba(242, 189, 92, .14);
-      --coral: #ef8169;
-      --coral-dim: rgba(239, 129, 105, .13);
-      --green: #82d39c;
-      --green-dim: rgba(130, 211, 156, .13);
-      --violet: #a9a0f0;
-      --panel: rgba(255, 255, 255, .035);
-      --panel-strong: rgba(255, 255, 255, .062);
-      --display: "Space Grotesk", system-ui, sans-serif;
-      --sans: "Spline Sans", system-ui, sans-serif;
+      --bg: #fff3cf;
+      --bg-deep: #f5d98f;
+      --ink: #24343c;
+      --ink-strong: #101a20;
+      --ink-muted: #627078;
+      --line: rgba(36, 52, 60, .22);
+      --line-soft: rgba(36, 52, 60, .12);
+      --cyan: #008da6;
+      --cyan-dim: rgba(0, 141, 166, .12);
+      --amber: #e68519;
+      --amber-dim: rgba(230, 133, 25, .14);
+      --coral: #d94f45;
+      --coral-dim: rgba(217, 79, 69, .12);
+      --green: #2f8a55;
+      --green-dim: rgba(47, 138, 85, .12);
+      --violet: #7d5cc6;
+      --panel: rgba(255, 255, 255, .72);
+      --panel-strong: rgba(255, 252, 242, .92);
+      --paper-shadow: rgba(80, 55, 16, .22);
+      --display: "Newsreader", "Iowan Old Style", Georgia, serif;
+      --sans: "Newsreader", "Iowan Old Style", Georgia, serif;
       --serif: "Newsreader", Georgia, serif;
+      --math: "STIX Two Math", "Cambria Math", "Latin Modern Math", "Newsreader", Georgia, serif;
+      --hand: "Comic Sans MS", "Comic Sans", "Bradley Hand", "Segoe Print", "Marker Felt", cursive;
       --mono: "JetBrains Mono", ui-monospace, monospace;
     }
 
     :root {
-      --board: radial-gradient(ellipse 90% 70% at 50% -8%, rgba(92, 207, 198, .07) 0%, transparent 55%),
-        radial-gradient(ellipse 60% 55% at 92% 100%, rgba(242, 189, 92, .055) 0%, transparent 60%),
-        radial-gradient(ellipse 55% 55% at 4% 96%, rgba(169, 160, 240, .05) 0%, transparent 60%),
+      --board: radial-gradient(ellipse 80% 55% at 50% -10%, rgba(255, 255, 255, .86) 0%, transparent 58%),
+        radial-gradient(ellipse 62% 55% at 92% 96%, rgba(0, 141, 166, .12) 0%, transparent 62%),
+        radial-gradient(ellipse 56% 50% at 5% 92%, rgba(230, 133, 25, .16) 0%, transparent 62%),
+        linear-gradient(180deg, #fffdf4 0%, #fff3cf 62%, #f8df9c 100%),
         var(--bg);
     }
 
@@ -56,10 +60,10 @@
       inset: 0;
       pointer-events: none;
       z-index: 0;
-      opacity: .5;
+      opacity: .62;
       background-image:
-        linear-gradient(rgba(221, 230, 238, .022) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(221, 230, 238, .022) 1px, transparent 1px);
+        linear-gradient(rgba(0, 141, 166, .08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 141, 166, .06) 1px, transparent 1px);
       background-size: 54px 54px;
     }
 
@@ -69,7 +73,7 @@
       inset: 0;
       pointer-events: none;
       z-index: 0;
-      opacity: .16;
+      opacity: .13;
       background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .05 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
     }
 
@@ -126,14 +130,20 @@
       color: var(--ink-strong);
       text-wrap: balance;
       line-height: 1.07;
-      letter-spacing: -.01em;
+      letter-spacing: 0;
       margin: 0 0 .3em;
     }
 
     .reveal h1 { font-size: 2.0em; max-width: 95%; margin-inline: auto; font-weight: 700; }
     .reveal h2 { font-size: 1.4em; }
     .reveal h3 { font-size: 1.08em; }
-    .reveal em { font-style: italic; }
+    .reveal em,
+    .math,
+    .tex {
+      font-family: var(--math);
+      font-style: italic;
+      letter-spacing: 0;
+    }
     .reveal strong { font-weight: 600; }
 
     .reveal section {
@@ -155,7 +165,7 @@
       min-height: 0;
       margin: 0 auto;
       box-sizing: border-box;
-      padding-bottom: clamp(44px, 7vh, 72px);
+      padding-bottom: clamp(56px, 8vh, 88px);
       transform-origin: center top;
       display: flex;
       flex-direction: column;
@@ -164,12 +174,12 @@
 
     .reveal a {
       color: var(--cyan);
-      text-decoration-color: rgba(92, 207, 198, .4);
+      text-decoration-color: rgba(0, 141, 166, .38);
       text-decoration-thickness: 1px;
       text-underline-offset: .14em;
       transition: color .2s;
     }
-    .reveal a:hover { color: #8fe6dd; }
+    .reveal a:hover { color: #006a7d; }
 
     .kicker {
       display: block;
@@ -198,6 +208,106 @@
     }
 
     .small { font-size: .5em; font-family: var(--mono); color: var(--ink-muted); }
+
+    .hist-btn {
+      display: inline-grid;
+      place-items: center;
+      width: 1.45em;
+      height: 1.45em;
+      margin-left: .35em;
+      border: 1px solid rgba(0, 141, 166, .42);
+      border-radius: 50%;
+      background: rgba(0, 141, 166, .1);
+      color: var(--cyan);
+      font-family: var(--mono);
+      font-size: .48em;
+      font-weight: 700;
+      line-height: 1;
+      cursor: pointer;
+      vertical-align: middle;
+      transform: translateY(-.08em);
+    }
+    .hist-btn:hover, .hist-btn:focus-visible {
+      background: rgba(0, 141, 166, .18);
+      border-color: var(--cyan);
+      outline: none;
+    }
+    .env-label .hist-btn,
+    .algo-name .hist-btn {
+      font-size: 1em;
+    }
+
+    .history-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 20;
+      display: none;
+      place-items: center;
+      padding: 32px;
+      background: rgba(64, 48, 18, .32);
+      backdrop-filter: blur(4px);
+    }
+    .history-overlay.open { display: grid; }
+    .history-card {
+      width: min(760px, calc(100vw - 64px));
+      border: 1px solid rgba(0, 141, 166, .2);
+      border-radius: 6px;
+      background: rgba(255, 253, 245, .97);
+      box-shadow: 0 22px 80px rgba(80, 55, 16, .24);
+      padding: 28px 32px 30px;
+      color: var(--ink);
+      font-family: var(--sans);
+      text-align: left;
+      position: relative;
+    }
+    .history-card .tag {
+      display: block;
+      font-family: var(--mono);
+      font-size: 13px;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--cyan);
+      margin-bottom: 10px;
+    }
+    .history-card h3 {
+      margin: 0 36px 14px 0;
+      color: var(--ink-strong);
+      font-family: var(--display);
+      font-size: 32px;
+      line-height: 1.12;
+    }
+    .history-card p {
+      margin: 0;
+      font-size: 20px;
+      line-height: 1.45;
+    }
+    .history-card .source {
+      margin-top: 18px;
+      color: var(--ink-muted);
+      font-family: var(--mono);
+      font-size: 13px;
+      letter-spacing: .04em;
+    }
+    .history-card a { color: var(--cyan); }
+    .history-close {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      width: 34px;
+      height: 34px;
+      border: 1px solid var(--line);
+      border-radius: 50%;
+      background: rgba(255, 255, 255, .7);
+      color: var(--ink-muted);
+      font-size: 22px;
+      line-height: 1;
+      cursor: pointer;
+    }
+    .history-close:hover, .history-close:focus-visible {
+      color: var(--ink-strong);
+      border-color: var(--cyan);
+      outline: none;
+    }
 
     .lead {
       font-family: var(--serif);
@@ -311,7 +421,7 @@
       text-align: left;
       margin: .3em auto 0;
       max-width: 94%;
-      box-shadow: 0 12px 34px rgba(0, 0, 0, .3);
+      box-shadow: 0 14px 28px var(--paper-shadow);
     }
     .env .env-label {
       display: block;
@@ -345,7 +455,7 @@
       border-radius: 8px;
       padding: .72em .85em;
       text-align: left;
-      box-shadow: 0 10px 28px rgba(0, 0, 0, .28);
+      box-shadow: 0 14px 26px var(--paper-shadow);
       display: flex;
       flex-direction: column;
       justify-content: flex-start;
@@ -382,7 +492,7 @@
       border-radius: 9px;
       padding: .7em .8em;
       text-align: left;
-      box-shadow: 0 10px 28px rgba(0, 0, 0, .26);
+      box-shadow: 0 14px 26px var(--paper-shadow);
     }
     .ex .ic { font-size: 1.05em; line-height: 1; }
     .ex .nm { display: block; font-family: var(--display); font-weight: 600; font-size: .56em; color: var(--ink-strong); margin: .35em 0 .15em; }
@@ -394,12 +504,13 @@
 
     /* figure stage */
     .stage {
-      background: linear-gradient(168deg, rgba(10, 14, 21, .9), rgba(16, 22, 32, .5));
+      background: linear-gradient(168deg, rgba(255, 255, 255, .84), rgba(255, 246, 218, .7));
       border: 1px solid var(--line-soft);
       border-radius: 9px;
       padding: .55em;
       margin: .3em auto 0;
-      box-shadow: inset 0 1px 0 rgba(255, 255, 255, .03), 0 12px 30px rgba(0, 0, 0, .3);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, .72), 0 14px 28px var(--paper-shadow);
+      box-sizing: border-box;
       width: 100%;
       display: flex;
       flex-direction: column;
@@ -411,8 +522,8 @@
     .split svg { max-height: min(430px, 48vh); }
     svg text { font-family: var(--mono); }
 
-    .s-edge { stroke: var(--line); stroke-width: 2.2; fill: none; }
-    .s-node { fill: rgba(255, 255, 255, .04); stroke: var(--ink-muted); stroke-width: 2; }
+    .s-edge { stroke: rgba(36, 52, 60, .28); stroke-width: 2.2; fill: none; }
+    .s-node { fill: rgba(255, 255, 255, .78); stroke: var(--ink-muted); stroke-width: 2; }
     .s-node.cyan { stroke: var(--cyan); fill: var(--cyan-dim); }
     .s-node.amber { stroke: var(--amber); fill: var(--amber-dim); }
     .s-node.coral { stroke: var(--coral); fill: var(--coral-dim); }
@@ -428,7 +539,7 @@
     .s-cy { fill: var(--cyan); font-size: 13px; font-weight: 600; }
     .s-am { fill: var(--amber); font-size: 13px; font-weight: 600; }
     .s-co { fill: var(--coral); font-size: 13px; font-weight: 600; }
-    .panel-box { fill: rgba(255, 255, 255, .025); stroke: var(--line); stroke-width: 1.4; }
+    .panel-box { fill: rgba(255, 255, 255, .68); stroke: var(--line); stroke-width: 1.4; }
 
     /* flowing links (centralized vs distributed) */
     .flow-link { stroke-dasharray: 5 7; animation: flowdash 1.15s linear infinite; }
@@ -469,8 +580,8 @@
       padding: .62em 1em; cursor: pointer; transition: all .15s ease;
     }
     .btn:hover { border-color: var(--cyan); color: var(--ink-strong); }
-    .btn.primary { color: #06121a; background: var(--cyan); border-color: var(--cyan); }
-    .btn.primary:hover { background: #7be0d7; }
+    .btn.primary { color: #fffdf5; background: var(--cyan); border-color: var(--cyan); }
+    .btn.primary:hover { background: #007a91; }
     .btn:disabled { opacity: .3; cursor: default; border-color: var(--line); color: var(--ink); }
     .progress-pill {
       font-family: var(--mono); font-size: .36em; letter-spacing: .1em;
@@ -479,8 +590,8 @@
 
     /* LCR svg */
     #lcr-svg .ring-guide { fill: none; stroke: var(--line-soft); stroke-width: 1.5; }
-    #lcr-svg .flow-arc { fill: none; stroke: rgba(92,207,198,.3); stroke-width: 1.8; marker-end: url(#aCs); }
-    #lcr-svg .node-ring { fill: rgba(255,255,255,.025); stroke: var(--ink-muted); stroke-width: 2; transition: stroke .4s, fill .4s, stroke-width .4s; }
+    #lcr-svg .flow-arc { fill: none; stroke: rgba(0,141,166,.32); stroke-width: 1.8; marker-end: url(#aCs); }
+    #lcr-svg .node-ring { fill: rgba(255,255,255,.76); stroke: var(--ink-muted); stroke-width: 2; transition: stroke .4s, fill .4s, stroke-width .4s; }
     #lcr-svg .node-ring.leader { stroke: var(--amber); stroke-width: 4; fill: var(--amber-dim); }
     #lcr-svg .node-id { fill: var(--ink-muted); font-size: 15px; font-weight: 600; text-anchor: middle; }
     #lcr-svg .node-id.leader { fill: var(--amber); }
@@ -488,7 +599,7 @@
     #lcr-svg .tok circle { fill: var(--cyan-dim); stroke: var(--cyan); stroke-width: 2.6; }
     #lcr-svg .tok text { fill: var(--ink-strong); font-size: 17px; font-weight: 700; text-anchor: middle; dominant-baseline: central; }
     #lcr-svg .tok.dead { opacity: 0; }
-    #lcr-svg .tok.win circle { fill: var(--amber); stroke: #fff; }
+    #lcr-svg .tok.win circle { fill: var(--amber); stroke: #fffdf5; }
     #lcr-svg .tok.win text { fill: #2c2000; }
     #lcr-svg .crown { fill: var(--amber); font-size: 22px; text-anchor: middle; opacity: 0; transition: opacity .4s; }
     #lcr-svg .crown.show { opacity: 1; }
@@ -500,7 +611,7 @@
     .fl-edge { transition: stroke .5s, stroke-width .5s; stroke: var(--line); stroke-width: 2.4; }
     .fl-edge.tree { stroke: var(--green); stroke-width: 4.5; }
     .fl-edge.dup { stroke: var(--coral); stroke-width: 3.2; stroke-dasharray: 4 5; animation: flowdash 1.1s linear infinite; }
-    .fl-node { transition: fill .45s, stroke .45s, stroke-width .45s; fill: rgba(255,255,255,.02); stroke: rgba(141,160,179,.55); stroke-width: 2; }
+    .fl-node { transition: fill .45s, stroke .45s, stroke-width .45s; fill: rgba(255,255,255,.78); stroke: rgba(98,112,120,.72); stroke-width: 2; }
     .fl-node.recv { fill: var(--cyan-dim); stroke: var(--cyan); }
     .fl-node.src { fill: var(--amber-dim); stroke: var(--amber); }
     .fl-node.justnew { stroke-width: 4; }
@@ -511,7 +622,7 @@
     .env.thm .env-label { color: var(--amber); }
     .env.thm p { font-family: var(--serif); font-size: .68em; font-style: italic; color: var(--ink-strong); }
     .env.thm p strong, .env.thm p .rm { font-style: normal; color: var(--amber); }
-    .env.proof { border-left-color: var(--ink-muted); background: transparent; box-shadow: none; }
+    .env.proof { border-left-color: var(--ink-muted); background: rgba(255, 255, 255, .42); box-shadow: none; }
     .env.proof .env-label { color: var(--ink-muted); }
     .env.proof p { font-size: .56em; color: var(--ink); }
     .env.proof .qed { float: right; color: var(--ink-muted); }
@@ -519,8 +630,8 @@
 
     /* bridge-to-prior-lecture callout */
     .callout {
-      border: 1px dashed rgba(169, 160, 240, .5);
-      background: rgba(169, 160, 240, .06);
+      border: 1px dashed rgba(125, 92, 198, .42);
+      background: rgba(255, 255, 255, .56);
       border-radius: 8px;
       padding: .5em .85em;
       margin: .35em auto 0;
@@ -535,12 +646,93 @@
     .callout p strong { color: var(--ink-strong); font-weight: 600; }
     .callout p em { color: var(--violet); font-style: italic; }
 
+    /* interactive exercise slides */
+    .exercise .headline { margin-bottom: .35em; }
+    .exercise .headline h2 { font-size: 1.22em; }
+    .reveal section.exercise {
+      padding-left: .65em;
+      padding-right: .65em;
+    }
+    .exercise .think-tag {
+      display: inline-block;
+      font-family: var(--hand);
+      font-size: .48em;
+      font-weight: 700;
+      letter-spacing: 0;
+      color: #fffdf5;
+      background: linear-gradient(120deg, var(--coral), var(--amber));
+      border-radius: 999px;
+      padding: .28em .85em .26em;
+      margin: 0 auto .55em;
+      transform: rotate(-1.2deg);
+      box-shadow: 0 9px 18px rgba(217, 79, 69, .18);
+    }
+    .exercise .setup {
+      max-width: 92%;
+      margin: .1em auto .45em;
+      font-family: var(--serif);
+      font-size: .62em;
+      line-height: 1.35;
+      color: var(--ink-strong);
+      text-align: center;
+    }
+    .question-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: .54em;
+      width: min(100%, 1620px);
+      margin: 0 auto;
+    }
+    .question-card {
+      background: linear-gradient(170deg, rgba(255, 255, 255, .9), rgba(255, 246, 218, .72));
+      border: 1px solid var(--line-soft);
+      border-radius: 8px;
+      border-top: 3px solid var(--cyan);
+      padding: .5em .62em;
+      text-align: left;
+      min-height: 3.55em;
+      box-shadow: 0 14px 26px var(--paper-shadow);
+    }
+    .question-card.amber { border-top-color: var(--amber); }
+    .question-card.coral { border-top-color: var(--coral); }
+    .question-card.green { border-top-color: var(--green); }
+    .question-card .label {
+      display: block;
+      font-family: var(--mono);
+      font-size: .34em;
+      font-weight: 700;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: var(--cyan);
+      margin-bottom: .42em;
+    }
+    .question-card.amber .label { color: var(--amber); }
+    .question-card.coral .label { color: var(--coral); }
+    .question-card.green .label { color: var(--green); }
+    .question-card p {
+      margin: 0;
+      font-size: .55em;
+      line-height: 1.32;
+      color: var(--ink);
+    }
+    .question-card p strong { color: var(--ink-strong); font-weight: 600; }
+    .question-card p em { color: var(--amber); font-style: italic; }
+    .exercise .takeaway {
+      margin: .38em auto 0;
+      max-width: 92%;
+      font-family: var(--mono);
+      font-size: .34em;
+      line-height: 1.45;
+      color: var(--ink-muted);
+      text-align: center;
+    }
+
     /* compact pseudocode */
     .algo {
-      background: linear-gradient(168deg, rgba(7, 10, 16, .85), rgba(14, 19, 28, .5));
+      background: linear-gradient(168deg, rgba(255, 255, 255, .92), rgba(255, 248, 228, .78));
       border: 1px solid var(--line-soft); border-radius: 7px;
       padding: .62em .85em; text-align: left; margin: .3em auto 0; max-width: 94%;
-      box-shadow: 0 12px 34px rgba(0, 0, 0, .32);
+      box-shadow: 0 14px 28px var(--paper-shadow);
     }
     .algo .algo-name {
       display: block; font-family: var(--mono); font-size: .4em; font-weight: 600;
@@ -548,6 +740,51 @@
     }
     .algo code { display: block; font-family: var(--mono); font-size: .45em; line-height: 1.5; white-space: pre; color: var(--ink); }
     .algo .kw { color: var(--cyan); } .algo .hl { color: var(--amber); } .algo .cm { color: var(--ink-muted); font-style: italic; }
+
+    .panel,
+    .env,
+    .ex,
+    .stage,
+    .algo,
+    .question-card,
+    .callout {
+      position: relative;
+      z-index: 0;
+      overflow: visible;
+    }
+
+    .panel::after,
+    .env::after,
+    .ex::after,
+    .stage::after,
+    .algo::after,
+    .question-card::after,
+    .callout::after {
+      content: "";
+      position: absolute;
+      left: 8%;
+      right: 8%;
+      bottom: -16px;
+      height: 20px;
+      z-index: -1;
+      pointer-events: none;
+      border-radius: 50%;
+      background: radial-gradient(ellipse at center, rgba(80, 55, 16, .24) 0%, rgba(80, 55, 16, .12) 44%, transparent 74%);
+      filter: blur(6px);
+      transform: rotate(-1.4deg);
+    }
+
+    .panel:nth-child(2n)::after,
+    .question-card:nth-child(2n)::after,
+    .ex:nth-child(2n)::after {
+      transform: rotate(1.25deg);
+      left: 11%;
+      right: 6%;
+    }
+
+    .env.proof::after {
+      display: none;
+    }
 
     .depth { color: var(--violet); font-weight: 600; font-family: var(--mono); }
 
@@ -560,6 +797,15 @@
   <div class="board-frame" aria-hidden="true"></div>
   <div class="chrome" aria-hidden="true"><span>Introduction to Distributed Algorithms</span><span>Debasish
       Pattanayak · 2026</span></div>
+  <div class="history-overlay" id="history-overlay" aria-hidden="true">
+    <div class="history-card" role="dialog" aria-modal="true" aria-labelledby="history-title">
+      <button class="history-close" type="button" aria-label="Close history note">×</button>
+      <span class="tag">History note</span>
+      <h3 id="history-title"></h3>
+      <p id="history-body"></p>
+      <p class="source" id="history-source"></p>
+    </div>
+  </div>
 
   <div class="reveal">
     <div class="slides">
@@ -567,23 +813,23 @@
       <svg width="0" height="0" style="position:absolute" aria-hidden="true">
         <defs>
           <marker id="aC" markerWidth="9" markerHeight="6" refX="7.6" refY="3" orient="auto">
-            <polygon points="0,0 9,3 0,6" fill="#5ccfc6"></polygon>
+            <polygon points="0,0 9,3 0,6" fill="#008da6"></polygon>
           </marker>
           <marker id="aCs" markerWidth="8" markerHeight="6" refX="6.5" refY="3" orient="auto">
-            <polygon points="0,0 8,3 0,6" fill="rgba(92,207,198,.55)"></polygon>
+            <polygon points="0,0 8,3 0,6" fill="rgba(0,141,166,.55)"></polygon>
           </marker>
           <marker id="aA" markerWidth="9" markerHeight="6" refX="7.6" refY="3" orient="auto">
-            <polygon points="0,0 9,3 0,6" fill="#f2bd5c"></polygon>
+            <polygon points="0,0 9,3 0,6" fill="#e68519"></polygon>
           </marker>
           <marker id="aR" markerWidth="9" markerHeight="6" refX="7.6" refY="3" orient="auto">
-            <polygon points="0,0 9,3 0,6" fill="#ef8169"></polygon>
+            <polygon points="0,0 9,3 0,6" fill="#d94f45"></polygon>
           </marker>
         </defs>
       </svg>
 
       <!-- 1 · TITLE -->
       <section class="titlepage" data-transition="fade">
-        <p class="series">A One-Hour Introduction</p>
+        <p class="series">Messages, Models, and Agreement</p>
         <h1>Introduction to<br><em>Distributed Algorithms</em></h1>
         <div class="rule"></div>
         <p class="author"><a href="https://drdebmath.github.io">Debasish Pattanayak</a></p>
@@ -596,14 +842,59 @@
         <span class="kicker">Why should you care?</span>
         <div class="headline"><h2>You already use these every day</h2></div>
         <div class="exgrid">
-          <div class="ex"><span class="ic">💸</span><span class="nm">UPI / payments</span><span class="ds">Your money moves correctly across banks that never share one database.</span></div>
+          <div class="ex"><span class="ic">💸</span><span class="nm">UPI payments</span><span class="ds">Unified Payments Interface: money moves correctly across banks that never share one database.</span></div>
           <div class="ex"><span class="ic">💬</span><span class="nm">WhatsApp</span><span class="ds">A message reaches everyone in a group, in order, across continents.</span></div>
           <div class="ex"><span class="ic">🔎</span><span class="nm">Google Search</span><span class="ds">One query is answered by thousands of machines working together.</span></div>
-          <div class="ex"><span class="ic">🎬</span><span class="nm">Netflix / CDNs</span><span class="ds">Video streams from a server near you, not one giant computer.</span></div>
+          <div class="ex"><span class="ic">🎬</span><span class="nm">CDNs</span><span class="ds">Content delivery networks stream video from a server near you, not one giant computer.</span></div>
           <div class="ex"><span class="ic">🎮</span><span class="nm">Online games</span><span class="ds">Many players see a single, consistent game world in real time.</span></div>
           <div class="ex"><span class="ic">⛓️</span><span class="nm">Blockchains</span><span class="ds">Strangers who trust no one still agree on one shared ledger.</span></div>
         </div>
-        <p class="lead fragment fade-up">Behind all of them: many computers, no shared memory, talking only by <span class="cy">messages</span> — and somehow agreeing.</p>
+      </section>
+
+      <section>
+        <span class="kicker">The common pattern</span>
+        <div class="headline"><h2>What do these systems have in common?</h2></div>
+        <div class="grid-3">
+          <div class="panel cyan">
+            <h4>Many computers</h4>
+            <p>Work is spread across machines that do not share one memory.</p>
+          </div>
+          <div class="panel amber">
+            <h4>Only messages</h4>
+            <p>Each machine learns about the world by receiving messages from others.</p>
+          </div>
+          <div class="panel green">
+            <h4>One outcome</h4>
+            <p>Somehow they must still agree, coordinate, or elect one process to act.</p>
+          </div>
+        </div>
+        <p class="lead fragment fade-up">That tension — <span class="cy">local communication</span>, global coordination — is the heart of distributed algorithms.</p>
+      </section>
+
+      <section class="exercise">
+        <span class="kicker">Interactive pause</span>
+        <span class="think-tag">Think break 1</span>
+        <div class="headline"><h2>Which agreement is hiding here?</h2></div>
+        <p class="setup">Pick one system from the previous slide. Before algorithms, name the one fact that many machines must agree on.</p>
+        <div class="question-grid">
+          <div class="question-card fragment fade-up">
+            <span class="label">Core</span>
+            <p>For UPI, WhatsApp, search, games, or blockchains: what is the <strong>single shared outcome</strong> the users expect?</p>
+          </div>
+          <div class="question-card amber fragment fade-up">
+            <span class="label">Failure mode</span>
+            <p>What could go wrong if two machines temporarily believe <strong>different versions</strong> of that outcome?</p>
+          </div>
+          <div class="question-card green fragment fade-up">
+            <span class="label">Modeling move</span>
+            <p>Which details would you throw away to get a clean graph-and-message model, and which details feel too important to ignore?</p>
+          </div>
+          <div class="question-card coral fragment fade-up">
+            <span class="label">Stretch</span>
+            <p>If the system is allowed to be briefly inconsistent, what extra rule must eventually repair the disagreement?</p>
+          </div>
+        </div>
+        <p class="takeaway fragment fade-up">The same real system may need broadcast, leader election, ordering, and fault tolerance at different layers.</p>
       </section>
 
       <!-- 3 · CONTENTS -->
@@ -613,8 +904,8 @@
           <div class="toc-row fragment fade-up"><span class="no">1</span><span class="ttl">Centralized vs. distributed</span><span class="sub">what changes</span></div>
           <div class="toc-row fragment fade-up"><span class="no">2</span><span class="ttl">The model — nodes &amp; messages</span><span class="sub">how we describe it</span></div>
           <div class="toc-row fragment fade-up"><span class="no">3</span><span class="ttl">Measuring cost</span><span class="sub">time &amp; messages</span></div>
-          <div class="toc-row fragment fade-up"><span class="no">4</span><span class="ttl">Talking to everyone — broadcast</span><span class="sub">animated</span></div>
-          <div class="toc-row fragment fade-up"><span class="no">5</span><span class="ttl">Choosing a leader — token ring</span><span class="sub">fully animated</span></div>
+          <div class="toc-row fragment fade-up"><span class="no">4</span><span class="ttl">Talking to everyone — broadcast</span><span class="sub">flooding &amp; BFS trees</span></div>
+          <div class="toc-row fragment fade-up"><span class="no">5</span><span class="ttl">Choosing a leader — token ring</span><span class="sub">IDs break symmetry</span></div>
           <div class="toc-row fragment fade-up"><span class="no">6</span><span class="ttl">When nodes can lie</span><span class="sub">a hard problem to end on</span></div>
         </div>
       </section>
@@ -696,6 +987,32 @@
         </div>
       </section>
 
+      <section class="exercise">
+        <span class="kicker"><span class="sec-no">§1</span>Interactive pause</span>
+        <span class="think-tag">Think break 2</span>
+        <div class="headline"><h2>Does a leader make it centralized?</h2></div>
+        <p class="setup">Suppose a distributed system first elects one coordinator, then everyone follows that coordinator for the next minute.</p>
+        <div class="question-grid">
+          <div class="question-card fragment fade-up">
+            <span class="label">Core</span>
+            <p>Is the system now centralized, distributed, or temporarily both? What would you count as the <strong>algorithmic boundary</strong>?</p>
+          </div>
+          <div class="question-card amber fragment fade-up">
+            <span class="label">Trade-off</span>
+            <p>What do we gain by having one coordinator, and what new failure point have we created?</p>
+          </div>
+          <div class="question-card green fragment fade-up">
+            <span class="label">Repair</span>
+            <p>If the coordinator crashes, what information must survive so the rest can choose a replacement?</p>
+          </div>
+          <div class="question-card coral fragment fade-up">
+            <span class="label">Stretch</span>
+            <p>Can the coordinator be a role rather than a machine? How would that change your proof obligations?</p>
+          </div>
+        </div>
+        <p class="takeaway fragment fade-up">Many practical systems are distributed precisely because the identity of the "central" actor can change.</p>
+      </section>
+
       <!-- ===================== §2 ===================== -->
       <section class="divider" data-transition="fade">
         <span class="secno">2</span>
@@ -709,28 +1026,39 @@
         <div class="split">
           <div class="stage">
             <svg viewBox="0 0 520 380" aria-label="A network drawn as a graph; a node only sees its neighbours">
-              <line class="s-edge" x1="110" y1="90" x2="260" y2="70"></line>
-              <line class="s-edge" x1="260" y1="70" x2="410" y2="120"></line>
-              <line class="s-edge" x1="110" y1="90" x2="170" y2="220"></line>
-              <line class="s-edge" x1="260" y1="70" x2="250" y2="210"></line>
-              <line class="s-edge" x1="410" y1="120" x2="250" y2="210"></line>
-              <line class="s-edge" x1="410" y1="120" x2="420" y2="270"></line>
-              <line class="s-edge" x1="170" y1="220" x2="250" y2="210"></line>
-              <line class="s-edge" x1="170" y1="220" x2="200" y2="340"></line>
-              <line class="s-edge" x1="250" y1="210" x2="420" y2="270"></line>
-              <line class="s-edge" x1="250" y1="210" x2="200" y2="340"></line>
-              <line class="s-edge" x1="420" y1="270" x2="370" y2="350"></line>
-              <line class="s-edge" x1="200" y1="340" x2="370" y2="350"></line>
-              <circle cx="250" cy="210" r="92" fill="rgba(92,207,198,.06)" stroke="rgba(92,207,198,.3)" stroke-width="1.5" stroke-dasharray="4 6"></circle>
-              <circle class="s-node" cx="110" cy="90" r="22"></circle>
-              <circle class="s-node" cx="260" cy="70" r="22"></circle>
-              <circle class="s-node" cx="410" cy="120" r="22"></circle>
-              <circle class="s-node cyan" cx="250" cy="210" r="26"></circle><text class="s-id" x="250" y="217">v</text>
-              <circle class="s-node" cx="170" cy="220" r="22"></circle>
-              <circle class="s-node" cx="420" cy="270" r="22"></circle>
-              <circle class="s-node" cx="200" cy="340" r="22"></circle>
-              <circle class="s-node" cx="370" cy="350" r="22"></circle>
-              <text class="s-cy" x="250" y="320" text-anchor="middle">v talks only to its neighbours</text>
+              <circle cx="260" cy="188" r="122" fill="rgba(0,141,166,.08)" stroke="rgba(0,141,166,.35)" stroke-width="1.7" stroke-dasharray="5 7"></circle>
+              <text class="s-cy" x="260" y="52" text-anchor="middle">one-hop neighbourhood of v</text>
+
+              <!-- direct links: inside the circle -->
+              <line class="s-edge" x1="260" y1="188" x2="260" y2="82" style="stroke:var(--cyan);stroke-width:3.4"></line>
+              <line class="s-edge" x1="260" y1="188" x2="154" y2="152" style="stroke:var(--cyan);stroke-width:3.4"></line>
+              <line class="s-edge" x1="260" y1="188" x2="366" y2="152" style="stroke:var(--cyan);stroke-width:3.4"></line>
+              <line class="s-edge" x1="260" y1="188" x2="196" y2="282" style="stroke:var(--cyan);stroke-width:3.4"></line>
+              <line class="s-edge" x1="260" y1="188" x2="324" y2="282" style="stroke:var(--cyan);stroke-width:3.4"></line>
+
+              <!-- indirect links: outside the circle, not directly visible from v -->
+              <line class="s-edge" x1="84" y1="82" x2="154" y2="152"></line>
+              <line class="s-edge" x1="84" y1="82" x2="92" y2="292"></line>
+              <line class="s-edge" x1="436" y1="82" x2="366" y2="152"></line>
+              <line class="s-edge" x1="436" y1="82" x2="428" y2="292"></line>
+              <line class="s-edge" x1="92" y1="292" x2="196" y2="282"></line>
+              <line class="s-edge" x1="428" y1="292" x2="324" y2="282"></line>
+              <line class="s-edge" x1="196" y1="282" x2="324" y2="282"></line>
+
+              <circle class="s-node" cx="84" cy="82" r="20"></circle><text class="s-mut" x="84" y="88" text-anchor="middle">x</text>
+              <circle class="s-node" cx="436" cy="82" r="20"></circle><text class="s-mut" x="436" y="88" text-anchor="middle">y</text>
+              <circle class="s-node" cx="92" cy="292" r="20"></circle><text class="s-mut" x="92" y="298" text-anchor="middle">z</text>
+              <circle class="s-node" cx="428" cy="292" r="20"></circle><text class="s-mut" x="428" y="298" text-anchor="middle">w</text>
+
+              <circle class="s-node amber" cx="260" cy="82" r="21"></circle><text class="s-id" x="260" y="89" style="font-size:16px">a</text>
+              <circle class="s-node amber" cx="154" cy="152" r="21"></circle><text class="s-id" x="154" y="159" style="font-size:16px">b</text>
+              <circle class="s-node amber" cx="366" cy="152" r="21"></circle><text class="s-id" x="366" y="159" style="font-size:16px">c</text>
+              <circle class="s-node amber" cx="196" cy="282" r="21"></circle><text class="s-id" x="196" y="289" style="font-size:16px">d</text>
+              <circle class="s-node amber" cx="324" cy="282" r="21"></circle><text class="s-id" x="324" y="289" style="font-size:16px">e</text>
+              <circle class="s-node cyan" cx="260" cy="188" r="27"></circle><text class="s-id" x="260" y="196">v</text>
+
+              <text class="s-am" x="260" y="332" text-anchor="middle">inside: nodes connected to v</text>
+              <text class="s-mut" x="260" y="354" text-anchor="middle">outside: not neighbours of v</text>
             </svg>
             <p class="fig-cap">A network is a graph: dots = computers, lines = links.</p>
           </div>
@@ -752,7 +1080,7 @@
         <div class="grid-3">
           <div class="panel cyan">
             <h4>Its own state</h4>
-            <p>Process <em>v</em> knows <em>id(v)</em>, its incident links, and the messages it has received so far.</p>
+            <p>Process <em>v</em> knows its identifier <em>id(v)</em>, its incident links, and the messages it has received so far.</p>
           </div>
           <div class="panel amber">
             <h4>Not the whole network</h4>
@@ -765,8 +1093,34 @@
         </div>
         <div class="env idea fragment fade-up">
           <span class="env-label">Why identifiers matter</span>
-          <p>Unique IDs come from a totally ordered set and fit in <em>O(log n)</em> bits. They are the <strong>only</strong> thing distinguishing otherwise-identical nodes — a theme that returns in leader election.</p>
+          <p>Unique identifiers (IDs) come from a totally ordered set and fit in <em>O(log n)</em> bits. They are the <strong>only</strong> thing distinguishing otherwise-identical nodes — a theme that returns in leader election.</p>
         </div>
+      </section>
+
+      <section class="exercise">
+        <span class="kicker"><span class="sec-no">§2</span>Interactive pause</span>
+        <span class="think-tag">Think break 3</span>
+        <div class="headline"><h2>What can one node distinguish?</h2></div>
+        <p class="setup">You are node <em>v</em>. After two synchronous rounds, you know everything within distance two, but nothing beyond that frontier.</p>
+        <div class="question-grid">
+          <div class="question-card fragment fade-up">
+            <span class="label">Core</span>
+            <p>Draw two different graphs whose radius-2 view around <em>v</em> is identical. What decision must <em>v</em> make the same way in both?</p>
+          </div>
+          <div class="question-card amber fragment fade-up">
+            <span class="label">Cost</span>
+            <p>If a decision depends on a node at distance <em>d</em>, what lower bound on rounds follows immediately?</p>
+          </div>
+          <div class="question-card green fragment fade-up">
+            <span class="label">IDs</span>
+            <p>Do unique IDs help <em>v</em> see farther, or only help it compare names inside the part it has already seen?</p>
+          </div>
+          <div class="question-card coral fragment fade-up">
+            <span class="label">Stretch</span>
+            <p>Can two graphs have the same radius-<em>t</em> view around every node but require different global answers?</p>
+          </div>
+        </div>
+        <p class="takeaway fragment fade-up">This is the seed of indistinguishability proofs: same local view forces same local behaviour.</p>
       </section>
 
       <!-- 8 · WHAT A NODE DOES -->
@@ -786,11 +1140,37 @@
         </div>
       </section>
 
+      <section class="exercise">
+        <span class="kicker"><span class="sec-no">§2</span>Interactive pause</span>
+        <span class="think-tag">Think break 4</span>
+        <div class="headline"><h2>What if the round clock disappears?</h2></div>
+        <p class="setup">Now messages still arrive eventually, but with unpredictable delays; a process cannot tell "slow" from "silent".</p>
+        <div class="question-grid">
+          <div class="question-card fragment fade-up">
+            <span class="label">Core</span>
+            <p>Which line of the synchronous-round model breaks first? Sending, receiving, or deciding when to halt?</p>
+          </div>
+          <div class="question-card amber fragment fade-up">
+            <span class="label">Timeout trap</span>
+            <p>If no message arrives for one second, did a neighbour crash, or is the network just slow?</p>
+          </div>
+          <div class="question-card green fragment fade-up">
+            <span class="label">Algorithm design</span>
+            <p>What extra mechanism might replace rounds: acknowledgements, clocks, failure detectors, or none of these?</p>
+          </div>
+          <div class="question-card coral fragment fade-up">
+            <span class="label">Stretch</span>
+            <p>Which theorem or impossibility result would you expect to become harder once timing is unreliable?</p>
+          </div>
+        </div>
+        <p class="takeaway fragment fade-up">Synchronous rounds are a teaching scaffold; removing them turns timing into part of the problem.</p>
+      </section>
+
       <section>
         <span class="kicker"><span class="sec-no">§2</span>What changes in the analysis</span>
         <div class="headline"><h2>A different bottleneck</h2></div>
         <div class="callout">
-          <span class="tag">Contrast — NP-completeness &amp; beyond (Kanesh)</span>
+          <span class="tag">Contrast — NP = nondeterministic polynomial time</span>
           <p>There the scarce resource is <strong>time</strong>, and computation is the adversary. Here computation is <em>free</em> — the bottleneck is <strong>information</strong>: what a node can possibly know from local messages alone.</p>
         </div>
         <div class="env idea fragment fade-up">
@@ -825,10 +1205,10 @@
 
       <section>
         <span class="kicker"><span class="sec-no">§3</span>Lower-bound mindset</span>
-        <div class="headline"><h2>You have played this game before</h2></div>
+        <div class="headline"><h2>Centralized vs. distributed analysis</h2></div>
         <div class="callout">
-          <span class="tag">Selection lower bounds (Raman)</span>
-          <p>Finding the min <em>and</em> max needs exactly <strong>⌈3n/2⌉ − 2</strong> comparisons. Distributed problems have similar matching upper and lower bounds, but the adversary controls <em>what information can reach whom</em>.</p>
+          <span class="tag">Same asymptotics, different bottleneck</span>
+          <p>In a centralized algorithm, the usual question is how many steps or comparisons one machine needs. In a distributed algorithm, the scarce resource is communication: <em>what information can reach which node</em>, and how many rounds or messages it takes.</p>
         </div>
         <p class="lead fragment fade-up">The technique rhymes: adversary and <span class="cy">indistinguishability</span> arguments. We'll meet one on the ring.</p>
       </section>
@@ -849,15 +1229,14 @@
           <p>The source tells its neighbours. <strong>The first time</strong> a node hears <em>M</em>, it relays to all other neighbours, then goes silent — gossip through a crowd.</p>
         </div>
         <div class="algo">
-          <span class="algo-name">Flooding — code at every node v</span>
+          <span class="algo-name">Flooding — at every node v</span>
           <code><span class="kw">if</span> v is the source:  send <span class="hl">M</span> to all neighbours; halt.
-
 <span class="kw">on first</span> receipt of M from neighbour p:
     <span class="hl">parent(v) ← p</span>                <span class="cm"># a tree edge</span>
     send M to all neighbours <span class="kw">except</span> p
     ignore every later copy of M</code>
         </div>
-        <p class="lead fragment fade-up">Acting only on the <strong>first</strong> copy halts the flood; the <em>parent</em> pointers form a spanning tree. Watch it run — <span class="cy">press ▶ next</span>.</p>
+        <p class="lead fragment fade-up">First receipt sets the <em>parent</em>; later copies are ignored. Watch it run — <span class="cy">press ▶ next</span>.</p>
       </section>
 
       <!-- 10 · FLOODING ANIMATION -->
@@ -894,17 +1273,69 @@
         </div>
       </section>
 
+      <section class="exercise">
+        <span class="kicker"><span class="sec-no">§4</span>Interactive pause</span>
+        <span class="think-tag">Think break 5</span>
+        <div class="headline"><h2>What if messages collide?</h2></div>
+        <p class="setup">Now that flooding's relay rule is clear, test the channel assumption: each link must actually deliver the messages sent on it.</p>
+        <div class="question-grid">
+          <div class="question-card fragment fade-up">
+            <span class="label">Core</span>
+            <p>If two neighbours transmit to the same receiver at once and both messages are lost, does flooding still guarantee broadcast?</p>
+          </div>
+          <div class="question-card amber fragment fade-up">
+            <span class="label">Patch</span>
+            <p>Would random backoff, acknowledgements, or a fixed schedule restore the proof? Which one changes time complexity most?</p>
+          </div>
+          <div class="question-card green fragment fade-up">
+            <span class="label">Accounting</span>
+            <p>If every failed transmission is counted as a message attempt, what happens to the clean <em>2m</em> bound?</p>
+          </div>
+          <div class="question-card coral fragment fade-up">
+            <span class="label">Stretch</span>
+            <p>Can you define a collision model precise enough that the theorem statement becomes true or false, not vague?</p>
+          </div>
+        </div>
+        <p class="takeaway fragment fade-up">Many "obvious" algorithms depend on hidden channel assumptions.</p>
+      </section>
+
       <!-- 11 · FLOODING RECAP -->
       <section>
         <span class="kicker"><span class="sec-no">§4</span>What we just saw — stated precisely</span>
         <div class="env thm">
           <span class="env-label">Proposition</span>
-          <p>Synchronous flooding from <em>s</em> reaches every node, finishing in exactly <span class="rm">ecc(s)</span> rounds — the distance to the farthest node, at most the diameter <em>D</em> — and sending at most <span class="rm">2m</span> messages. The parent pointers form a <span class="rm">BFS tree</span> rooted at <em>s</em>.</p>
+          <p>Synchronous flooding from <em>s</em> reaches every node, finishing in exactly <span class="rm">ecc(s)</span> rounds — the distance to the farthest node, at most the diameter <em>D</em> — and sending at most <span class="rm">2m</span> messages. The parent pointers form a <span class="rm">BFS (breadth-first search) tree</span> rooted at <em>s</em>.</p>
         </div>
         <div class="env proof">
           <span class="env-label">Proof sketch</span>
           <p>Induction on <em>d</em>: a node at distance <em>d</em> from <em>s</em> first receives <em>M</em> in round <em>d</em> — a shortest path delivers it by round <em>d</em>, and nothing is faster since each hop costs one round. The last node sits at distance ecc(s). Each edge carries <em>M</em> at most once per direction ⇒ ≤ 2m messages. <span class="qed">∎</span></p>
         </div>
+      </section>
+
+      <section class="exercise">
+        <span class="kicker"><span class="sec-no">§4</span>Interactive pause</span>
+        <span class="think-tag">Think break 6</span>
+        <div class="headline"><h2>How fragile is flooding?</h2></div>
+        <p class="setup">Change exactly one assumption in the proposition and decide whether the statement survives.</p>
+        <div class="question-grid">
+          <div class="question-card fragment fade-up">
+            <span class="label">Lost message</span>
+            <p>One message may be lost, but processes do not know which one. What is the smallest repair that guarantees delivery?</p>
+          </div>
+          <div class="question-card amber fragment fade-up">
+            <span class="label">Duplicate message</span>
+            <p>The network may duplicate messages. Does the "first receipt sets parent" rule still produce a tree?</p>
+          </div>
+          <div class="question-card green fragment fade-up">
+            <span class="label">Finite buffers</span>
+            <p>If each node can store only one unseen message at a time, can flooding overload a high-degree node?</p>
+          </div>
+          <div class="question-card coral fragment fade-up">
+            <span class="label">Stretch</span>
+            <p>Which assumption affects correctness, and which only affects the cost bound?</p>
+          </div>
+        </div>
+        <p class="takeaway fragment fade-up">A theorem is always a theorem about a model; changing the model changes the contract.</p>
       </section>
 
       <section>
@@ -946,29 +1377,15 @@
       <!-- LCR ALGORITHM + CORRECTNESS LEMMA -->
       <section>
         <span class="kicker"><span class="sec-no">§5</span>The algorithm, precisely</span>
-        <div class="split">
-          <div class="col-text">
-            <div class="algo" style="max-width:none;">
-              <span class="algo-name">LCR — unidirectional ring</span>
-              <code><span class="kw">init:</span> send id(v) clockwise.
+        <div class="algo" style="max-width:84%;">
+          <span class="algo-name">LCR = Le Lann–Chang–Roberts — unidirectional ring <button class="hist-btn" type="button" data-history="lcr" aria-label="History of LCR leader election">?</button></span>
+          <code><span class="kw">init:</span> send id(v) clockwise.
 
 <span class="kw">on receiving</span> value m:
     <span class="kw">if</span> m &gt; id(v):  forward m    <span class="cm"># larger survives</span>
     <span class="kw">if</span> m &lt; id(v):  discard m    <span class="cm"># smaller dies</span>
     <span class="kw">if</span> m = id(v):  output <span class="hl">leader</span>
                   <span class="cm"># my id came home</span></code>
-            </div>
-          </div>
-          <div class="col-text">
-            <div class="env idea">
-              <span class="env-label">The plan — LCR</span>
-              <p>Send IDs one way around the ring. A token meeting a <strong>larger</strong> ID is swallowed; the <strong>maximum</strong> ID survives a full lap.</p>
-            </div>
-            <div class="env thm">
-              <span class="env-label">Lemma (correctness)</span>
-              <p>Let <em>v*</em> = arg max id. Then <span class="rm">exactly v*</span> outputs <em>leader</em>.</p>
-            </div>
-          </div>
         </div>
         <p class="small fragment fade-up" style="text-align:center;display:block;margin-top:.5em;">We analyze LCR <strong>synchronously</strong> for clarity; Chang–Roberts originally runs <em>asynchronously</em>, with the same message counts.</p>
       </section>
@@ -976,6 +1393,10 @@
       <section>
         <span class="kicker"><span class="sec-no">§5</span>Correctness proof</span>
         <div class="headline"><h2>Why the maximum ID is the only survivor</h2></div>
+        <div class="env thm" style="margin-bottom:.45em;">
+          <span class="env-label">Lemma (correctness)</span>
+          <p>Let <em>v*</em> = arg max id. Then <span class="rm">exactly v*</span> outputs <em>leader</em>.</p>
+        </div>
         <div class="grid-2">
           <div class="env proof">
             <span class="env-label">Survival</span>
@@ -986,6 +1407,32 @@
             <p>The maximum token is forwarded <em>n</em> times and returns to <em>v*</em>, which sees <em>m = id(v*)</em> and elects. Every other token dies before completing the lap. <span class="qed">∎</span></p>
           </div>
         </div>
+      </section>
+
+      <section class="exercise">
+        <span class="kicker"><span class="sec-no">§5</span>Interactive pause</span>
+        <span class="think-tag">Think break 7</span>
+        <div class="headline"><h2>What if the ring is not oriented?</h2></div>
+        <p class="setup">LCR has now used the phrase "send clockwise" as a real algorithmic assumption. Suppose neighbouring nodes may name their two ports inconsistently.</p>
+        <div class="question-grid">
+          <div class="question-card fragment fade-up">
+            <span class="label">Core</span>
+            <p>Can the exact LCR code still run? Where does the phrase <strong>send clockwise</strong> become ambiguous?</p>
+          </div>
+          <div class="question-card amber fragment fade-up">
+            <span class="label">Adapt</span>
+            <p>Try sending each ID in both directions. What new problem appears when the same ID returns from two sides?</p>
+          </div>
+          <div class="question-card green fragment fade-up">
+            <span class="label">Orientation first</span>
+            <p>Could leader election itself be used to orient the ring afterward? What circularity does that reveal?</p>
+          </div>
+          <div class="question-card coral fragment fade-up">
+            <span class="label">Stretch</span>
+            <p>With unique IDs, is unoriented leader election impossible, or just more expensive and more delicate?</p>
+          </div>
+        </div>
+        <p class="takeaway fragment fade-up">Orientation is not a cosmetic detail; it is part of the distributed input.</p>
       </section>
 
       <!-- 13 · LCR ANIMATION (centerpiece) -->
@@ -1028,9 +1475,35 @@
         </div>
       </section>
 
+      <section class="exercise">
+        <span class="kicker"><span class="sec-no">§5</span>Interactive pause</span>
+        <span class="think-tag">Think break 8</span>
+        <div class="headline"><h2>Can we beat LCR's message cost?</h2></div>
+        <p class="setup">LCR wastes messages because many small IDs travel several hops before a larger ID kills them.</p>
+        <div class="question-grid">
+          <div class="question-card fragment fade-up">
+            <span class="label">Core</span>
+            <p>What local evidence tells a process that its own ID is too small to keep competing?</p>
+          </div>
+          <div class="question-card amber fragment fade-up">
+            <span class="label">Design idea</span>
+            <p>What if nodes explore in phases of length 1, 2, 4, 8, ... before continuing? How might that save messages?</p>
+          </div>
+          <div class="question-card green fragment fade-up">
+            <span class="label">Lower bound</span>
+            <p>Even with clever phases, why should every "region" of the ring need to reveal at least one strong candidate?</p>
+          </div>
+          <div class="question-card coral fragment fade-up">
+            <span class="label">Stretch</span>
+            <p>Which algorithms are ruled out by the comparison-based lower bound, and which escape by using more than comparisons?</p>
+          </div>
+        </div>
+        <p class="takeaway fragment fade-up">The jump from quadratic to <em>n log n</em> comes from killing hopeless candidates earlier.</p>
+      </section>
+
       <section>
         <span class="kicker"><span class="sec-no">§5</span>How good can leader election get?</span>
-        <div class="headline"><h2>The tight bound on rings</h2></div>
+        <div class="headline"><h2>The tight bound on rings <button class="hist-btn" type="button" data-history="ring-bounds" aria-label="History of ring leader-election bounds">?</button></h2></div>
         <div class="env thm">
           <span class="env-label">Theorem — a matching lower bound</span>
           <p>Every comparison-based ring leader-election algorithm sends <span class="rm">Ω(n log n)</span> messages in the worst case (Frederickson–Lynch 1987; cf. Burns 1980 for asynchronous rings).</p>
@@ -1044,7 +1517,7 @@
         <div class="split">
           <div class="col-text">
             <div class="env thm">
-              <span class="env-label">Lemma (Angluin 1980)</span>
+              <span class="env-label">Lemma (Angluin 1980) <button class="hist-btn" type="button" data-history="anonymous" aria-label="History of anonymous-network impossibility">?</button></span>
               <p>No <span class="rm">deterministic</span> algorithm elects a leader on an <span class="rm">anonymous</span> ring — even synchronous, even with <em>n</em> known to all.</p>
             </div>
             <div class="env proof">
@@ -1054,12 +1527,38 @@
           </div>
           <div class="col-text">
             <div class="callout">
-              <span class="tag">An indistinguishability argument (cf. Raman)</span>
+              <span class="tag">An indistinguishability argument</span>
               <p>Same shape as the selection lower bounds: exhibit executions a node <strong>cannot tell apart</strong>, forcing identical behaviour. Here <em>symmetry itself</em> is the adversary.</p>
             </div>
             <p class="lead" style="text-align:left;margin-left:0;font-size:.68em;">Two escape hatches: <span class="cy">unique IDs</span> (what LCR uses) or <span class="cy">randomization</span> — break symmetry with high probability.</p>
           </div>
         </div>
+      </section>
+
+      <section class="exercise">
+        <span class="kicker"><span class="sec-no">§5</span>Interactive pause</span>
+        <span class="think-tag">Think break 9</span>
+        <div class="headline"><h2>How else can symmetry be broken?</h2></div>
+        <p class="setup">The anonymous-ring proof blocks deterministic algorithms because identical nodes stay identical forever.</p>
+        <div class="question-grid">
+          <div class="question-card fragment fade-up">
+            <span class="label">Random bits</span>
+            <p>If each node privately flips coins, are the states still forced to remain identical?</p>
+          </div>
+          <div class="question-card amber fragment fade-up">
+            <span class="label">Advice</span>
+            <p>What if all nodes know <em>n</em>, a common orientation, or a distinguished edge? Which of these actually breaks symmetry?</p>
+          </div>
+          <div class="question-card green fragment fade-up">
+            <span class="label">Probability</span>
+            <p>Would you accept an algorithm that elects exactly one leader with probability at least <em>1 - 1/n</em>?</p>
+          </div>
+          <div class="question-card coral fragment fade-up">
+            <span class="label">Stretch</span>
+            <p>How would the specification change if "eventually one leader with high probability" replaced deterministic certainty?</p>
+          </div>
+        </div>
+        <p class="takeaway fragment fade-up">Impossibility results often point to the exact extra power needed to escape them.</p>
       </section>
 
       <!-- ===================== §6 ===================== -->
@@ -1094,7 +1593,7 @@
           </div>
           <div class="col-text">
             <div class="env def">
-              <span class="env-label">Byzantine Generals (Lamport–Shostak–Pease 1982)</span>
+              <span class="env-label">Byzantine Generals (Lamport–Shostak–Pease 1982) <button class="hist-btn" type="button" data-history="byzantine" aria-label="History of the Byzantine Generals problem">?</button></span>
               <p><em>n</em> processes; up to <em>f</em> are <strong>Byzantine</strong> — arbitrarily faulty, even malicious. A commander holds a value <em>x ∈ {attack, retreat}</em> and sends orders; every correct process must <em>decide</em>.</p>
             </div>
           </div>
@@ -1115,6 +1614,32 @@
           </div>
         </div>
         <p class="lead fragment fade-up">For which <em>n, f</em> is this possible? <span class="cy">That is where the next lecture begins.</span></p>
+      </section>
+
+      <section class="exercise">
+        <span class="kicker"><span class="sec-no">§6</span>Interactive pause</span>
+        <span class="think-tag">Think break 10</span>
+        <div class="headline"><h2>How many liars can agreement survive?</h2></div>
+        <p class="setup">Try the smallest nontrivial case: one Byzantine process, and everyone else follows the protocol.</p>
+        <div class="question-grid">
+          <div class="question-card fragment fade-up">
+            <span class="label">n = 3, f = 1</span>
+            <p>Can two honest processes always tell whether the commander lied, or whether the other lieutenant is lying about the command?</p>
+          </div>
+          <div class="question-card amber fragment fade-up">
+            <span class="label">n = 4, f = 1</span>
+            <p>What extra cross-check becomes possible when there are three honest processes instead of two?</p>
+          </div>
+          <div class="question-card green fragment fade-up">
+            <span class="label">Rule guess</span>
+            <p>Based on these cases, guess a threshold relating <em>n</em> and <em>f</em>.</p>
+          </div>
+          <div class="question-card coral fragment fade-up">
+            <span class="label">Stretch</span>
+            <p>Which assumption would change the threshold: digital signatures, synchrony, private channels, or authenticated sender IDs?</p>
+          </div>
+        </div>
+        <p class="takeaway fragment fade-up">This is the gateway to Byzantine agreement: the model decides what "trust" means.</p>
       </section>
 
       <!-- 16 · CLOSING -->
@@ -1172,7 +1697,7 @@
           bottom = Math.max(bottom, r.bottom - wr.top);
         });
 
-        const sideReserve = 18, topReserve = 16, bottomReserve = 58;
+        const sideReserve = 18, topReserve = 16, bottomReserve = 86;
         const cw = Math.max(1, right - left);
         const ch = Math.max(1, bottom - top);
         const scale = Math.min(1, (aw - sideReserve * 2) / cw, (ah - topReserve - bottomReserve) / ch);
@@ -1189,6 +1714,70 @@
       if (attrs) for (const k in attrs) n.setAttribute(k, attrs[k]);
       if (kids) kids.forEach(c => n.appendChild(c));
       return n;
+    }
+
+    const HISTORIES = {
+      lcr: {
+        title: "Le Lann–Chang–Roberts leader election",
+        body: "Ring leader election grew from Le Lann's 1977 formal treatment of distributed systems and Chang–Roberts' 1979 extrema-finding algorithm for circular process configurations. The version used here sends identifiers around a unidirectional ring and lets larger identifiers eliminate smaller ones.",
+        source: "Sources: <a href='https://dblp.org/rec/conf/ifip/Lann77.html' target='_blank' rel='noopener'>Le Lann 1977</a>; <a href='https://doi.org/10.1145/359104.359108' target='_blank' rel='noopener'>Chang &amp; Roberts 1979</a>."
+      },
+      "ring-bounds": {
+        title: "Why the ring bound became tight",
+        body: "Hirschberg and Sinclair showed in 1980 that extrema finding, hence leader election, can be done with O(n log n) messages on rings. Frederickson and Lynch later proved a matching Omega(n log n) lower bound for broad comparison-based synchronous-ring algorithms.",
+        source: "Sources: <a href='https://doi.org/10.1145/359024.359029' target='_blank' rel='noopener'>Hirschberg &amp; Sinclair 1980</a>; <a href='https://doi.org/10.1145/7531.7533' target='_blank' rel='noopener'>Frederickson &amp; Lynch 1987</a>."
+      },
+      anonymous: {
+        title: "Anonymous networks and symmetry",
+        body: "Angluin's 1980 paper made precise the difference between local and global network properties. The anonymous-ring impossibility here is the clean classroom version of that symmetry obstacle: if all local views stay identical, deterministic code cannot choose exactly one node.",
+        source: "Source: <a href='https://doi.org/10.1145/800141.804655' target='_blank' rel='noopener'>Angluin 1980</a>."
+      },
+      byzantine: {
+        title: "The Byzantine Generals problem",
+        body: "Lamport, Shostak, and Pease introduced the Byzantine Generals problem to model processes that may lie, collude, or send inconsistent messages. Their 1982 paper became the reference point for Byzantine fault tolerance in distributed systems.",
+        source: "Source: <a href='https://doi.org/10.1145/357172.357176' target='_blank' rel='noopener'>Lamport, Shostak &amp; Pease 1982</a>."
+      }
+    };
+
+    function wireHistoryOverlay() {
+      const overlay = document.getElementById("history-overlay");
+      if (!overlay) return;
+      const title = document.getElementById("history-title");
+      const body = document.getElementById("history-body");
+      const source = document.getElementById("history-source");
+      const close = overlay.querySelector(".history-close");
+      let lastButton = null;
+
+      function openHistory(key, button) {
+        const note = HISTORIES[key];
+        if (!note) return;
+        lastButton = button;
+        title.textContent = note.title;
+        body.textContent = note.body;
+        source.innerHTML = note.source;
+        overlay.classList.add("open");
+        overlay.setAttribute("aria-hidden", "false");
+        close.focus();
+      }
+
+      function closeHistory() {
+        overlay.classList.remove("open");
+        overlay.setAttribute("aria-hidden", "true");
+        if (lastButton) lastButton.focus();
+      }
+
+      document.querySelectorAll(".hist-btn").forEach(button => {
+        button.addEventListener("click", event => {
+          event.preventDefault();
+          event.stopPropagation();
+          openHistory(button.dataset.history, button);
+        });
+      });
+      close.addEventListener("click", event => { event.stopPropagation(); closeHistory(); });
+      overlay.addEventListener("click", event => { if (event.target === overlay) closeHistory(); });
+      document.addEventListener("keydown", event => {
+        if (event.key === "Escape" && overlay.classList.contains("open")) closeHistory();
+      });
     }
 
     /* ---------- generic stepper wiring ---------- */
@@ -1356,6 +1945,7 @@
     }
 
     /* ---------- init ---------- */
+    wireHistoryOverlay();
     Reveal.initialize({ hash: true, slideNumber: "c/t", progress: true, center: true, margin: 0, width: '100%', height: '100%', minScale: 1, maxScale: 1, transition: "fade", backgroundTransition: "fade", fragments: !/fragments=false/.test(location.search) });
     Reveal.on("ready", () => {
       buildFlood(); buildLCR();
@@ -1370,6 +1960,7 @@
     });
     Reveal.on("fragmentshown", scheduleFitSlides); Reveal.on("fragmenthidden", scheduleFitSlides); Reveal.on("resize", scheduleFitSlides);
     window.addEventListener("load", () => { scheduleFitSlides(); setTimeout(fitSlidesToViewport, 140) });
+    window.addEventListener("hashchange", () => { scheduleFitSlides(); setTimeout(fitSlidesToViewport, 140) });
     window.addEventListener("resize", scheduleFitSlides);
   </script>
 </body>
