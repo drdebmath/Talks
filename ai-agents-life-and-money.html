@@ -1,0 +1,2968 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>AI Agents: Life and Money</title>
+  <meta name="description" content="AI agents in daily life, the parallel agent economy, and why digital-native agents need digital-native money: stablecoins, x402, ERC-8004. Ethereum Day talk by Debasish Pattanayak.">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js/dist/reveal.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=STIX+Two+Text:ital,wght@0,400;0,600;0,700;1,400;1,600&family=IBM+Plex+Mono:wght@400;500;600&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --bg: #101912;
+      --bg-deep: #0a110c;
+      --ink: #f0ecdd;
+      --ink-strong: #fbfaf4;
+      --ink-muted: #c2c9b8;
+      --chalk: rgba(240, 236, 221, .18);
+      --chalk-soft: rgba(240, 236, 221, .095);
+      --yellow: #f2cc60;
+      --yellow-dim: rgba(242, 204, 96, .16);
+      --blue: #8fd0c6;
+      --blue-dim: rgba(143, 208, 198, .14);
+      --red: #e8836f;
+      --red-dim: rgba(232, 131, 111, .12);
+      --panel: rgba(251, 250, 244, .04);
+      --panel-strong: rgba(251, 250, 244, .075);
+      --serif: "STIX Two Text", "STIX Two Math", Georgia, serif;
+      --display: "Instrument Serif", Georgia, serif;
+      --mono: "IBM Plex Mono", ui-monospace, monospace;
+    }
+
+    :root {
+      --board: radial-gradient(ellipse 90% 70% at 50% 0%, rgba(231, 228, 216, .045) 0%, transparent 55%),
+        radial-gradient(ellipse 60% 50% at 88% 96%, rgba(242, 204, 96, .05) 0%, transparent 60%),
+        radial-gradient(ellipse 55% 50% at 8% 90%, rgba(143, 208, 198, .04) 0%, transparent 60%),
+        var(--bg);
+    }
+
+    html {
+      background: var(--bg);
+    }
+
+    body,
+    .reveal-viewport {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--board) !important;
+      color: var(--ink);
+    }
+
+    /* chalk dust / film-grain texture */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      opacity: .24;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .05 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+
+    /* faint graph-paper rule */
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      opacity: .48;
+      background-image:
+        linear-gradient(rgba(231, 228, 216, .025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(231, 228, 216, .025) 1px, transparent 1px);
+      background-size: 56px 56px;
+    }
+
+    .board-frame {
+      position: fixed;
+      inset: 14px;
+      pointer-events: none;
+      z-index: 2;
+      border: 1px solid var(--chalk-soft);
+    }
+
+    .board-frame::before {
+      content: "";
+      position: absolute;
+      inset: 5px;
+      border: 1px solid rgba(231, 228, 216, .045);
+    }
+
+    .chrome {
+      position: fixed;
+      left: 34px;
+      right: 34px;
+      bottom: 22px;
+      z-index: 3;
+      pointer-events: none;
+      display: flex;
+      justify-content: space-between;
+      font-family: var(--mono);
+      font-size: 13px;
+      letter-spacing: .12em;
+      color: var(--ink-muted);
+      opacity: .75;
+      text-transform: uppercase;
+    }
+
+    .reveal {
+      position: relative;
+      z-index: 1;
+      font-family: var(--serif);
+      color: var(--ink);
+      font-size: clamp(40px, 1.2vw + 33px, 56px);
+    }
+
+    .reveal .progress {
+      color: var(--yellow);
+      height: 3px;
+    }
+
+    .reveal .slide-number {
+      background: transparent;
+      font-family: var(--mono);
+      font-size: 15px;
+      color: var(--ink-muted);
+      right: 34px;
+      bottom: 40px;
+    }
+
+    .reveal h1,
+    .reveal h2,
+    .reveal h3 {
+      font-family: var(--display);
+      font-weight: 400;
+      color: var(--ink-strong);
+      text-wrap: balance;
+      line-height: 1.06;
+      letter-spacing: .005em;
+      margin: 0 0 .3em;
+      text-shadow: 0 2px 24px rgba(0, 0, 0, .5);
+    }
+
+    .reveal h1 {
+      font-size: 2.05em;
+      max-width: 94%;
+      margin-inline: auto;
+    }
+
+    .reveal h2 {
+      font-size: 1.42em;
+    }
+
+    .reveal h3 {
+      font-size: 1.12em;
+    }
+
+    .reveal em {
+      font-style: italic;
+    }
+
+    .reveal section {
+      padding: .35em 1em;
+      box-sizing: border-box;
+      width: 100% !important;
+      height: 100% !important;
+    }
+
+    .reveal .slides section.present {
+      display: flex !important;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .slide-fit {
+      width: min(100%, 1760px);
+      min-height: min(850px, calc(100vh - 180px));
+      margin: 0 auto;
+      transform-origin: center center;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .reveal a {
+      color: var(--blue);
+      text-decoration-color: rgba(143, 208, 198, .4);
+      text-decoration-thickness: 1px;
+      text-underline-offset: .14em;
+      transition: color .2s;
+    }
+
+    .reveal a:hover {
+      color: #b6e6de;
+    }
+
+    /* ---- kicker + chalk underline ---- */
+    .kicker {
+      display: block;
+      font-family: var(--mono);
+      font-size: .42em;
+      font-weight: 500;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: var(--yellow);
+      margin: 0 0 .9em;
+    }
+
+    .kicker .sec-no {
+      color: var(--ink-muted);
+      margin-right: 1em;
+    }
+
+    .headline {
+      text-align: center;
+      margin-bottom: .45em;
+      flex-shrink: 0;
+    }
+
+    .headline h2 {
+      display: inline-block;
+      position: relative;
+      padding-bottom: .14em;
+      margin-bottom: 0;
+    }
+
+    .headline h2::after {
+      content: "";
+      position: absolute;
+      left: 6%;
+      right: 6%;
+      bottom: 0;
+      height: 3px;
+      border-radius: 2px;
+      background: linear-gradient(90deg, transparent, rgba(242, 204, 96, .75) 12%, rgba(242, 204, 96, .75) 88%, transparent);
+      transform: rotate(-.35deg);
+    }
+
+    .small {
+      font-size: .52em;
+      font-family: var(--mono);
+      color: var(--ink-muted);
+    }
+
+    .lead {
+      font-size: .72em;
+      line-height: 1.45;
+      max-width: 86%;
+      margin: .45em auto 0;
+      color: var(--ink);
+      text-align: center;
+    }
+
+    .lead strong {
+      color: var(--yellow);
+      font-weight: 600;
+    }
+
+    /* ---- cold open ---- */
+    .cold-open .slide-fit {
+      gap: .55em;
+    }
+
+    .cold-open .kicker {
+      text-align: center;
+      margin-bottom: .2em;
+    }
+
+    .cold-rows {
+      display: grid;
+      grid-template-rows: repeat(3, minmax(0, 1fr));
+      gap: .36em;
+      width: min(100%, 1640px);
+      min-height: clamp(470px, 54vh, 610px);
+      margin: 0 auto;
+    }
+
+    .cold-row {
+      background: linear-gradient(170deg, var(--panel-strong), var(--panel));
+      border: 1px solid var(--chalk-soft);
+      border-left: 4px solid var(--blue);
+      border-radius: 3px;
+      margin: 0;
+      padding: .48em .7em;
+      text-align: left;
+      display: grid;
+      grid-template-columns: 8.5em 1fr;
+      align-items: center;
+      gap: .8em;
+      box-shadow: 0 12px 36px rgba(0, 0, 0, .32);
+    }
+
+    .cold-row.gold {
+      border-left-color: var(--yellow);
+      background: linear-gradient(170deg, rgba(242, 204, 96, .08), var(--panel));
+    }
+
+    .cold-row .tag {
+      font-family: var(--mono);
+      font-size: .42em;
+      font-weight: 600;
+      letter-spacing: .18em;
+      line-height: 1.25;
+      text-transform: uppercase;
+      color: var(--blue);
+    }
+
+    .cold-row.gold .tag {
+      color: var(--yellow);
+    }
+
+    .cold-row .claim {
+      font-size: .92em;
+      line-height: 1.18;
+      color: var(--ink-strong);
+    }
+
+    .cold-row .claim strong {
+      color: var(--yellow);
+      font-weight: 700;
+    }
+
+    .cold-open .lead {
+      font-size: .82em;
+      margin-top: .15em;
+    }
+
+    .cold-open .source-links {
+      margin-top: .25em;
+    }
+
+    /* ---- theorem-style environments ---- */
+    .env {
+      background: var(--panel);
+      border: 1px solid var(--chalk-soft);
+      border-left: 3px solid var(--blue);
+      border-radius: 2px;
+      padding: .55em .8em;
+      text-align: left;
+      margin: .3em auto 0;
+      max-width: 92%;
+      box-shadow: 0 12px 36px rgba(0, 0, 0, .35);
+    }
+
+    .env .env-label {
+      display: block;
+      font-family: var(--mono);
+      font-size: .45em;
+      font-weight: 600;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--blue);
+      margin-bottom: .55em;
+    }
+
+    .env p {
+      margin: 0;
+      font-size: .68em;
+      line-height: 1.38;
+      color: var(--ink);
+    }
+
+    .env.thm {
+      border-left-color: var(--yellow);
+    }
+
+    .env.thm .env-label {
+      color: var(--yellow);
+    }
+
+    .env.thm p {
+      font-style: italic;
+      color: var(--ink-strong);
+    }
+
+    .env.thm p strong,
+    .env.thm p .rm {
+      font-style: normal;
+    }
+
+    .env.warn {
+      border-left-color: var(--red);
+    }
+
+    .env.warn .env-label {
+      color: var(--red);
+    }
+
+    .env.rmk {
+      border-left-color: var(--ink-muted);
+    }
+
+    .env.rmk .env-label {
+      color: var(--ink-muted);
+    }
+
+    .env.rmk p {
+      font-size: .6em;
+      color: var(--ink);
+    }
+
+    /* ---- title page ---- */
+    .titlepage {
+      text-align: center;
+    }
+
+    .titlepage .series {
+      font-family: var(--mono);
+      font-size: .46em;
+      letter-spacing: .26em;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      margin: 0 0 1.6em;
+    }
+
+    .titlepage h1 {
+      font-size: 2.28em;
+    }
+
+    .titlepage .rule {
+      width: 5.2em;
+      height: 1px;
+      background: var(--chalk);
+      margin: 1.1em auto;
+      position: relative;
+    }
+
+    .titlepage .rule::after {
+      content: "✦";
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -52%);
+      font-size: .42em;
+      color: var(--yellow);
+      background: var(--bg);
+      padding: 0 .8em;
+    }
+
+    .titlepage .author {
+      margin: 0;
+      font-family: var(--display);
+      font-size: 1em;
+      color: var(--ink-strong);
+    }
+
+    .titlepage .affil {
+      margin: .25em 0 0;
+      font-size: .62em;
+      color: var(--ink);
+    }
+
+    .titlepage .event {
+      margin: .9em 0 0;
+      font-family: var(--mono);
+      font-size: .42em;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+    }
+
+    /* ---- contents ---- */
+    .toc {
+      margin: .2em auto 0;
+      max-width: 86%;
+      text-align: left;
+    }
+
+    .toc-row {
+      display: grid;
+      grid-template-columns: 2.4em 1fr auto;
+      align-items: baseline;
+      gap: .6em;
+      padding: .48em .2em;
+      border-bottom: 1px dashed var(--chalk-soft);
+    }
+
+    .toc-row:last-child {
+      border-bottom: 0;
+    }
+
+    .toc-row .no {
+      font-family: var(--mono);
+      font-size: .5em;
+      color: var(--yellow);
+    }
+
+    .toc-row .ttl {
+      font-family: var(--display);
+      font-size: .9em;
+      color: var(--ink-strong);
+    }
+
+    .toc-row .sub {
+      font-family: var(--mono);
+      font-size: .44em;
+      letter-spacing: .06em;
+      color: var(--ink-muted);
+    }
+
+    /* ---- section dividers ---- */
+    .divider {
+      text-align: center;
+    }
+
+    .divider .secno {
+      font-family: var(--display);
+      font-style: italic;
+      font-size: 4.75em;
+      line-height: 1;
+      color: var(--yellow);
+      display: block;
+      text-shadow: 0 0 60px rgba(242, 204, 96, .25);
+    }
+
+    .divider h2 {
+      font-size: 2.15em;
+      margin: .18em 0 0;
+    }
+
+    .divider .sub {
+      margin: .5em auto 0;
+      font-size: .72em;
+      font-style: italic;
+      color: var(--ink-muted);
+      max-width: 80%;
+      line-height: 1.4;
+    }
+
+    .quote-slide blockquote {
+      margin: 0 auto;
+      max-width: 86%;
+      border: 0;
+      background: transparent;
+      font-family: var(--display);
+      font-style: italic;
+      font-size: 1.95em;
+      line-height: 1.25;
+      color: var(--ink-strong);
+      text-align: center;
+      box-shadow: none;
+    }
+
+    .quote-slide blockquote .hl {
+      color: var(--yellow);
+    }
+
+    /* ---- panels (cards) ---- */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: .9em;
+      align-items: stretch;
+      width: 100%;
+      min-height: clamp(390px, 48vh, 540px);
+    }
+
+    .panel {
+      background: linear-gradient(170deg, var(--panel-strong), var(--panel));
+      border: 1px solid var(--chalk-soft);
+      border-radius: 3px;
+      padding: .74em .9em;
+      text-align: left;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, .3);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      position: relative;
+      min-height: 0;
+    }
+
+    .panel::before {
+      content: "";
+      position: absolute;
+      top: -1px;
+      left: .85em;
+      width: 2.2em;
+      height: 2px;
+      background: rgba(143, 208, 198, .55);
+    }
+
+    .panel.gold::before {
+      background: rgba(242, 204, 96, .65);
+    }
+
+    .panel h4 {
+      margin: 0 0 .4em;
+      font-family: var(--mono);
+      font-weight: 600;
+      font-size: .5em;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--blue);
+    }
+
+    .panel.gold h4 {
+      color: var(--yellow);
+    }
+
+    .panel p {
+      margin: 0;
+      font-size: .63em;
+      line-height: 1.35;
+      color: var(--ink);
+    }
+
+    .panel p strong {
+      color: var(--ink-strong);
+      font-weight: 600;
+    }
+
+    .panel p .acc {
+      color: var(--yellow);
+      font-weight: 600;
+    }
+
+    .reveal ul.dense-list {
+      margin: 0;
+      max-width: none;
+      padding-left: 1.05em;
+      font-size: .57em;
+      line-height: 1.32;
+    }
+
+    .reveal ul.dense-list li {
+      margin: .22em 0;
+    }
+
+    .reveal ul {
+      margin: .34em auto 0;
+      max-width: 92%;
+      text-align: left;
+      font-size: .68em;
+      line-height: 1.34;
+    }
+
+    .reveal ul li {
+      margin: .3em 0;
+    }
+
+    .reveal ul li::marker {
+      color: var(--yellow);
+    }
+
+    .reveal li strong {
+      color: var(--ink-strong);
+    }
+
+    /* ---- figure stage + svg ---- */
+    .stage {
+      background: linear-gradient(168deg, rgba(13, 19, 15, .9), rgba(19, 27, 22, .55));
+      border: 1px solid var(--chalk-soft);
+      border-radius: 4px;
+      padding: .5em;
+      margin: .34em auto 0;
+      box-shadow: inset 0 1px 0 rgba(251, 250, 244, .03), 0 12px 30px rgba(0, 0, 0, .3);
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .fig-cap {
+      margin: .35em 0 0;
+      font-family: var(--mono);
+      font-size: .36em;
+      letter-spacing: .08em;
+      color: var(--ink-muted);
+      text-align: center;
+    }
+
+    svg {
+      width: 100%;
+      height: auto;
+      max-height: min(390px, 45vh);
+    }
+
+    .figure-image {
+      display: block;
+      width: 100%;
+      height: clamp(380px, 50vh, 540px);
+      object-fit: contain;
+      object-position: center;
+      background: #f9f8f2;
+      border: 1px solid rgba(231, 228, 216, .2);
+      border-radius: 3px;
+    }
+
+    .unit-distance-figure {
+      background: linear-gradient(168deg, rgba(251, 250, 244, .08), rgba(13, 19, 15, .72));
+    }
+
+    svg text {
+      font-family: var(--mono);
+    }
+
+    .label {
+      font-size: 16px;
+      fill: var(--ink-strong);
+      font-weight: 600;
+    }
+
+    .sub-label {
+      font-size: 14px;
+      fill: var(--ink);
+    }
+
+    .mut-label {
+      font-size: 13px;
+      fill: var(--ink-muted);
+    }
+
+    .chalk-box {
+      fill: rgba(251, 250, 244, .03);
+      stroke: rgba(231, 228, 216, .35);
+      stroke-width: 1.6;
+    }
+
+    .chalk-box.blue {
+      stroke: rgba(143, 208, 198, .7);
+      fill: rgba(143, 208, 198, .06);
+    }
+
+    .chalk-box.gold {
+      stroke: rgba(242, 204, 96, .75);
+      fill: rgba(242, 204, 96, .07);
+    }
+
+    .chalk-box.red {
+      stroke: rgba(232, 131, 111, .65);
+      fill: rgba(232, 131, 111, .05);
+    }
+
+    .chalk-arrow {
+      stroke: rgba(242, 204, 96, .8);
+      stroke-width: 2;
+      fill: none;
+      marker-end: url(#tip);
+    }
+
+    .chalk-arrow.blue {
+      stroke: rgba(143, 208, 198, .7);
+      marker-end: url(#tipblue);
+    }
+
+    .chalk-arrow.dashed {
+      stroke-dasharray: 6 7;
+    }
+
+    .packet {
+      fill: var(--yellow);
+      transform-box: fill-box;
+      transform-origin: center;
+      animation: packet-hop 2.4s ease-in-out infinite;
+    }
+
+    /* ---- post cards (field evidence) ---- */
+    .post-grid {
+      display: grid;
+      gap: .82em;
+      margin-top: .3em;
+      width: 100%;
+      align-items: stretch;
+      min-height: clamp(500px, 60vh, 660px);
+    }
+
+    .post-grid-2 {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .post-grid-3 {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .post-card {
+      background: linear-gradient(170deg, var(--panel-strong), var(--panel));
+      border: 1px solid var(--chalk-soft);
+      border-radius: 3px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, .3);
+      padding: .58em .68em;
+      text-align: left;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+    }
+
+    .post-image {
+      width: 100%;
+      height: clamp(260px, 38vh, 410px);
+      object-fit: contain;
+      object-position: center;
+      background: var(--bg-deep);
+      border-radius: 2px;
+      border: 1px solid var(--chalk-soft);
+    }
+
+    .post-image.tall {
+      height: clamp(300px, 43vh, 460px);
+    }
+
+    .post-card h4 {
+      margin: .4em 0 .2em;
+      font-family: var(--mono);
+      font-weight: 600;
+      font-size: .46em;
+      letter-spacing: .1em;
+      color: var(--yellow);
+    }
+
+    .post-card p {
+      margin: 0;
+      font-size: .57em;
+      line-height: 1.32;
+      color: var(--ink);
+    }
+
+    .metric-row {
+      display: flex;
+      gap: .26em;
+      flex-wrap: wrap;
+      margin-top: .28em;
+    }
+
+    .metric {
+      font-family: var(--mono);
+      font-size: .38em;
+      font-weight: 500;
+      letter-spacing: .04em;
+      border-radius: 2px;
+      padding: .22em .55em;
+      border: 1px dashed rgba(143, 208, 198, .4);
+      color: var(--blue);
+      background: rgba(143, 208, 198, .05);
+    }
+
+    .metric.gold {
+      border-color: rgba(242, 204, 96, .45);
+      color: var(--yellow);
+      background: rgba(242, 204, 96, .05);
+    }
+
+    .post-link {
+      display: block;
+      margin-top: .24em;
+      font-family: var(--mono);
+      font-size: .36em;
+      color: var(--blue);
+      text-decoration: none;
+      word-break: break-all;
+    }
+
+    .post-link:hover {
+      text-decoration: underline;
+    }
+
+    /* ---- footnote sources ---- */
+    .source-links {
+      margin: .5em auto 0;
+      padding-top: .3em;
+      max-width: 94%;
+      border-top: 1px solid var(--chalk-soft);
+      font-family: var(--mono);
+      font-size: .38em;
+      letter-spacing: .03em;
+      line-height: 1.5;
+      color: var(--ink-muted);
+      text-align: left;
+    }
+
+    .source-links a {
+      color: var(--blue);
+      text-decoration: none;
+    }
+
+    .source-links a:hover {
+      text-decoration: underline;
+    }
+
+    /* ---- table ---- */
+    .seminar-table {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+      font-size: .48em;
+      background: var(--panel);
+      border: 1px solid var(--chalk-soft);
+    }
+
+    .seminar-table thead th {
+      font-family: var(--mono);
+      font-weight: 600;
+      font-size: .86em;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      background: rgba(251, 250, 244, .035);
+      border-bottom: 1px solid var(--chalk);
+    }
+
+    .seminar-table th,
+    .seminar-table td {
+      padding: .5em .6em;
+      border-bottom: 1px dashed var(--chalk-soft);
+      vertical-align: top;
+      text-align: left;
+      line-height: 1.35;
+    }
+
+    .seminar-table tbody tr:last-child td {
+      border-bottom: 0;
+    }
+
+    .seminar-table td.h {
+      font-family: var(--mono);
+      color: var(--blue);
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .seminar-table td.h.alt {
+      color: var(--yellow);
+    }
+
+    /* ---- stats ---- */
+    .stat-row {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: .6em;
+      width: 100%;
+      margin-top: .34em;
+      min-height: clamp(270px, 34vh, 380px);
+    }
+
+    .stat-card {
+      background: linear-gradient(170deg, var(--panel-strong), var(--panel));
+      border: 1px solid var(--chalk-soft);
+      border-radius: 3px;
+      padding: .6em .45em;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, .3);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .stat-card .num {
+      font-family: var(--display);
+      font-style: italic;
+      font-size: 1.35em;
+      color: var(--blue);
+      line-height: 1;
+    }
+
+    .stat-card .num.hot {
+      color: var(--red);
+    }
+
+    .stat-card .num.sun {
+      color: var(--yellow);
+    }
+
+    .stat-card .cap {
+      margin-top: .35em;
+      font-size: .52em;
+      line-height: 1.35;
+      color: var(--ink);
+    }
+
+    .stat-card .cap strong {
+      color: var(--ink-strong);
+    }
+
+    /* ---- era strip ---- */
+    .era-strip {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: .4em;
+      width: 100%;
+      margin-top: .34em;
+      min-height: clamp(360px, 43vh, 480px);
+    }
+
+    .scoreboard-slide .stat-row {
+      min-height: clamp(230px, 28vh, 320px);
+    }
+
+    .scoreboard-slide .grid-2 {
+      min-height: clamp(320px, 36vh, 430px);
+    }
+
+    .unit-distance-slide .grid-2 {
+      min-height: clamp(360px, 42vh, 460px);
+    }
+
+    .unit-distance-slide .figure-image {
+      height: clamp(330px, 42vh, 455px);
+    }
+
+    .cascade-slide .env {
+      padding: .48em .72em;
+    }
+
+    .cascade-slide .env p {
+      font-size: .62em;
+      line-height: 1.32;
+    }
+
+    .cascade-slide .grid-2 {
+      min-height: clamp(300px, 34vh, 410px);
+    }
+
+    .cascade-slide .panel {
+      padding: .58em .75em;
+    }
+
+    .era {
+      background: var(--panel);
+      border: 1px solid var(--chalk-soft);
+      border-top: 2px solid rgba(143, 208, 198, .5);
+      border-radius: 3px;
+      padding: .5em .5em;
+      text-align: left;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .era .yr {
+      font-family: var(--mono);
+      font-size: .38em;
+      color: var(--ink-muted);
+      font-weight: 600;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    .era h5 {
+      margin: .2em 0 .25em;
+      font-family: var(--display);
+      font-weight: 400;
+      font-size: .66em;
+      color: var(--blue);
+    }
+
+    .era p {
+      margin: 0;
+      font-size: .46em;
+      line-height: 1.35;
+      color: var(--ink);
+    }
+
+    .era.now {
+      border-top-color: var(--yellow);
+      background: linear-gradient(170deg, rgba(242, 204, 96, .08), var(--panel));
+    }
+
+    .era.now h5 {
+      color: var(--yellow);
+    }
+
+    .lede-quote {
+      font-family: var(--display);
+      font-style: italic;
+      font-size: .7em;
+      line-height: 1.35;
+      color: var(--ink-strong);
+      border-left: 3px solid var(--yellow);
+      padding-left: .6em;
+      margin: .35em auto 0;
+      max-width: 92%;
+      text-align: left;
+    }
+
+    .lede-quote .src {
+      display: block;
+      margin-top: .3em;
+      font-family: var(--mono);
+      font-style: normal;
+      font-size: .54em;
+      letter-spacing: .06em;
+      color: var(--ink-muted);
+    }
+
+    .design-map {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: .26em;
+      margin-top: .3em;
+    }
+
+    .design-item {
+      background: var(--panel);
+      border: 1px solid var(--chalk-soft);
+      border-radius: 2px;
+      padding: .26em .34em;
+    }
+
+    .design-item h5 {
+      margin: 0 0 .14em;
+      font-family: var(--mono);
+      font-weight: 600;
+      font-size: .36em;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--blue);
+    }
+
+    .design-item p {
+      margin: 0;
+      font-size: .39em;
+      line-height: 1.3;
+      color: var(--ink);
+    }
+
+    .math {
+      font-family: var(--serif);
+      font-style: italic;
+    }
+
+    .math sup,
+    .math sub {
+      font-size: .68em;
+    }
+
+    @keyframes packet-hop {
+
+      0%,
+      100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-6px);
+      }
+    }
+
+    @media(max-width:900px) {
+
+      .grid-2,
+      .post-grid-2,
+      .post-grid-3,
+      .stat-row {
+        grid-template-columns: 1fr;
+      }
+
+      .era-strip {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .reveal {
+        font-size: 27px;
+      }
+    }
+
+    @media(max-height:900px) {
+      .reveal {
+        font-size: 34px;
+      }
+
+      svg {
+        max-height: min(250px, 31vh);
+      }
+    }
+
+    @media(max-height:760px) {
+      .reveal {
+        font-size: 30px;
+      }
+
+      .post-image {
+        height: clamp(100px, 17vh, 145px);
+      }
+
+      .post-image.tall {
+        height: clamp(110px, 19vh, 160px);
+      }
+    }
+
+    @media(prefers-reduced-motion:reduce) {
+      .packet {
+        animation: none !important;
+      }
+    }
+
+
+    /* =====================================================
+       Life & Money additions — motion layer
+       ===================================================== */
+    :root {
+      --eth: #a7a4f2;
+      --eth-dim: rgba(167, 164, 242, .14);
+      --green: #9ad58a;
+    }
+
+    /* entrance animations that replay each time a slide becomes present */
+    .reveal .slides section .rise,
+    .reveal .slides section .pop,
+    .reveal .slides section .slide-l,
+    .reveal .slides section .slide-r,
+    .reveal .slides section .draw {
+      opacity: 0;
+    }
+
+    .reveal .slides section.present .rise {
+      animation: rise .8s cubic-bezier(.2, .7, .2, 1) both;
+      animation-delay: var(--d, 0s);
+    }
+
+    .reveal .slides section.present .pop {
+      animation: pop .6s cubic-bezier(.3, 1.5, .5, 1) both;
+      animation-delay: var(--d, 0s);
+    }
+
+    .reveal .slides section.present .slide-l {
+      animation: slide-l .8s cubic-bezier(.2, .7, .2, 1) both;
+      animation-delay: var(--d, 0s);
+    }
+
+    .reveal .slides section.present .slide-r {
+      animation: slide-r .8s cubic-bezier(.2, .7, .2, 1) both;
+      animation-delay: var(--d, 0s);
+    }
+
+    .reveal .slides section.present .draw {
+      opacity: 1;
+      stroke-dasharray: var(--len, 600);
+      stroke-dashoffset: var(--len, 600);
+      animation: draw 1.4s ease-out forwards;
+      animation-delay: var(--d, 0s);
+    }
+
+    @keyframes rise {
+      from { opacity: 0; transform: translateY(26px); }
+      to { opacity: 1; transform: none; }
+    }
+
+    @keyframes pop {
+      from { opacity: 0; transform: scale(.6); }
+      to { opacity: 1; transform: none; }
+    }
+
+    @keyframes slide-l {
+      from { opacity: 0; transform: translateX(-60px); }
+      to { opacity: 1; transform: none; }
+    }
+
+    @keyframes slide-r {
+      from { opacity: 0; transform: translateX(60px); }
+      to { opacity: 1; transform: none; }
+    }
+
+    @keyframes draw {
+      to { stroke-dashoffset: 0; }
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.08); opacity: .8; }
+    }
+
+    @keyframes blink {
+      50% { opacity: 0; }
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .acc-eth { color: var(--eth); }
+    .acc-green { color: var(--green); }
+    .acc-red { color: var(--red); }
+
+    /* ---- title page: orbiting coins ---- */
+    .titlepage h1 em { color: var(--yellow); }
+
+    .orbit {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 0;
+      height: 0;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    .orbit span {
+      position: absolute;
+      font-family: var(--mono);
+      font-size: .5em;
+      color: var(--ink-muted);
+      opacity: .55;
+      animation: orbit var(--t, 18s) linear infinite;
+      animation-delay: var(--o, 0s);
+      white-space: nowrap;
+    }
+
+    @keyframes orbit {
+      from { transform: rotate(0deg) translateX(var(--r, 520px)) rotate(0deg); }
+      to { transform: rotate(360deg) translateX(var(--r, 520px)) rotate(-360deg); }
+    }
+
+    /* ---- day timeline ---- */
+    .day {
+      position: relative;
+      width: 100%;
+      margin: .4em auto 0;
+      padding: .3em 0 .2em;
+    }
+
+    .day-track {
+      position: relative;
+      height: 4px;
+      background: var(--chalk-soft);
+      border-radius: 2px;
+      margin: 1.5em .6em 0;
+    }
+
+    .day-track::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      width: 0;
+      background: linear-gradient(90deg, var(--blue), var(--yellow));
+      border-radius: 2px;
+    }
+
+    .reveal .slides section.present .day-track::after {
+      animation: grow-w 4.4s linear forwards;
+    }
+
+    @keyframes grow-w {
+      to { width: 100%; }
+    }
+
+    .day-events {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      gap: .45em;
+      margin-top: .9em;
+    }
+
+    .day-ev {
+      background: linear-gradient(170deg, var(--panel-strong), var(--panel));
+      border: 1px solid var(--chalk-soft);
+      border-top: 3px solid var(--blue);
+      border-radius: 3px;
+      padding: .45em .45em .5em;
+      text-align: left;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, .3);
+    }
+
+    .day-ev.money { border-top-color: var(--yellow); }
+
+    .day-ev .t {
+      font-family: var(--mono);
+      font-size: .38em;
+      letter-spacing: .14em;
+      color: var(--ink-muted);
+    }
+
+    .day-ev .ic {
+      font-size: 1.05em;
+      line-height: 1.2;
+      margin: .15em 0;
+      display: block;
+    }
+
+    .day-ev p {
+      margin: 0;
+      font-size: .5em;
+      line-height: 1.3;
+      color: var(--ink);
+    }
+
+    .day-ev p strong { color: var(--ink-strong); }
+
+    /* ---- agent loop orbit ---- */
+    .loop-wrap {
+      display: grid;
+      grid-template-columns: 1.05fr 1fr;
+      gap: 1em;
+      align-items: center;
+      width: 100%;
+    }
+
+    .loop-svg .spinner {
+      transform-box: view-box;
+      transform-origin: 300px 210px;
+      animation: spin 9s linear infinite;
+    }
+
+    .loop-svg .node-c {
+      transform-box: fill-box;
+      transform-origin: center;
+      animation: pulse 2.4s ease-in-out infinite;
+    }
+
+    /* ---- big counters ---- */
+    .counter {
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* ---- network canvas ---- */
+    .net-stage {
+      position: relative;
+      width: 100%;
+      height: clamp(380px, 52vh, 560px);
+      border: 1px solid var(--chalk-soft);
+      border-radius: 4px;
+      background: linear-gradient(168deg, rgba(13, 19, 15, .9), rgba(19, 27, 22, .55));
+      overflow: hidden;
+    }
+
+    .net-stage canvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .net-legend {
+      position: absolute;
+      left: .7em;
+      bottom: .5em;
+      display: flex;
+      gap: 1.1em;
+      font-family: var(--mono);
+      font-size: .36em;
+      color: var(--ink-muted);
+      letter-spacing: .08em;
+    }
+
+    .net-legend i {
+      display: inline-block;
+      width: .8em;
+      height: .8em;
+      border-radius: 50%;
+      margin-right: .4em;
+      vertical-align: -.1em;
+    }
+
+    .net-hud {
+      position: absolute;
+      right: .7em;
+      top: .5em;
+      text-align: right;
+      font-family: var(--mono);
+      font-size: .4em;
+      color: var(--ink-muted);
+      line-height: 1.5;
+    }
+
+    .net-hud b {
+      color: var(--yellow);
+      font-weight: 600;
+      font-size: 1.5em;
+    }
+
+    /* ---- fee bars ---- */
+    .bars {
+      width: 100%;
+      margin: .4em auto 0;
+      display: flex;
+      flex-direction: column;
+      gap: .5em;
+    }
+
+    .bar-row {
+      display: grid;
+      grid-template-columns: 9em 1fr 6.5em;
+      align-items: center;
+      gap: .6em;
+      text-align: left;
+    }
+
+    .bar-row .nm {
+      font-family: var(--mono);
+      font-size: .44em;
+      letter-spacing: .06em;
+      color: var(--ink);
+    }
+
+    .bar-row .val {
+      font-family: var(--mono);
+      font-size: .44em;
+      color: var(--ink-strong);
+      text-align: right;
+    }
+
+    .bar-track {
+      height: 1.05em;
+      background: var(--panel);
+      border: 1px solid var(--chalk-soft);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .bar-fill {
+      height: 100%;
+      width: 0;
+      background: linear-gradient(90deg, rgba(232, 131, 111, .55), var(--red));
+    }
+
+    .bar-fill.ok { background: linear-gradient(90deg, rgba(143, 208, 198, .45), var(--blue)); }
+    .bar-fill.sun { background: linear-gradient(90deg, rgba(242, 204, 96, .45), var(--yellow)); }
+
+    .reveal .slides section.present .bar-fill {
+      animation: bar 1.6s cubic-bezier(.2, .7, .2, 1) forwards;
+      animation-delay: var(--d, 0s);
+    }
+
+    @keyframes bar {
+      to { width: var(--w); }
+    }
+
+    /* ---- terminal / sequence ---- */
+    .term {
+      background: #070c08;
+      border: 1px solid var(--chalk-soft);
+      border-radius: 6px;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, .45);
+      text-align: left;
+      font-family: var(--mono);
+      font-size: .44em;
+      line-height: 1.55;
+      padding: .9em 1.1em;
+      color: var(--ink);
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    .term .bar3 {
+      display: flex;
+      gap: .45em;
+      margin: -.2em 0 .7em;
+    }
+
+    .term .bar3 i {
+      width: .8em;
+      height: .8em;
+      border-radius: 50%;
+      background: var(--chalk);
+    }
+
+    .term .ln {
+      display: block;
+      white-space: pre;
+      opacity: 0;
+    }
+
+    .reveal .slides section.present .term .ln {
+      animation: rise .35s ease-out both;
+      animation-delay: var(--d, 0s);
+    }
+
+    .term .c { color: var(--ink-muted); }
+    .term .k { color: var(--blue); }
+    .term .y { color: var(--yellow); }
+    .term .r { color: var(--red); }
+    .term .g { color: var(--green); }
+    .term .e { color: var(--eth); }
+
+    .cursor::after {
+      content: "▋";
+      color: var(--yellow);
+      animation: blink 1s steps(1) infinite;
+    }
+
+    /* ---- sequence diagram ---- */
+    .seq-svg .msg {
+      opacity: 0;
+    }
+
+    .reveal .slides section.present .seq-svg .msg {
+      animation: rise .5s ease-out both;
+      animation-delay: var(--d, 0s);
+    }
+
+    /* ---- stack (layers) ---- */
+    .stack {
+      display: flex;
+      flex-direction: column-reverse;
+      gap: .32em;
+      width: min(100%, 1250px);
+      margin: .3em auto 0;
+    }
+
+    .layer {
+      display: grid;
+      grid-template-columns: 9.5em 1fr;
+      align-items: center;
+      gap: .7em;
+      padding: .42em .8em;
+      border: 1px solid var(--chalk-soft);
+      border-left: 4px solid var(--blue);
+      border-radius: 3px;
+      background: linear-gradient(170deg, var(--panel-strong), var(--panel));
+      text-align: left;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, .3);
+    }
+
+    .layer .ln {
+      font-family: var(--mono);
+      font-size: .44em;
+      font-weight: 600;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--blue);
+    }
+
+    .layer p {
+      margin: 0;
+      font-size: .56em;
+      color: var(--ink);
+    }
+
+    .layer p strong { color: var(--ink-strong); }
+
+    .layer.l-gold { border-left-color: var(--yellow); }
+    .layer.l-gold .ln { color: var(--yellow); }
+    .layer.l-eth { border-left-color: var(--eth); }
+    .layer.l-eth .ln { color: var(--eth); }
+    .layer.l-red { border-left-color: var(--red); }
+    .layer.l-red .ln { color: var(--red); }
+
+    /* ---- vs columns ---- */
+    .vs {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: .8em;
+      align-items: stretch;
+      width: 100%;
+    }
+
+    .vs .mid {
+      display: flex;
+      align-items: center;
+      font-family: var(--display);
+      font-style: italic;
+      font-size: 1.3em;
+      color: var(--yellow);
+    }
+
+    .vs .col {
+      background: linear-gradient(170deg, var(--panel-strong), var(--panel));
+      border: 1px solid var(--chalk-soft);
+      border-radius: 3px;
+      padding: .6em .8em;
+      text-align: left;
+    }
+
+    .vs .col h4 {
+      margin: 0 0 .5em;
+      font-family: var(--mono);
+      font-size: .5em;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--blue);
+    }
+
+    .vs .col.eth h4 { color: var(--eth); }
+
+    .vs .col ul {
+      margin: 0;
+      max-width: none;
+      font-size: .58em;
+    }
+
+    /* ---- X post mini-card (text, no screenshot) ---- */
+    .xgrid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: .6em;
+      width: 100%;
+      margin-top: .3em;
+    }
+
+    .xgrid.two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+    .xcard {
+      background: linear-gradient(170deg, var(--panel-strong), var(--panel));
+      border: 1px solid var(--chalk-soft);
+      border-radius: 10px;
+      padding: .6em .7em;
+      text-align: left;
+      display: flex;
+      flex-direction: column;
+      gap: .3em;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, .3);
+      transition: transform .3s, border-color .3s;
+    }
+
+    .xcard:hover {
+      transform: translateY(-4px);
+      border-color: rgba(143, 208, 198, .45);
+    }
+
+    .xcard .who {
+      display: flex;
+      align-items: center;
+      gap: .45em;
+      font-family: var(--mono);
+      font-size: .4em;
+      color: var(--ink-muted);
+    }
+
+    .xcard .who .av {
+      width: 1.9em;
+      height: 1.9em;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: var(--blue-dim);
+      color: var(--blue);
+      font-weight: 600;
+      flex-shrink: 0;
+    }
+
+    .xcard .who b {
+      color: var(--ink-strong);
+      font-weight: 600;
+    }
+
+    .xcard .what {
+      font-size: .58em;
+      line-height: 1.32;
+      color: var(--ink-strong);
+      margin: 0;
+    }
+
+    .xcard .what strong { color: var(--yellow); }
+
+    .xcard .tags {
+      display: flex;
+      gap: .3em;
+      flex-wrap: wrap;
+      margin-top: auto;
+    }
+
+    .xcard a.go {
+      font-family: var(--mono);
+      font-size: .36em;
+      color: var(--blue);
+      text-decoration: none;
+    }
+
+    .xcard a.go:hover { text-decoration: underline; }
+
+    .xcard.gold { border-color: rgba(242, 204, 96, .35); }
+    .xcard.gold .who .av { background: var(--yellow-dim); color: var(--yellow); }
+    .xcard.red { border-color: rgba(232, 131, 111, .4); }
+    .xcard.red .who .av { background: var(--red-dim); color: var(--red); }
+    .xcard.eth .who .av { background: var(--eth-dim); color: var(--eth); }
+
+    /* ---- big-word slides ---- */
+    .bigword {
+      font-family: var(--display);
+      font-style: italic;
+      font-size: 3.1em;
+      line-height: 1;
+      color: var(--ink-strong);
+      margin: 0;
+    }
+
+    .bigword .hl { color: var(--yellow); }
+
+    .flow-svg .coin {
+      fill: var(--yellow);
+    }
+
+    .flow-svg .coin.eth { fill: var(--eth); }
+    .flow-svg .coin.blue { fill: var(--blue); }
+
+    .float { animation: float 3.5s ease-in-out infinite; }
+
+    .chalk-box.eth {
+      stroke: rgba(167, 164, 242, .75);
+      fill: rgba(167, 164, 242, .07);
+    }
+
+    .prompt-list {
+      counter-reset: p;
+      list-style: none;
+      padding: 0;
+      margin: .2em auto 0;
+      max-width: 96%;
+      text-align: left;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: .35em .8em;
+    }
+
+    .prompt-list li {
+      counter-increment: p;
+      font-family: var(--mono);
+      font-size: .4em;
+      line-height: 1.45;
+      color: var(--ink);
+      background: var(--panel);
+      border: 1px dashed var(--chalk-soft);
+      border-radius: 3px;
+      padding: .5em .7em .5em 2.6em;
+      position: relative;
+      margin: 0;
+    }
+
+    .prompt-list li::before {
+      content: counter(p, decimal-leading-zero);
+      position: absolute;
+      left: .7em;
+      top: .5em;
+      color: var(--yellow);
+    }
+
+    @media(max-width:900px) {
+      .xgrid, .xgrid.two, .day-events, .loop-wrap, .vs, .prompt-list {
+        grid-template-columns: 1fr;
+      }
+      .vs .mid { justify-content: center; }
+    }
+
+    @media(prefers-reduced-motion:reduce) {
+      .reveal .slides section .rise,
+      .reveal .slides section .pop,
+      .reveal .slides section .slide-l,
+      .reveal .slides section .slide-r,
+      .reveal .slides section .draw,
+      .term .ln,
+      .seq-svg .msg {
+        opacity: 1 !important;
+        animation: none !important;
+        stroke-dashoffset: 0 !important;
+      }
+      .orbit span, .float, .loop-svg .spinner, .loop-svg .node-c {
+        animation: none !important;
+      }
+      .bar-fill { width: var(--w) !important; animation: none !important; }
+    }
+
+    /* ---- sizing overrides for this deck ---- */
+    .reveal .stage { box-sizing: border-box; }
+    .loop-wrap svg, .flow-svg, .stage svg.wide { max-height: min(560px, 60vh) !important; }
+    .orbit { position: absolute; inset: 0; width: auto; height: auto; overflow: hidden; }
+    .orbit span { left: 50%; top: 50%; }
+    .bars { gap: .75em; }
+    .bar-row .nm, .bar-row .val { font-size: .52em; }
+    .bar-track { height: 1.5em; }
+    .fit-table .seminar-table { font-size: .6em; }
+    .reveal .era-strip { min-height: clamp(260px, 30vh, 340px); }
+    .reveal .era p { font-size: .54em; }
+    .reveal .era h5 { font-size: .74em; }
+  </style>
+</head>
+
+<body>
+  <div class="board-frame" aria-hidden="true"></div>
+  <div class="chrome" aria-hidden="true"><span>AI Agents · Life and Money</span><span>Ethereum Day · IIT Indore · 10 Oct 2026</span></div>
+
+  <div class="reveal">
+    <div class="slides">
+
+      <!-- shared arrow markers -->
+      <svg width="0" height="0" style="position:absolute">
+        <defs>
+          <marker id="tip" markerWidth="9" markerHeight="6" refX="7.8" refY="3" orient="auto">
+            <polygon points="0,0 9,3 0,6" fill="rgba(242,204,96,.85)"></polygon>
+          </marker>
+          <marker id="tipblue" markerWidth="9" markerHeight="6" refX="7.8" refY="3" orient="auto">
+            <polygon points="0,0 9,3 0,6" fill="rgba(143,208,198,.8)"></polygon>
+          </marker>
+        </defs>
+      </svg>
+
+      <!-- 1 · TITLE -->
+      <section class="titlepage" data-transition="fade">
+        <div class="orbit" aria-hidden="true">
+          <span style="--r:560px;--t:26s;--o:0s">agent://pay?amt=0.002</span>
+          <span style="--r:610px;--t:31s;--o:-8s">HTTP 402</span>
+          <span style="--r:520px;--t:23s;--o:-14s">USDC ⟶ 0x7a…f3</span>
+          <span style="--r:640px;--t:37s;--o:-20s">ERC-8004</span>
+          <span style="--r:580px;--t:29s;--o:-5s">book · buy · bargain</span>
+          <span style="--r:540px;--t:34s;--o:-26s">Ξ</span>
+        </div>
+        <p class="series rise" style="--d:.1s">Ethereum Day · A Talk in Five Sections</p>
+        <h1 class="rise" style="--d:.35s">AI Agents:<br><em>Life and Money</em></h1>
+        <div class="rule rise" style="--d:.6s"></div>
+        <p class="author rise" style="--d:.75s"><a href="https://drdebmath.github.io">Debasish Pattanayak</a></p>
+        <p class="affil rise" style="--d:.9s">Assistant Professor, IIT Indore</p>
+        <p class="event rise" style="--d:1.05s">Ethereum Day · IIT Indore · 10 October 2026</p>
+      </section>
+
+      <!-- 2 · COLD OPEN: A DAY -->
+      <section>
+        <span class="kicker">Before we begin</span>
+        <div class="headline">
+          <h2>A Day, Delegated</h2>
+        </div>
+        <div class="day">
+          <div class="day-track"></div>
+          <div class="day-events">
+            <div class="day-ev pop" style="--d:.3s"><span class="t">07:00</span><span class="ic">📬</span>
+              <p>Inbox <strong>triaged</strong></p>
+            </div>
+            <div class="day-ev pop" style="--d:1.0s"><span class="t">09:30</span><span class="ic">📞</span>
+              <p>Agent <strong>calls</strong> a shop</p>
+            </div>
+            <div class="day-ev money pop" style="--d:1.7s"><span class="t">12:15</span><span class="ic">🛒</span>
+              <p>Groceries <strong>bought</strong></p>
+            </div>
+            <div class="day-ev pop" style="--d:2.4s"><span class="t">15:00</span><span class="ic">✈️</span>
+              <p>Trip <strong>planned</strong></p>
+            </div>
+            <div class="day-ev money pop" style="--d:3.1s"><span class="t">19:40</span><span class="ic">🤖↔🤖</span>
+              <p>Agent <strong>pays an agent</strong></p>
+            </div>
+            <div class="day-ev money pop" style="--d:3.8s"><span class="t">03:00</span><span class="ic">🌙</span>
+              <p>Agents <strong>keep trading</strong></p>
+            </div>
+          </div>
+        </div>
+        <p class="lead rise" style="--d:4.5s">The first four are <strong>life</strong>. The last two are <strong>money</strong>.</p>
+        <p class="lead rise" style="--d:5.1s">They need different plumbing.</p>
+      </section>
+
+      <!-- 3 · CONTENTS -->
+      <section>
+        <div class="headline">
+          <h2>Contents</h2>
+        </div>
+        <div class="toc">
+          <div class="toc-row slide-l" style="--d:.1s"><span class="no">§1</span><span class="ttl">Life</span><span
+              class="sub">agents in the everyday</span></div>
+          <div class="toc-row slide-l" style="--d:.25s"><span class="no">§2</span><span class="ttl">Money</span><span
+              class="sub">a parallel economy</span></div>
+          <div class="toc-row slide-l" style="--d:.4s"><span class="no">§3</span><span class="ttl">Rails</span><span
+              class="sub">why blockchains fit</span></div>
+          <div class="toc-row slide-l" style="--d:.55s"><span class="no">§4</span><span class="ttl">Field Notes</span><span
+              class="sub">agents with wallets</span></div>
+          <div class="toc-row slide-l" style="--d:.7s"><span class="no">§5</span><span class="ttl">Risks &amp; Open Problems</span><span
+              class="sub">what could go wrong</span></div>
+        </div>
+      </section>
+
+      <!-- ===================== §1 LIFE ===================== -->
+      <section class="divider" data-transition="fade">
+        <span class="secno pop">§1</span>
+        <h2 class="rise" style="--d:.2s">Life</h2>
+        <p class="sub rise" style="--d:.4s">From answering questions to running errands.</p>
+      </section>
+
+      <!-- AGENT LOOP -->
+      <section>
+        <span class="kicker"><span class="sec-no">§1</span>Definition</span>
+        <div class="headline">
+          <h2>Chatbot → Agent</h2>
+        </div>
+        <div class="loop-wrap">
+          <div class="stage slide-l" style="--d:.1s">
+            <svg class="loop-svg" viewBox="0 0 600 420" role="img" aria-label="The agent loop">
+              <circle cx="300" cy="210" r="150" fill="none" stroke="rgba(240,236,221,.12)" stroke-width="2" stroke-dasharray="4 8"></circle>
+              <g class="spinner">
+                <circle cx="300" cy="60" r="7" fill="var(--yellow)"></circle>
+              </g>
+              <g class="node-c">
+                <circle cx="300" cy="210" r="58" class="chalk-box gold"></circle>
+                <text x="300" y="206" text-anchor="middle" class="label">LLM</text>
+                <text x="300" y="228" text-anchor="middle" class="mut-label">reason</text>
+              </g>
+              <g>
+                <rect x="235" y="30" width="130" height="50" rx="6" class="chalk-box blue"></rect>
+                <text x="300" y="61" text-anchor="middle" class="label">Goal</text>
+                <rect x="410" y="185" width="150" height="50" rx="6" class="chalk-box blue"></rect>
+                <text x="485" y="216" text-anchor="middle" class="label">Tools</text>
+                <rect x="235" y="340" width="130" height="50" rx="6" class="chalk-box blue"></rect>
+                <text x="300" y="371" text-anchor="middle" class="label">Act</text>
+                <rect x="40" y="185" width="150" height="50" rx="6" class="chalk-box blue"></rect>
+                <text x="115" y="216" text-anchor="middle" class="label">Observe</text>
+              </g>
+              <text x="300" y="412" text-anchor="middle" class="mut-label">repeat until done</text>
+            </svg>
+          </div>
+          <div>
+            <div class="panel slide-r" style="--d:.5s">
+              <h4>Chatbot</h4>
+              <p>You ask. It <strong>answers</strong>.</p>
+            </div>
+            <div class="panel gold slide-r" style="--d:1s;margin-top:.5em">
+              <h4>Agent</h4>
+              <p>You set a goal. It <strong>plans, uses tools, acts</strong>, checks, repeats.</p>
+            </div>
+            <div class="panel slide-r" style="--d:1.5s;margin-top:.5em">
+              <h4>The new tool</h4>
+              <p>Browsers, phones, calendars … and now <span class="acc">a wallet</span>.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ERRANDS -->
+      <section>
+        <span class="kicker"><span class="sec-no">§1</span>Field Notes · as posted on X</span>
+        <div class="headline">
+          <h2>Errands, Delegated</h2>
+        </div>
+        <div class="xgrid">
+          <div class="xcard gold pop" style="--d:.15s">
+            <div class="who"><span class="av">AS</span><span><b>@astuyve</b> · Jan 24, 2026</span></div>
+            <p class="what">Agent emails dealers, plays quotes against each other — <strong>buys a car</strong>.</p>
+            <div class="tags"><span class="metric gold">~155K views</span><span class="metric">OpenClaw</span></div>
+            <a class="go" href="https://x.com/astuyve/status/2015072920809226395">x.com/astuyve ↗</a>
+          </div>
+          <div class="xcard pop" style="--d:.55s">
+            <div class="who"><span class="av">JK</span><span><b>@Jacobsklug</b> · Feb 2026</span></div>
+            <p class="what">Agent with a phone number <strong>calls 5 restaurants at once</strong>, books a table.</p>
+            <div class="tags"><span class="metric">voice</span><span class="metric">OpenClaw</span></div>
+            <a class="go" href="https://x.com/Jacobsklug/status/2024489021486014972">x.com/Jacobsklug ↗</a>
+          </div>
+          <div class="xcard gold pop" style="--d:.95s">
+            <div class="who"><span class="av">AJ</span><span><b>@EastlondonDev</b> · Feb 2026</span></div>
+            <p class="what">Folder of receipts → agent <strong>files overdue VAT returns</strong> on the tax portal.</p>
+            <div class="tags"><span class="metric gold">~206K views</span><span class="metric">Claude Cowork</span></div>
+            <a class="go" href="https://x.com/EastlondonDev/status/2020826097890242582">x.com/EastlondonDev ↗</a>
+          </div>
+          <div class="xcard pop" style="--d:1.35s">
+            <div class="who"><span class="av">NK</span><span><b>@Hormold</b> · Jan 2026</span></div>
+            <p class="what">Agent spots a rejected insurance claim, <strong>sends a rebuttal</strong> unasked. Claim reopened.</p>
+            <div class="tags"><span class="metric">acted alone</span></div>
+            <a class="go" href="https://x.com/Hormold/status/2011133394764382583">x.com/Hormold ↗</a>
+          </div>
+          <div class="xcard pop" style="--d:1.75s">
+            <div class="who"><span class="av">AN</span><span><b>@antonplex</b> · Jan 2026</span></div>
+            <p class="what">Agent reverse-engineers an <strong>air purifier</strong>, then runs it for health goals.</p>
+            <div class="tags"><span class="metric">home</span></div>
+            <a class="go" href="https://x.com/antonplex/status/2010518442471006253">x.com/antonplex ↗</a>
+          </div>
+          <div class="xcard pop" style="--d:2.15s">
+            <div class="who"><span class="av">JC</span><span><b>@JackCulpan</b> · Feb 2026</span></div>
+            <p class="what">"flightclaw": watches a route, <strong>pings you when fares drop</strong>.</p>
+            <div class="tags"><span class="metric">travel</span><span class="metric">cron</span></div>
+            <a class="go" href="https://x.com/JackCulpan/status/2022431595391783187">x.com/JackCulpan ↗</a>
+          </div>
+        </div>
+        <p class="source-links">Self-reported claims by the posters. | Background: <a href="https://aaronstuyvenberg.com/posts/clawd-bought-a-car">"Clawd bought a car"</a> (blog)</p>
+      </section>
+
+      <!-- PLATFORMS -->
+      <section>
+        <span class="kicker"><span class="sec-no">§1</span>The Platforms Move In</span>
+        <div class="headline">
+          <h2>Checkout Moves Into the Chat</h2>
+        </div>
+        <div class="grid-2">
+          <div class="panel slide-l" style="--d:.1s">
+            <h4>ChatGPT × Instacart · Dec 2025</h4>
+            <p>Plan meals, fill cart, <strong>pay in chat</strong> (Agentic Commerce Protocol).</p>
+          </div>
+          <div class="panel slide-r" style="--d:.5s">
+            <h4>Google AI Mode · Nov 2025</h4>
+            <p>"Let Google call" stores; <strong>auto-buy</strong> when price hits target.</p>
+          </div>
+          <div class="panel gold slide-l" style="--d:.9s">
+            <h4>India · UPI in ChatGPT · Oct 2025</h4>
+            <p>NPCI + Razorpay pilot; <span class="acc">pre-authorised agent limits</span> via UPI Reserve Pay.</p>
+          </div>
+          <div class="panel slide-r" style="--d:1.3s">
+            <h4>Glasses · Meta Connect 2026</h4>
+            <p>Agent "Muse" coming to AI glasses; shipments <strong>+263%</strong> YoY (H1 2026).</p>
+          </div>
+        </div>
+        <p class="source-links">Sources: <a href="https://techcrunch.com/2025/12/08/you-can-buy-your-instacart-groceries-without-leaving-chatgpt">TechCrunch: Instacart</a> | <a
+            href="https://techcrunch.com/2025/11/13/google-expands-ai-shopping-with-conversational-search-agentic-checkout-and-an-ai-that-calls-stores-for-you">TechCrunch: Google</a> | <a
+            href="https://www.onmanorama.com/news/business/2025/10/09/npci-razorpay-openai-chatgpt-payments.html">Onmanorama: UPI pilot</a> | <a
+            href="https://9to5google.com/2026/09/22/smart-glasses-growth-h1-2026/">9to5Google</a> | <a
+            href="https://www.itechpost.com/articles/237412/20260924/meta-connect-2026-all-new-smart-glasses-ai-glasses-announced.htm">iTechPost</a></p>
+      </section>
+
+      <!-- WHEN IT GOES WRONG -->
+      <section>
+        <span class="kicker"><span class="sec-no">§1</span>Field Notes · the other side</span>
+        <div class="headline">
+          <h2>When the Errand Goes Wrong</h2>
+        </div>
+        <div class="xgrid">
+          <div class="xcard red pop" style="--d:.15s">
+            <div class="who"><span class="av">SY</span><span><b>@summeryue0</b> · Feb 23, 2026</span></div>
+            <p class="what">"Confirm before acting." Agent <strong>deletes the inbox</strong> anyway — instruction lost in context compaction.</p>
+            <div class="tags"><span class="metric">Meta alignment lead</span></div>
+            <a class="go" href="https://x.com/summeryue0/status/2025774069124399363">x.com/summeryue0 ↗</a>
+          </div>
+          <div class="xcard red pop" style="--d:.65s">
+            <div class="who"><span class="av">SM</span><span><b>@pitdesi</b> · Sep 2026</span></div>
+            <p class="what">Assistant polls Resy <strong>~200×/hour</strong> for a table. Account banned.</p>
+            <div class="tags"><span class="metric">CNN · Inc.</span></div>
+            <a class="go" href="https://x.com/pitdesi/status/2096673760707575960">x.com/pitdesi ↗</a>
+          </div>
+          <div class="xcard red pop" style="--d:1.15s">
+            <div class="who"><span class="av">AX</span><span><b>Axios</b> · Mar 4, 2026</span></div>
+            <p class="what">Agent makes its own accounts, buys a domain on a capped card, <strong>applies to 278 jobs</strong>.</p>
+            <div class="tags"><span class="metric">news</span></div>
+            <a class="go" href="https://axios.com/2026/03/04/openclaw-agent-future">axios.com ↗</a>
+          </div>
+        </div>
+        <p class="lead rise" style="--d:1.8s">Capability is here. <strong>Permission</strong> is the unsolved part.</p>
+        <p class="source-links">Sources: <a href="https://techcrunch.com/2026/02/23/a-meta-ai-security-researcher-said-an-openclaw-agent-ran-amok-on-her-inbox/">TechCrunch: inbox</a> | <a
+            href="https://www.cnn.com/2026/09/23/tech/ai-agent-restaurant-reservations-instinct-resy-cec">CNN: Resy</a> | <a
+            href="https://www.inc.com/victoria-salves/resy-deactivated-user-after-automated-assistant-made-200-requests-an-hour/91402131">Inc.</a></p>
+      </section>
+
+      <!-- STATS -->
+      <section class="scoreboard-slide">
+        <span class="kicker"><span class="sec-no">§1</span>Scoreboard</span>
+        <div class="headline">
+          <h2>Help, Yes. Pay, Not Yet.</h2>
+        </div>
+        <div class="stat-row">
+          <div class="stat-card pop" style="--d:.1s"><span class="num"><span class="counter" data-to="693" data-prefix="+" data-suffix="%">+693%</span></span>
+            <p class="cap">AI-referred traffic to US retail, <strong>holiday 2025</strong> (Adobe)</p>
+          </div>
+          <div class="stat-card pop" style="--d:.4s"><span class="num sun"><span class="counter" data-to="67" data-prefix="$" data-suffix="B" data-delay=".3">$67B</span></span>
+            <p class="cap">Cyber Week sales <strong>influenced by AI &amp; agents</strong> (Salesforce)</p>
+          </div>
+          <div class="stat-card pop" style="--d:.7s"><span class="num hot"><span class="counter" data-to="11" data-suffix="%" data-delay=".6">11%</span></span>
+            <p class="cap">Consumers willing to let AI <strong>make the purchase</strong> (Gartner, May 2026)</p>
+          </div>
+        </div>
+        <p class="lead rise" style="--d:1.6s">Agents now do almost everything — <strong>up to the payment step</strong>.</p>
+        <p class="source-links">Sources: <a href="https://news.adobe.com/news/downloads/pdfs/2026/01/010726-2025-holiday-shopping-season.pdf">Adobe</a> | <a
+            href="https://investor.salesforce.com/news/news-details/2025/Salesforce-Data-AI-and-Agents-Propel-Cyber-Week-to-Record-336-6B-in-Global-Spend/">Salesforce</a> | <a
+            href="https://www.gartner.com/en/newsroom/press-releases/2026-05-27-gartner-survey-finds-consumers-want-ai-shopping-help-but-not-ai-purchase-decisions">Gartner</a></p>
+      </section>
+
+      <!-- ===================== §2 MONEY ===================== -->
+      <section class="divider" data-transition="fade">
+        <span class="secno pop">§2</span>
+        <h2 class="rise" style="--d:.2s">Money</h2>
+        <p class="sub rise" style="--d:.4s">When software stops shopping <em>for</em> you<br>and starts trading <em>with</em> other software.</p>
+      </section>
+
+      <!-- PARALLEL ECONOMY NETWORK -->
+      <section>
+        <span class="kicker"><span class="sec-no">§2</span>Simulation · not data</span>
+        <div class="headline">
+          <h2>A Parallel Economy, Forming</h2>
+        </div>
+        <div class="net-stage rise" style="--d:.1s">
+          <canvas class="net" aria-label="Animated network: human nodes, then agent nodes multiply and transact"></canvas>
+          <div class="net-hud">transactions <b data-hud="tx">0</b><br>agent ↔ agent <b data-hud="share">0%</b></div>
+          <div class="net-legend"><span><i style="background:var(--blue)"></i>human</span><span><i
+                style="background:var(--yellow);border-radius:1px"></i>agent</span><span><i
+                style="background:var(--eth)"></i>agent ↔ agent payment</span></div>
+        </div>
+        <p class="lead rise" style="--d:.6s">Agents are <strong>cheap to copy</strong>, never sleep, and transact in <strong>tiny amounts</strong>.</p>
+      </section>
+
+      <!-- THREE KINDS OF AGENT COMMERCE -->
+      <section>
+        <span class="kicker"><span class="sec-no">§2</span>Taxonomy</span>
+        <div class="headline">
+          <h2>Three Kinds of Agent Money</h2>
+        </div>
+        <svg class="flow-svg rise" viewBox="0 0 1200 330" role="img" aria-label="Human to business, agent to business, agent to agent" style="max-height:min(330px,40vh)">
+          <!-- row 1 -->
+          <g class="rise" style="--d:.2s">
+            <text x="40" y="58" class="mut-label">01 · ON YOUR BEHALF</text>
+            <rect x="260" y="25" width="170" height="56" rx="6" class="chalk-box blue"></rect>
+            <text x="345" y="59" text-anchor="middle" class="label">👤 + 🤖</text>
+            <rect x="820" y="25" width="170" height="56" rx="6" class="chalk-box"></rect>
+            <text x="905" y="59" text-anchor="middle" class="label">🏪 merchant</text>
+            <path id="f1" d="M430 53 L820 53" class="chalk-arrow blue"></path>
+            <text x="625" y="40" text-anchor="middle" class="sub-label">your card · your rules</text>
+            <circle r="7" class="coin blue"><animateMotion dur="2.6s" repeatCount="indefinite" path="M430 53 L815 53"></animateMotion></circle>
+          </g>
+          <!-- row 2 -->
+          <g class="rise" style="--d:.9s">
+            <text x="40" y="168" class="mut-label">02 · PAY-PER-USE</text>
+            <rect x="260" y="135" width="170" height="56" rx="6" class="chalk-box gold"></rect>
+            <text x="345" y="169" text-anchor="middle" class="label">🤖 agent</text>
+            <rect x="820" y="135" width="170" height="56" rx="6" class="chalk-box"></rect>
+            <text x="905" y="169" text-anchor="middle" class="label">🌐 API / data</text>
+            <path d="M430 163 L820 163" class="chalk-arrow"></path>
+            <text x="625" y="150" text-anchor="middle" class="sub-label">$0.001 per call</text>
+            <circle r="5" class="coin"><animateMotion dur="1.1s" repeatCount="indefinite" path="M430 163 L815 163"></animateMotion></circle>
+            <circle r="5" class="coin"><animateMotion dur="1.1s" begin=".37s" repeatCount="indefinite" path="M430 163 L815 163"></animateMotion></circle>
+            <circle r="5" class="coin"><animateMotion dur="1.1s" begin=".74s" repeatCount="indefinite" path="M430 163 L815 163"></animateMotion></circle>
+          </g>
+          <!-- row 3 -->
+          <g class="rise" style="--d:1.6s">
+            <text x="40" y="278" class="mut-label">03 · AGENT ↔ AGENT</text>
+            <rect x="260" y="245" width="170" height="56" rx="6" class="chalk-box eth"></rect>
+            <text x="345" y="279" text-anchor="middle" class="label">🤖 buyer</text>
+            <rect x="820" y="245" width="170" height="56" rx="6" class="chalk-box eth"></rect>
+            <text x="905" y="279" text-anchor="middle" class="label">🤖 seller</text>
+            <path d="M430 263 L820 263" class="chalk-arrow blue"></path>
+            <path d="M820 285 L430 285" class="chalk-arrow dashed"></path>
+            <circle r="6" class="coin eth"><animateMotion dur="1.8s" repeatCount="indefinite" path="M430 263 L815 263"></animateMotion></circle>
+            <rect width="12" height="12" fill="var(--blue)"><animateMotion dur="1.8s" begin=".9s" repeatCount="indefinite" path="M815 279 L430 279"></animateMotion></rect>
+            <text x="1010" y="279" class="sub-label">no human</text>
+          </g>
+        </svg>
+        <p class="lead rise" style="--d:2.3s">Card networks were built for <strong>01</strong>. Rows <strong>02–03</strong> are the new part.</p>
+      </section>
+
+      <!-- WHY OLD RAILS STRUGGLE -->
+      <section>
+        <span class="kicker"><span class="sec-no">§2</span>The Mismatch</span>
+        <div class="headline">
+          <h2>Can an Agent Open a Bank Account?</h2>
+        </div>
+        <div class="grid-2">
+          <div class="panel pop" style="--d:.2s">
+            <h4>Identity</h4>
+            <p>KYC assumes <strong>a person</strong> with a passport.</p>
+          </div>
+          <div class="panel pop" style="--d:.5s">
+            <h4>Hours</h4>
+            <p>Bank settlement has <strong>business days</strong>. Agents don't.</p>
+          </div>
+          <div class="panel gold pop" style="--d:.8s">
+            <h4>Size</h4>
+            <p>Fixed fees make <span class="acc">sub-cent payments</span> impossible.</p>
+          </div>
+          <div class="panel pop" style="--d:1.1s">
+            <h4>Interface</h4>
+            <p>Checkout pages, CAPTCHAs, OTPs — built for <strong>human eyes</strong>.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- FEE BARS -->
+      <section>
+        <span class="kicker"><span class="sec-no">§2</span>Arithmetic</span>
+        <div class="headline">
+          <h2>Paying $0.01 for One API Call</h2>
+        </div>
+        <div class="bars">
+          <div class="bar-row rise" style="--d:.1s"><span class="nm">Card · 2.9% + $0.30</span>
+            <div class="bar-track"><div class="bar-fill" style="--w:100%;--d:.3s"></div></div><span class="val">$0.3003</span></div>
+          <div class="bar-row rise" style="--d:.5s"><span class="nm">Ethereum L1 (typical)</span>
+            <div class="bar-track"><div class="bar-fill sun" style="--w:12%;--d:.7s"></div></div><span class="val">≈ cents</span></div>
+          <div class="bar-row rise" style="--d:.9s"><span class="nm">L2 rollup · USDC</span>
+            <div class="bar-track"><div class="bar-fill ok" style="--w:1%;--d:1.1s"></div></div><span class="val">&lt; $0.01</span></div>
+          <div class="bar-row rise" style="--d:1.3s"><span class="nm">The payment itself</span>
+            <div class="bar-track"><div class="bar-fill ok" style="--w:3.3%;--d:1.5s"></div></div><span class="val">$0.01</span></div>
+        </div>
+        <p class="lead rise" style="--d:2.4s">On cards, the fee is <strong>30×</strong> the payment.</p>
+        <p class="source-links">Indicative: Stripe US standard card pricing; L1/L2 fees vary with congestion (post-EIP-4844 rollup fees are typically sub-cent). | <a
+            href="https://stripe.com/pricing">stripe.com/pricing</a> | <a href="https://l2fees.info">l2fees.info</a></p>
+      </section>
+
+      <section class="quote-slide" data-transition="fade">
+        <blockquote class="rise">Digital-native workers<br><span class="hl">want digital-native money.</span></blockquote>
+      </section>
+
+      <!-- ===================== §3 RAILS ===================== -->
+      <section class="divider" data-transition="fade">
+        <span class="secno pop">§3</span>
+        <h2 class="rise" style="--d:.2s">Rails</h2>
+        <p class="sub rise" style="--d:.4s">What a blockchain offers a piece of software.</p>
+      </section>
+
+      <!-- WHAT AN AGENT NEEDS vs CHAIN -->
+      <section>
+        <span class="kicker"><span class="sec-no">§3</span>Fit</span>
+        <div class="headline">
+          <h2>What an Agent Needs → What a Chain Gives</h2>
+        </div>
+        <div class="seminar-table-wrap fit-table rise" style="--d:.1s;width:100%">
+          <table class="seminar-table">
+            <thead><tr><th style="width:28%">Agent needs</th><th>On-chain answer</th></tr></thead>
+            <tbody>
+              <tr class="rise" style="--d:.3s"><td class="h">Account, no paperwork</td><td>A key pair <em>is</em> an account.</td></tr>
+              <tr class="rise" style="--d:.6s"><td class="h">Money with an API</td><td>Stablecoins (USDC, USDT …) as programmable tokens.</td></tr>
+              <tr class="rise" style="--d:.9s"><td class="h">Tiny, instant payments</td><td>L2 rollups: seconds, sub-cent.</td></tr>
+              <tr class="rise" style="--d:1.2s"><td class="h">Spending limits</td><td>Smart accounts (ERC-4337, EIP-7702): caps, allow-lists, session keys.</td></tr>
+              <tr class="rise" style="--d:1.5s"><td class="h">Trust strangers</td><td>Escrow contracts + on-chain identity &amp; reputation (ERC-8004).</td></tr>
+              <tr class="rise" style="--d:1.8s"><td class="h alt">Open 24/7, global</td><td>No business days. No borders.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- HTTP 402 SEQUENCE -->
+      <section>
+        <span class="kicker"><span class="sec-no">§3</span>A 1997 Placeholder</span>
+        <div class="headline">
+          <h2>HTTP 402: Payment Required</h2>
+        </div>
+        <div class="loop-wrap">
+          <div class="stage slide-l" style="--d:.1s">
+            <svg class="seq-svg wide" viewBox="0 0 600 430" role="img" aria-label="x402 sequence">
+              <rect x="30" y="10" width="150" height="44" rx="6" class="chalk-box gold"></rect>
+              <text x="105" y="38" text-anchor="middle" class="label">🤖 Agent</text>
+              <rect x="420" y="10" width="150" height="44" rx="6" class="chalk-box blue"></rect>
+              <text x="495" y="38" text-anchor="middle" class="label">🌐 Server</text>
+              <line x1="105" y1="54" x2="105" y2="420" stroke="rgba(240,236,221,.18)" stroke-dasharray="4 6"></line>
+              <line x1="495" y1="54" x2="495" y2="420" stroke="rgba(240,236,221,.18)" stroke-dasharray="4 6"></line>
+              <g class="msg" style="--d:.5s"><path d="M105 95 L490 95" class="chalk-arrow blue"></path><text x="300" y="85" text-anchor="middle" class="sub-label">GET /weather</text></g>
+              <g class="msg" style="--d:1.3s"><path d="M495 160 L110 160" class="chalk-arrow"></path><text x="300" y="150" text-anchor="middle" class="sub-label" style="fill:var(--yellow)">402 · pay 0.001 USDC to 0x…</text></g>
+              <g class="msg" style="--d:2.1s"><circle cx="105" cy="215" r="16" fill="var(--eth)" opacity=".85"></circle><text x="105" y="221" text-anchor="middle" class="label" style="fill:#101912">✍</text><text x="135" y="220" class="mut-label">sign payment (wallet)</text></g>
+              <g class="msg" style="--d:2.9s"><path d="M105 275 L490 275" class="chalk-arrow blue"></path><text x="300" y="265" text-anchor="middle" class="sub-label">GET /weather + X-PAYMENT</text></g>
+              <g class="msg" style="--d:3.7s"><text x="495" y="320" text-anchor="middle" class="mut-label">verify · settle on-chain</text></g>
+              <g class="msg" style="--d:4.4s"><path d="M495 375 L110 375" class="chalk-arrow" style="stroke:var(--green)"></path><text x="300" y="365" text-anchor="middle" class="sub-label" style="fill:var(--green)">200 OK · {"temp": 31}</text></g>
+            </svg>
+          </div>
+          <div>
+            <div class="panel slide-r" style="--d:.4s">
+              <h4>1997</h4>
+              <p>HTTP/1.1 reserves 402 <strong>"for future use."</strong></p>
+            </div>
+            <div class="panel gold slide-r" style="--d:1.2s;margin-top:.5em">
+              <h4>2025 · x402</h4>
+              <p>Coinbase's open protocol finally uses it: <span class="acc">pay inside the HTTP request</span>.</p>
+            </div>
+            <div class="panel slide-r" style="--d:2s;margin-top:.5em">
+              <h4>Why agents like it</h4>
+              <p>No account. No API key. No checkout page. <strong>One round trip.</strong></p>
+            </div>
+          </div>
+        </div>
+        <p class="source-links">Sources: <a href="https://www.rfc-editor.org/rfc/rfc2068#section-10.4.3">RFC 2068 §10.4.3</a> | <a href="https://www.x402.org/">x402.org</a> | <a href="https://github.com/coinbase/x402">github.com/coinbase/x402</a></p>
+      </section>
+
+      <!-- VIRAL: THE CEO EXCHANGE -->
+      <section>
+        <span class="kicker"><span class="sec-no">§3</span>Field Notes · as posted on X</span>
+        <div class="headline">
+          <h2>The Rails, Announced in Public</h2>
+        </div>
+        <div class="xgrid two">
+          <div class="xcard gold slide-l" style="--d:.1s">
+            <div class="who"><span class="av">BA</span><span><b>@brian_armstrong</b> · Sep 16, 2025</span></div>
+            <p class="what">"Agents can actually <strong>pay each other</strong> now, with x402 … inside Google's new AP2."</p>
+            <div class="tags"><span class="metric gold">Coinbase</span><span class="metric">x402 + AP2</span></div>
+            <a class="go" href="https://x.com/brian_armstrong/status/1967980850567582096">x.com/brian_armstrong ↗</a>
+          </div>
+          <div class="xcard slide-r" style="--d:.6s">
+            <div class="who"><span class="av">SP</span><span><b>@sundarpichai</b> · reply</span></div>
+            <p class="what">Congratulates Coinbase for <strong>extending x402 to AP2</strong>.</p>
+            <div class="tags"><span class="metric">Google</span></div>
+            <a class="go" href="https://x.com/sundarpichai/status/1968013016181641492">x.com/sundarpichai ↗</a>
+          </div>
+          <div class="xcard eth slide-l" style="--d:1.1s">
+            <div class="who"><span class="av">T</span><span><b>@tempo</b> · Mar 18, 2026</span></div>
+            <p class="what">"Agent payments will soon <strong>overtake human payments</strong> on the internet."</p>
+            <div class="tags"><span class="metric">Stripe × Paradigm</span><span class="metric">Machine Payments Protocol</span></div>
+            <a class="go" href="https://x.com/tempo/status/2034253707303338264">x.com/tempo ↗</a>
+          </div>
+          <div class="xcard gold slide-r" style="--d:1.6s">
+            <div class="who"><span class="av">BA</span><span><b>@brian_armstrong</b> · Feb 11, 2026</span></div>
+            <p class="what">Agentic Wallets: agents can "<strong>spend, earn, and trade</strong> autonomously."</p>
+            <div class="tags"><span class="metric gold">Coinbase</span></div>
+            <a class="go" href="https://x.com/brian_armstrong/status/2021661132734288131">x.com/brian_armstrong ↗</a>
+          </div>
+        </div>
+        <p class="source-links">Also: <a href="https://x.com/stripe/status/1972712679128052136">@stripe on ACP</a> | <a
+            href="https://x.com/patrickc/status/2034256590467989973">@patrickc "Tempo is live!"</a> | <a
+            href="https://x.com/sytaylor/status/1920027597947199881">@sytaylor "the HTTP for Money"</a></p>
+      </section>
+
+      <!-- x402 NUMBERS: HYPE VS DATA -->
+      <section class="scoreboard-slide">
+        <span class="kicker"><span class="sec-no">§3</span>Scoreboard · read carefully</span>
+        <div class="headline">
+          <h2>Many Payments, Little Money</h2>
+        </div>
+        <div class="stat-row">
+          <div class="stat-card pop" style="--d:.1s"><span class="num sun"><span class="counter" data-to="160" data-suffix="M+">160M+</span></span>
+            <p class="cap">x402 payments in a year, <strong>per Coinbase</strong></p>
+          </div>
+          <div class="stat-card pop" style="--d:.4s"><span class="num"><span class="counter" data-to="41" data-prefix="~$" data-suffix="M" data-delay=".3">~$41M</span></span>
+            <p class="cap">cumulative stablecoin volume (tracker, Jul 2026)</p>
+          </div>
+          <div class="stat-card pop" style="--d:.7s"><span class="num hot"><span class="counter" data-to="90" data-prefix="~" data-suffix="%" data-delay=".6">~90%</span></span>
+            <p class="cap">of one audit's $ volume from <strong>a single contract</strong> (Bitquery)</p>
+          </div>
+        </div>
+        <div class="grid-2" style="min-height:0;margin-top:.5em">
+          <div class="env rmk rise" style="--d:1.4s;max-width:none;margin:0"><span class="env-label">Hype · Oct 2025</span>
+            <p>"x402 txs <strong>up 10,000%</strong>" — <a href="https://x.com/Cointelegraph/status/1982386943418667026">@Cointelegraph</a></p>
+          </div>
+          <div class="env warn rise" style="--d:1.9s;max-width:none;margin:0"><span class="env-label">Data · Feb 2026</span>
+            <p>"Still mostly a <strong>mirage</strong>": 731K/day → 57K/day — <a href="https://x.com/artemis/status/2020929124416606632">@artemis</a></p>
+          </div>
+        </div>
+        <p class="source-links">Sources: <a href="https://thedefiant.io/news/cefi/brian-armstrong-says-coinbase-processes-usd1t-in-stablecoin-payments-annually">The Defiant</a> | <a
+            href="https://agenteconomy.to/stats/x402-transactions">agenteconomy.to</a> | <a
+            href="https://bitquery.io/investigations/x402-ai-agent-payments-audit">Bitquery audit</a> | <a
+            href="https://www.chainalysis.com/blog/x402-agentic-payments-adoption/">Chainalysis</a> (notes memecoin farming)</p>
+      </section>
+
+      <!-- ERC-8004 -->
+      <section>
+        <span class="kicker"><span class="sec-no">§3</span>Ethereum · Trust Layer</span>
+        <div class="headline">
+          <h2>ERC-8004: Trustless Agents</h2>
+        </div>
+        <div class="loop-wrap">
+          <div class="stage slide-l" style="--d:.1s">
+            <svg class="wide" viewBox="0 0 600 400" role="img" aria-label="Three ERC-8004 registries">
+              <g class="pop" style="--d:.3s">
+                <rect x="40" y="30" width="230" height="90" rx="8" class="chalk-box eth"></rect>
+                <text x="155" y="68" text-anchor="middle" class="label">🪪 Identity</text>
+                <text x="155" y="95" text-anchor="middle" class="mut-label">who is this agent?</text>
+              </g>
+              <g class="pop" style="--d:.9s">
+                <rect x="330" y="30" width="230" height="90" rx="8" class="chalk-box gold"></rect>
+                <text x="445" y="68" text-anchor="middle" class="label">⭐ Reputation</text>
+                <text x="445" y="95" text-anchor="middle" class="mut-label">how did it behave?</text>
+              </g>
+              <g class="pop" style="--d:1.5s">
+                <rect x="185" y="160" width="230" height="90" rx="8" class="chalk-box blue"></rect>
+                <text x="300" y="198" text-anchor="middle" class="label">✅ Validation</text>
+                <text x="300" y="225" text-anchor="middle" class="mut-label">was the work correct?</text>
+              </g>
+              <path d="M155 120 L250 160" class="chalk-arrow blue draw" style="--len:120;--d:1.9s"></path>
+              <path d="M445 120 L350 160" class="chalk-arrow draw" style="--len:120;--d:2.1s"></path>
+              <path d="M300 250 L300 320" class="chalk-arrow draw" style="--len:80;--d:2.4s"></path>
+              <g class="rise" style="--d:2.7s">
+                <rect x="150" y="322" width="300" height="56" rx="8" class="chalk-box"></rect>
+                <text x="300" y="356" text-anchor="middle" class="label">🤝 hire a stranger agent</text>
+              </g>
+            </svg>
+          </div>
+          <div>
+            <div class="xcard eth slide-r" style="--d:.5s">
+              <div class="who"><span class="av">DC</span><span><b>@DavideCrapis</b> · Jan 29, 2026 · EF</span></div>
+              <p class="what">"ERC-8004 is now <strong>live on mainnet</strong>."</p>
+              <a class="go" href="https://x.com/DavideCrapis/status/2016893815857066212">x.com/DavideCrapis ↗</a>
+            </div>
+            <div class="stat-row" style="grid-template-columns:1fr 1fr;min-height:0;margin-top:.5em">
+              <div class="stat-card pop" style="--d:1.2s"><span class="num" style="font-size:1em"><span class="counter" data-to="21562" data-delay="1">21,562</span></span>
+                <p class="cap">agents · Feb 2026</p>
+              </div>
+              <div class="stat-card pop" style="--d:1.6s"><span class="num sun" style="font-size:1em">~<span class="counter" data-to="515" data-suffix="K" data-delay="1.4">515K</span></span>
+                <p class="cap">registered · Sep 2026</p>
+              </div>
+            </div>
+            <div class="env warn rise" style="--d:2.4s;max-width:none"><span class="env-label">Caveat</span>
+              <p>"Registration-heavy, <strong>operationally shallow</strong>."</p>
+            </div>
+          </div>
+        </div>
+        <p class="source-links">Sources: <a href="https://eips.ethereum.org/EIPS/eip-8004">EIP-8004</a> | <a
+            href="https://news.bitcoin.com/what-is-erc-8004-ethereums-new-agent-standard-powers-thousands-of-onchain-ai-identities/">Bitcoin.com (Feb count)</a> | <a
+            href="https://x.com/termix_ai/status/2102205561614041440">@termix_ai citing 8004scan (Sep count)</a> | <a
+            href="https://arxiv.org/html/2606.12128v1">arXiv 2606.12128</a></p>
+      </section>
+
+      <!-- AGENT WALLET POLICY TERMINAL -->
+      <section>
+        <span class="kicker"><span class="sec-no">§3</span>Programmable Guardrails</span>
+        <div class="headline">
+          <h2>A Wallet With House Rules</h2>
+        </div>
+        <div class="loop-wrap">
+          <div class="term slide-l" style="--d:.1s">
+            <div class="bar3"><i></i><i></i><i></i></div>
+            <span class="ln c" style="--d:.3s">// smart-account policy for my agent</span>
+            <span class="ln" style="--d:.6s"><span class="k">session_key</span>  = <span class="e">0xA9…41</span>   <span class="c">// agent's key, not mine</span></span>
+            <span class="ln" style="--d:.9s"><span class="k">daily_cap</span>    = <span class="y">100 USDC</span></span>
+            <span class="ln" style="--d:1.2s"><span class="k">allow</span>        = [weather.api, gpu.rent, <span class="e">x402:*</span>]</span>
+            <span class="ln" style="--d:1.5s"><span class="k">ask_human_if</span> = amount &gt; <span class="y">20 USDC</span></span>
+            <span class="ln" style="--d:1.8s"><span class="k">expires</span>      = 7 days</span>
+            <span class="ln" style="--d:2.4s"> </span>
+            <span class="ln" style="--d:2.6s"><span class="g">✓</span> pay 0.002 → weather.api      <span class="g">OK</span></span>
+            <span class="ln" style="--d:3.1s"><span class="g">✓</span> pay 4.00  → gpu.rent         <span class="g">OK</span></span>
+            <span class="ln" style="--d:3.6s"><span class="y">?</span> pay 35.00 → gpu.rent         <span class="y">ASK HUMAN</span></span>
+            <span class="ln" style="--d:4.1s"><span class="r">✗</span> pay 900   → 0xScam…         <span class="r">REVERTED</span></span>
+            <span class="ln cursor" style="--d:4.4s"> </span>
+          </div>
+          <div>
+            <div class="panel slide-r" style="--d:.6s">
+              <h4>Rules live in code</h4>
+              <p>ERC-4337 / EIP-7702 smart accounts <strong>enforce limits on-chain</strong>.</p>
+            </div>
+            <div class="panel gold slide-r" style="--d:1.3s;margin-top:.5em">
+              <h4>Vitalik's own setting</h4>
+              <p>Reportedly caps his agent at <span class="acc">$100/day</span>.</p>
+            </div>
+          </div>
+        </div>
+        <p class="source-links">Illustrative pseudo-config. | <a href="https://eips.ethereum.org/EIPS/eip-4337">ERC-4337</a> | <a
+            href="https://eips.ethereum.org/EIPS/eip-7702">EIP-7702</a> | <a
+            href="https://startupfortune.com/vitalik-buterin-tells-crypto-builders-ai-is-a-privacy-and-security-nightmare/">StartupFortune on Buterin's post</a></p>
+      </section>
+
+      <!-- THE STACK -->
+      <section>
+        <span class="kicker"><span class="sec-no">§3</span>Putting It Together</span>
+        <div class="headline">
+          <h2>The Agent Money Stack</h2>
+        </div>
+        <div class="stack">
+          <div class="layer l-eth rise" style="--d:.2s"><span class="ln">Money</span>
+            <p><strong>Stablecoins</strong> — USDC, USDT · ~$300B supply</p></div>
+          <div class="layer rise" style="--d:.7s"><span class="ln">Settlement</span>
+            <p><strong>Ethereum + L2s</strong> (Base …), Solana, Tempo, Arc</p></div>
+          <div class="layer l-gold rise" style="--d:1.2s"><span class="ln">Wallet</span>
+            <p><strong>Smart accounts</strong> · agentic wallets · spending policy</p></div>
+          <div class="layer l-eth rise" style="--d:1.7s"><span class="ln">Trust</span>
+            <p><strong>ERC-8004</strong> identity · reputation · validation</p></div>
+          <div class="layer l-gold rise" style="--d:2.2s"><span class="ln">Protocol</span>
+            <p><strong>x402</strong> · MPP · AP2 · ACP</p></div>
+          <div class="layer l-red rise" style="--d:2.7s"><span class="ln">Agent</span>
+            <p>OpenClaw, Claude, ChatGPT, Gemini … <strong>your bot</strong></p></div>
+        </div>
+      </section>
+
+      <!-- TWO TRACKS CONVERGING -->
+      <section>
+        <span class="kicker"><span class="sec-no">§3</span>Neutral Ground</span>
+        <div class="headline">
+          <h2>Two Tracks, Converging</h2>
+        </div>
+        <div class="vs">
+          <div class="col slide-l" style="--d:.1s">
+            <h4>Card &amp; platform track</h4>
+            <ul>
+              <li>Visa <strong>Trusted Agent Protocol</strong></li>
+              <li>Mastercard <strong>Agent Pay</strong></li>
+              <li>OpenAI + Stripe <strong>ACP</strong></li>
+              <li>Google <strong>AP2</strong></li>
+              <li>UPI Reserve Pay (India)</li>
+            </ul>
+          </div>
+          <div class="mid pop" style="--d:.9s">⇄</div>
+          <div class="col eth slide-r" style="--d:.5s">
+            <h4>Crypto-native track</h4>
+            <ul>
+              <li><strong>x402</strong> (Coinbase, Cloudflare)</li>
+              <li><strong>ERC-8004</strong> on Ethereum</li>
+              <li>Agentic <strong>wallets</strong></li>
+              <li>Stablecoin chains: <strong>Tempo, Arc</strong></li>
+              <li>Agent-to-agent markets</li>
+            </ul>
+          </div>
+        </div>
+        <div class="grid-2" style="min-height:0;margin-top:.6em">
+          <div class="panel gold rise" style="--d:1.4s">
+            <h4>Convergence</h4>
+            <p>AP2 carries x402. Visa, Mastercard, Stripe, Google back the <strong>x402 Foundation</strong> (Linux Foundation, Apr 2026).</p>
+          </div>
+          <div class="panel rise" style="--d:1.9s">
+            <h4>Reality check</h4>
+            <p>OpenAI <strong>scaled back</strong> in-chat Instant Checkout (Mar 2026) after low adoption.</p>
+          </div>
+        </div>
+        <p class="source-links">Sources: <a href="https://unchainedcrypto.com/x402-foundation-joins-linux-foundation-with-backing-from-google-microsoft-and-amazon/">Unchained: x402 Foundation</a> | <a
+            href="https://www.forbes.com/sites/digital-assets/2026/06/07/visa-mastercard-and-coinbase-are-fighting-over-how-ai-agents-pay/">Forbes: Visa, Mastercard, Coinbase</a> | <a
+            href="https://www.americanbanker.com/payments/news/openai-moves-ai-checkout-to-third-parties">American Banker</a> | <a
+            href="https://www.arc.io/blog/arc-mainnet-goes-live-on-september-16-2026">Arc mainnet</a></p>
+      </section>
+
+      <!-- STABLECOIN STATS -->
+      <section class="scoreboard-slide">
+        <span class="kicker"><span class="sec-no">§3</span>The Money Layer</span>
+        <div class="headline">
+          <h2>Stablecoins, by the Numbers</h2>
+        </div>
+        <div class="stat-row">
+          <div class="stat-card pop" style="--d:.1s"><span class="num sun">~$<span class="counter" data-to="300" data-suffix="B">300B</span></span>
+            <p class="cap">stablecoin supply, Sep 2026 (peak ~$322B in May)</p>
+          </div>
+          <div class="stat-card pop" style="--d:.4s"><span class="num"><span class="counter" data-to="99" data-suffix="%" data-delay=".3">99%</span></span>
+            <p class="cap">of agent stablecoin txs in <strong>USDC</strong> (Coinbase)</p>
+          </div>
+          <div class="stat-card pop" style="--d:.7s"><span class="num">2025</span>
+            <p class="cap"><strong>GENIUS Act</strong>: first US stablecoin law, 1:1 reserves</p>
+          </div>
+        </div>
+        <p class="lead rise" style="--d:1.5s">Dollars that move like <strong>data packets</strong>.</p>
+        <p class="source-links">Sources: <a href="https://stablecoinbeat.com/tracker/">stablecoinbeat tracker</a> | <a
+            href="https://www.forbes.com/sites/digital-assets/2026/07/27/the-stablecoin-market-shrank-for-the-first-time-in-four-years-watch-the-volumes-instead/">Forbes</a> | <a
+            href="https://thedefiant.io/news/cefi/brian-armstrong-says-coinbase-processes-usd1t-in-stablecoin-payments-annually">The Defiant</a> | <a
+            href="https://x.com/RepFrenchHill/status/1946315045459177553">@RepFrenchHill (signing)</a></p>
+      </section>
+
+      <!-- ===================== §4 FIELD NOTES ===================== -->
+      <section class="divider" data-transition="fade">
+        <span class="secno pop">§4</span>
+        <h2 class="rise" style="--d:.2s">Field Notes</h2>
+        <p class="sub rise" style="--d:.4s">Agents that hold wallets, earn, spend — and hire.</p>
+      </section>
+
+      <!-- TIMELINE -->
+      <section>
+        <span class="kicker"><span class="sec-no">§4</span>How We Got Here</span>
+        <div class="headline">
+          <h2>From Meme to Infrastructure</h2>
+        </div>
+        <div class="era-strip">
+          <div class="era rise" style="--d:.1s"><span class="yr">Jul 2024</span>
+            <h5>$50K to a bot</h5>
+            <p>Andreessen grants Truth Terminal <strong>$50K in BTC</strong>.</p>
+          </div>
+          <div class="era rise" style="--d:.5s"><span class="yr">Oct–Nov 2024</span>
+            <h5>"AI millionaire"</h5>
+            <p>GOAT memecoin hits $428M cap. Freysa game: human tricks AI out of 13 ETH.</p>
+          </div>
+          <div class="era rise" style="--d:.9s"><span class="yr">May–Sep 2025</span>
+            <h5>Protocols</h5>
+            <p>x402, AP2, ACP. GENIUS Act signed.</p>
+          </div>
+          <div class="era rise" style="--d:1.3s"><span class="yr">Jan–Mar 2026</span>
+            <h5>Wallets &amp; IDs</h5>
+            <p>ERC-8004 mainnet · Agentic Wallets · Tempo + MPP.</p>
+          </div>
+          <div class="era now rise" style="--d:1.7s"><span class="yr">Sep–Oct 2026</span>
+            <h5>Now</h5>
+            <p>Arc mainnet. Vitalik: agents as Ethereum's <strong>main interface</strong> in ~2 years.</p>
+          </div>
+        </div>
+        <p class="source-links">Sources: <a href="https://x.com/pmarca/status/1810813293805851044">@pmarca</a> | <a
+            href="https://x.com/AISafetyMemes/status/1847312782049333701">@AISafetyMemes</a> | <a
+            href="https://www.theblock.co/post/328747/human-player-outwits-freysa-ai-agent-in-47000-crypto-challenge">The Block: Freysa</a> | <a
+            href="https://x.com/WuBlockchain/status/2107682331326660991">@WuBlockchain (Vitalik, Oct 6 2026)</a></p>
+      </section>
+
+      <!-- AGENTS EARNING -->
+      <section>
+        <span class="kicker"><span class="sec-no">§4</span>Field Notes · as posted on X</span>
+        <div class="headline">
+          <h2>Agents That Earn</h2>
+        </div>
+        <div class="xgrid">
+          <div class="xcard gold pop" style="--d:.1s">
+            <div class="who"><span class="av">PB</span><span><b>@plbiojout</b> · Feb 2026</span></div>
+            <p class="what">"My OpenClaw … made its <strong>first dollars</strong> online <strong>selling to other bots</strong>."</p>
+            <a class="go" href="https://x.com/plbiojout/status/2018457662866985340">x.com/plbiojout ↗</a>
+          </div>
+          <div class="xcard eth pop" style="--d:.5s">
+            <div class="who"><span class="av">V</span><span><b>@virtuals_io</b> · Aug 2026</span></div>
+            <p class="what"><strong>18K+ agents</strong>, $479M "agentic GDP" on Base.</p>
+            <div class="tags"><span class="metric">self-reported</span></div>
+            <a class="go" href="https://x.com/virtuals_io/status/2083922265356570884">x.com/virtuals_io ↗</a>
+          </div>
+          <div class="xcard eth pop" style="--d:.9s">
+            <div class="who"><span class="av">O</span><span><b>@autonolas</b> · 2026</span></div>
+            <p class="what"><strong>10M+ agent-to-agent</strong> transactions (~14.8M by Oct).</p>
+            <div class="tags"><span class="metric">self-reported</span></div>
+            <a class="go" href="https://x.com/autonolas/status/2019752385959415861">x.com/autonolas ↗</a>
+          </div>
+          <div class="xcard pop" style="--d:1.3s">
+            <div class="who"><span class="av">CT</span><span><b>@Cointelegraph</b> · Feb 2026</span></div>
+            <p class="what">RentAHuman: <strong>agents hire humans</strong> for physical tasks, pay in crypto.</p>
+            <div class="tags"><span class="metric">outcomes disputed</span></div>
+            <a class="go" href="https://x.com/Cointelegraph/status/2018743807437652094">x.com/Cointelegraph ↗</a>
+          </div>
+          <div class="xcard red pop" style="--d:1.7s">
+            <div class="who"><span class="av">0P</span><span><b>@0xPhilanthrop</b> · Mar 2026</span></div>
+            <p class="what">Polymarket bot: <strong>$1.2K → $270K</strong> in 11 days.</p>
+            <div class="tags"><span class="metric">unaudited claim</span></div>
+            <a class="go" href="https://x.com/0xPhilanthrop/status/2031748602079404203">x.com/0xPhilanthrop ↗</a>
+          </div>
+          <div class="xcard red pop" style="--d:2.1s">
+            <div class="who"><span class="av">TF</span><span><b>@TFTC21</b> · Mar 2026</span></div>
+            <p class="what">Same game, other bot: <strong>liquidated to zero</strong>.</p>
+            <div class="tags"><span class="metric">unaudited claim</span></div>
+            <a class="go" href="https://x.com/TFTC21/status/2031180225648930968">x.com/TFTC21 ↗</a>
+          </div>
+        </div>
+        <p class="source-links">Treat as claims: self-reported metrics may include farming and test traffic. | <a href="https://olas.network/">olas.network</a></p>
+      </section>
+
+      <!-- TWO QUOTES -->
+      <section class="quote-slide" data-transition="fade">
+        <blockquote class="slide-l" style="--d:.1s;font-size:1.5em">"Agent payments will soon overtake human payments."<br><span class="small">— @tempo, Mar 2026</span></blockquote>
+        <blockquote class="slide-r" style="--d:1.2s;font-size:1.5em;margin-top:.8em"><span class="hl">"Still mostly a mirage."</span><br><span class="small">— @artemis, Feb 2026</span></blockquote>
+        <p class="lead rise" style="--d:2.2s">Both can be true. <strong>Watch the volume, not the count.</strong></p>
+      </section>
+
+      <!-- ===================== §5 RISKS ===================== -->
+      <section class="divider" data-transition="fade">
+        <span class="secno pop">§5</span>
+        <h2 class="rise" style="--d:.2s">Risks &amp; Open Problems</h2>
+        <p class="sub rise" style="--d:.4s">Give software a wallet, and words become withdrawals.</p>
+      </section>
+
+      <!-- INCIDENTS -->
+      <section>
+        <span class="kicker"><span class="sec-no">§5</span>Incident Log</span>
+        <div class="headline">
+          <h2>When Agents Lose Money</h2>
+        </div>
+        <div class="xgrid two">
+          <div class="xcard red slide-l" style="--d:.1s">
+            <div class="who"><span class="av">BB</span><span><b>@bankrbot</b> · May 2026</span></div>
+            <p class="what">Morse-code prompt to Grok → bot <strong>sends 3B DRB</strong> (~$150–200K).</p>
+            <div class="tags"><span class="metric">prompt injection</span></div>
+            <a class="go" href="https://x.com/bankrbot/status/2051192437797015859">x.com/bankrbot ↗</a>
+          </div>
+          <div class="xcard red slide-r" style="--d:.6s">
+            <div class="who"><span class="av">LW</span><span><b>Lobstar Wilde</b> · Feb 2026</span></div>
+            <p class="what">Meant to tip ~4 SOL; <strong>sent 52M tokens</strong> (~$250K+) after a state reset.</p>
+            <div class="tags"><span class="metric">lost state</span></div>
+            <a class="go" href="https://www.coindesk.com/markets/2026/02/23/ai-bot-s-tipping-blunder-hands-usd250-000-memecoin-pile-to-x-sad-story-poster">coindesk.com ↗</a>
+          </div>
+          <div class="xcard red slide-l" style="--d:1.1s">
+            <div class="who"><span class="av">F</span><span><b>Freysa</b> · Nov 2024</span></div>
+            <p class="what">Attempt #482 redefines "approveTransfer" → <strong>13.19 ETH</strong> released.</p>
+            <div class="tags"><span class="metric">adversarial game</span></div>
+            <a class="go" href="https://www.theblock.co/post/328747/human-player-outwits-freysa-ai-agent-in-47000-crypto-challenge">theblock.co ↗</a>
+          </div>
+          <div class="xcard red slide-r" style="--d:1.6s">
+            <div class="who"><span class="av">AX</span><span><b>AIXBT</b> · Mar 2025</span></div>
+            <p class="what">Dashboard breach queues replies → <strong>55.5 ETH</strong> drained.</p>
+            <div class="tags"><span class="metric">ops security</span></div>
+            <a class="go" href="https://decrypt.co/310510/aixbt-ai-influencer-hacked-100k-ethereum">decrypt.co ↗</a>
+          </div>
+        </div>
+        <p class="source-links">Also: <a href="https://x.com/MarcinRedStone/status/2053022211695624204">@MarcinRedStone breakdown</a> | <a
+            href="https://www.theblock.co/post/390722/ai-agent-created-by-openai-dev-accidentally-sends-entire-memecoin-holdings-to-reply-guy">The Block: Lobstar Wilde</a></p>
+      </section>
+
+      <!-- ATTACK SURFACE -->
+      <section>
+        <span class="kicker"><span class="sec-no">§5</span>Attack Surface</span>
+        <div class="headline">
+          <h2>Text In, Money Out</h2>
+        </div>
+        <div class="stage rise" style="--d:.1s">
+          <svg class="wide" viewBox="0 0 1200 300" role="img" aria-label="Untrusted text reaches the agent which controls a wallet">
+            <g class="slide-l" style="--d:.3s">
+              <rect x="30" y="40" width="250" height="70" rx="8" class="chalk-box red"></rect>
+              <text x="155" y="82" text-anchor="middle" class="label">📨 page · reply · email</text>
+              <rect x="30" y="170" width="250" height="70" rx="8" class="chalk-box red"></rect>
+              <text x="155" y="212" text-anchor="middle" class="label">🧩 malicious skill</text>
+            </g>
+            <path d="M280 75 L470 140" class="chalk-arrow dashed draw" style="--len:210;--d:.9s;stroke:var(--red)"></path>
+            <path d="M280 205 L470 160" class="chalk-arrow dashed draw" style="--len:210;--d:1.1s;stroke:var(--red)"></path>
+            <g class="pop" style="--d:1.5s">
+              <circle cx="560" cy="150" r="85" class="chalk-box gold"></circle>
+              <text x="560" y="145" text-anchor="middle" class="label">🤖 agent</text>
+              <text x="560" y="170" text-anchor="middle" class="mut-label">can't tell data</text>
+              <text x="560" y="188" text-anchor="middle" class="mut-label">from instructions</text>
+            </g>
+            <path d="M645 150 L860 150" class="chalk-arrow draw" style="--len:220;--d:2s"></path>
+            <g class="pop" style="--d:2.4s">
+              <rect x="860" y="110" width="140" height="80" rx="8" class="chalk-box eth"></rect>
+              <text x="930" y="157" text-anchor="middle" class="label">👛 wallet</text>
+            </g>
+            <path d="M1000 150 L1150 150" class="chalk-arrow draw" style="--len:150;--d:2.8s;stroke:var(--red)"></path>
+            <text x="1100" y="130" text-anchor="middle" class="label rise" style="--d:3s;fill:var(--red)">💸</text>
+            <text x="1100" y="190" text-anchor="middle" class="mut-label rise" style="--d:3.1s">irreversible</text>
+          </svg>
+        </div>
+        <div class="grid-2" style="min-height:0;margin-top:.5em">
+          <div class="panel gold rise" style="--d:3.4s">
+            <h4>Defences</h4>
+            <p>Caps · allow-lists · human approval above a threshold · escrow · reputation.</p>
+          </div>
+          <div class="panel rise" style="--d:3.8s">
+            <h4>Supply chain</h4>
+            <p>Buterin's post reportedly cites <strong>~15%</strong> of OpenClaw skills as malicious.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- OPEN PROBLEMS -->
+      <section>
+        <span class="kicker"><span class="sec-no">§5</span>For the Students</span>
+        <div class="headline">
+          <h2>Open Problems Worth a Thesis</h2>
+        </div>
+        <div class="grid-2">
+          <div class="panel pop" style="--d:.1s">
+            <h4>Liability</h4>
+            <p>Agent pays the wrong party. <strong>Who owes whom?</strong></p>
+          </div>
+          <div class="panel pop" style="--d:.4s">
+            <h4>Verification</h4>
+            <p>Prove the work was done <strong>before</strong> escrow releases.</p>
+          </div>
+          <div class="panel gold pop" style="--d:.7s">
+            <h4>Real vs farmed activity</h4>
+            <p>Measure the agent economy <strong>without wash traffic</strong>.</p>
+          </div>
+          <div class="panel pop" style="--d:1s">
+            <h4>Privacy</h4>
+            <p>Public ledgers expose <strong>every agent purchase</strong>.</p>
+          </div>
+          <div class="panel pop" style="--d:1.3s">
+            <h4>Injection-proof wallets</h4>
+            <p>Policies an LLM <strong>cannot talk its way past</strong>.</p>
+          </div>
+          <div class="panel pop" style="--d:1.6s">
+            <h4>Regulation</h4>
+            <p>KYC for agents? Stablecoin rules (GENIUS Act, RBI) for <strong>machines</strong>?</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- RECAP -->
+      <section>
+        <span class="kicker">Recap</span>
+        <div class="headline">
+          <h2>Life and Money, in Four Lines</h2>
+        </div>
+        <div class="toc">
+          <div class="toc-row slide-l" style="--d:.2s"><span class="no">01</span><span class="ttl">Agents already run errands.</span><span class="sub">life</span></div>
+          <div class="toc-row slide-l" style="--d:.8s"><span class="no">02</span><span class="ttl">They stall at the payment step.</span><span class="sub">permission</span></div>
+          <div class="toc-row slide-l" style="--d:1.4s"><span class="no">03</span><span class="ttl">Crypto rails fit machine payments.</span><span class="sub">x402 · 8004</span></div>
+          <div class="toc-row slide-l" style="--d:2s"><span class="no">04</span><span class="ttl">Counts are big; real volume is small.</span><span class="sub">for now</span></div>
+        </div>
+      </section>
+
+      <!-- APPENDIX: GROK PROMPTS -->
+      <section>
+        <span class="kicker">Appendix · find your own references</span>
+        <div class="headline">
+          <h2>Prompts to Run Through Grok</h2>
+        </div>
+        <ol class="prompt-list">
+          <li class="rise" style="--d:.1s">Most-viewed X posts (2026) where an AI agent completed a real purchase for its user. Give URLs, dates, views.</li>
+          <li class="rise" style="--d:.25s">Viral X posts about AI agents paying other agents via x402, with on-chain tx links.</li>
+          <li class="rise" style="--d:.4s">Original X posts on the Freysa AI agent prize game and its winner p0pular.eth.</li>
+          <li class="rise" style="--d:.55s">X posts by Nik Pash about the Lobstar Wilde agent sending its tokens by mistake.</li>
+          <li class="rise" style="--d:.7s">Official X posts from Visa and Mastercard about agentic payments in 2026, with dates.</li>
+          <li class="rise" style="--d:.85s">Viral posts of AI agents booking travel or calling businesses by phone, Jun–Oct 2026.</li>
+          <li class="rise" style="--d:1s">Indian X posts on UPI payments made by AI agents (NPCI, Razorpay, ChatGPT), 2026.</li>
+          <li class="rise" style="--d:1.15s">Posts showing AI-glasses agents (Meta Muse, Ray-Ban) doing multi-step tasks.</li>
+          <li class="rise" style="--d:1.3s">Vitalik Buterin's 2026 X posts on AI agents and Ethereum; quote exact text.</li>
+          <li class="rise" style="--d:1.45s">Latest ERC-8004 registered-agent count on 8004scan, by chain, with the source post.</li>
+        </ol>
+      </section>
+
+      <!-- CLOSING -->
+      <section class="quote-slide" data-transition="fade">
+        <blockquote class="rise">Agents are learning to live with us.<br><span class="hl">Now they're learning to pay.</span></blockquote>
+        <p class="lead rise" style="--d:1s;margin-top:1.2em">Thank you.</p>
+        <p class="small rise" style="--d:1.4s;text-align:center;display:block;margin-top:.6em">Debasish Pattanayak ·
+          Department of Computer Science and Engineering, IIT Indore · <a href="https://drdebmath.github.io"
+            style="color:var(--blue);">drdebmath.github.io</a></p>
+      </section>
+
+    </div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/reveal.js/dist/reveal.js"></script>
+  <script>
+    function prepareSlideFit() { const s = document.querySelectorAll(".reveal .slides > section, .reveal .slides > section > section"); s.forEach(e => { if (e.classList.contains("stack")) return; if (e.firstElementChild && e.firstElementChild.classList.contains("slide-fit")) return; const w = document.createElement("div"); w.className = "slide-fit"; while (e.firstChild) w.appendChild(e.firstChild); e.appendChild(w) }) }
+    function fitSlidesToViewport() { document.querySelectorAll(".reveal .slides > section, .reveal .slides > section > section").forEach(e => { if (e.classList.contains("stack")) return; const w = e.firstElementChild; if (!(w instanceof HTMLElement) || !w.classList.contains("slide-fit")) return; w.style.transform = "scale(1)"; const aw = e.clientWidth, ah = e.clientHeight, cw = w.scrollWidth, ch = w.scrollHeight; if (!aw || !ah || !cw || !ch) return; w.style.transform = `scale(${Math.min(1, (aw - 12) / cw, (ah - 14) / ch)})` }) }
+    let fitRaf = null; function scheduleFitSlides() { if (fitRaf !== null) cancelAnimationFrame(fitRaf); fitRaf = requestAnimationFrame(() => { fitRaf = null; fitSlidesToViewport() }) }
+    prepareSlideFit();
+    Reveal.initialize({ hash: true, slideNumber: "c/t", progress: true, center: true, margin: 0, width: '100%', height: '100%', minScale: 1, maxScale: 1, transition: "fade", backgroundTransition: "fade", autoAnimate: true, autoAnimateDuration: 1.0, autoAnimateEasing: "ease-out", fragments: !/fragments=false/.test(location.search) });
+    Reveal.on("ready", () => { scheduleFitSlides(); setTimeout(fitSlidesToViewport, 120) });
+    Reveal.on("slidechanged", scheduleFitSlides); Reveal.on("fragmentshown", scheduleFitSlides); Reveal.on("fragmenthidden", scheduleFitSlides); Reveal.on("resize", scheduleFitSlides);
+    window.addEventListener("load", () => { scheduleFitSlides(); setTimeout(fitSlidesToViewport, 120) }); window.addEventListener("resize", scheduleFitSlides);
+  </script>
+  <script>
+    /* ---- count-up numbers: <span class="counter" data-to="1000" data-prefix="$" data-suffix="M" data-dec="1"> ---- */
+    function runCounters(slide) {
+      if (!slide) return;
+      slide.querySelectorAll(".counter[data-to]").forEach(el => {
+        const to = parseFloat(el.dataset.to), dec = parseInt(el.dataset.dec || "0", 10);
+        const pre = el.dataset.prefix || "", suf = el.dataset.suffix || "";
+        const dur = parseFloat(el.dataset.dur || "1.8") * 1000, delay = parseFloat(el.dataset.delay || "0") * 1000;
+        const fmt = v => pre + v.toLocaleString("en-US", { minimumFractionDigits: dec, maximumFractionDigits: dec }) + suf;
+        el.textContent = fmt(0);
+        if (matchMedia("(prefers-reduced-motion: reduce)").matches) { el.textContent = fmt(to); return; }
+        const t0 = performance.now() + delay;
+        const step = now => {
+          const p = Math.min(1, Math.max(0, (now - t0) / dur));
+          el.textContent = fmt(to * (1 - Math.pow(1 - p, 3)));
+          if (p < 1) requestAnimationFrame(step);
+        };
+        requestAnimationFrame(step);
+      });
+    }
+
+    /* ---- the parallel economy: humans + agents exchanging value ---- */
+    function makeNetwork(canvas) {
+      const ctx = canvas.getContext("2d");
+      const hudTx = canvas.parentElement.querySelector("[data-hud=tx]");
+      const hudShare = canvas.parentElement.querySelector("[data-hud=share]");
+      let W = 0, H = 0, nodes = [], edges = [], packets = [], tick = 0, tx = 0, agentTx = 0, running = false, phase = 0;
+      const css = getComputedStyle(document.documentElement);
+      const C = { human: css.getPropertyValue("--blue").trim() || "#8fd0c6", agent: css.getPropertyValue("--yellow").trim() || "#f2cc60", eth: css.getPropertyValue("--eth").trim() || "#a7a4f2", line: "rgba(240,236,221,.08)" };
+      function resize() {
+        const r = canvas.getBoundingClientRect(), d = window.devicePixelRatio || 1;
+        W = r.width; H = r.height; canvas.width = W * d; canvas.height = H * d; ctx.setTransform(d, 0, 0, d, 0, 0);
+      }
+      function seed() {
+        nodes = []; edges = []; packets = []; tx = 0; agentTx = 0; tick = 0; phase = 0;
+        for (let i = 0; i < 14; i++) nodes.push({ x: .08 + .84 * Math.random(), y: .1 + .8 * Math.random(), kind: "human", born: 0, vx: 0, vy: 0 });
+        link();
+      }
+      function link() {
+        edges = [];
+        nodes.forEach((a, i) => {
+          const near = nodes.map((b, j) => ({ j, d: Math.hypot(a.x - b.x, a.y - b.y) })).filter(o => o.j !== i).sort((p, q) => p.d - q.d).slice(0, a.kind === "agent" ? 4 : 2);
+          near.forEach(o => { if (!edges.some(e => (e[0] === i && e[1] === o.j) || (e[0] === o.j && e[1] === i))) edges.push([i, o.j]); });
+        });
+      }
+      function spawnAgent() {
+        const p = nodes[Math.floor(Math.random() * nodes.length)];
+        nodes.push({ x: Math.min(.95, Math.max(.05, p.x + (Math.random() - .5) * .18)), y: Math.min(.92, Math.max(.08, p.y + (Math.random() - .5) * .18)), kind: "agent", born: tick });
+        link();
+      }
+      function frame() {
+        if (!running) return;
+        tick++;
+        if (tick % 40 === 0 && nodes.length < 90) spawnAgent();
+        const agentShare = nodes.filter(n => n.kind === "agent").length / nodes.length;
+        const rate = 1 + Math.floor(nodes.length / 12);
+        for (let k = 0; k < rate; k++) if (Math.random() < .35 && edges.length) {
+          const e = edges[Math.floor(Math.random() * edges.length)], dir = Math.random() < .5;
+          const a = nodes[dir ? e[0] : e[1]], b = nodes[dir ? e[1] : e[0]];
+          const isAgent = a.kind === "agent" && b.kind === "agent";
+          packets.push({ a, b, t: 0, s: isAgent ? .03 : .012, agent: isAgent });
+          tx++; if (isAgent) agentTx++;
+        }
+        ctx.clearRect(0, 0, W, H);
+        ctx.lineWidth = 1;
+        edges.forEach(([i, j]) => {
+          const a = nodes[i], b = nodes[j];
+          ctx.strokeStyle = a.kind === "agent" && b.kind === "agent" ? "rgba(242,204,96,.12)" : C.line;
+          ctx.beginPath(); ctx.moveTo(a.x * W, a.y * H); ctx.lineTo(b.x * W, b.y * H); ctx.stroke();
+        });
+        packets = packets.filter(p => p.t < 1);
+        packets.forEach(p => {
+          p.t += p.s;
+          const x = (p.a.x + (p.b.x - p.a.x) * p.t) * W, y = (p.a.y + (p.b.y - p.a.y) * p.t) * H;
+          ctx.fillStyle = p.agent ? C.eth : C.human;
+          ctx.beginPath(); ctx.arc(x, y, p.agent ? 2.4 : 3.2, 0, Math.PI * 2); ctx.fill();
+        });
+        nodes.forEach(n => {
+          const age = Math.min(1, (tick - n.born) / 30), r = n.kind === "agent" ? 4.5 * age : 9;
+          ctx.fillStyle = n.kind === "agent" ? C.agent : C.human;
+          ctx.globalAlpha = n.kind === "agent" ? .9 : .85;
+          if (n.kind === "agent") { ctx.beginPath(); ctx.rect(n.x * W - r, n.y * H - r, 2 * r, 2 * r); ctx.fill(); }
+          else { ctx.beginPath(); ctx.arc(n.x * W, n.y * H, r, 0, Math.PI * 2); ctx.fill(); }
+          ctx.globalAlpha = 1;
+        });
+        if (hudTx) hudTx.textContent = tx.toLocaleString("en-US");
+        if (hudShare) hudShare.textContent = tx ? Math.round(100 * agentTx / tx) + "%" : "0%";
+        requestAnimationFrame(frame);
+      }
+      return {
+        start() { resize(); seed(); if (!running) { running = true; requestAnimationFrame(frame); } },
+        stop() { running = false; },
+        resize
+      };
+    }
+    const networks = new Map();
+    function onSlide(slide) {
+      networks.forEach(n => n.stop());
+      runCounters(slide);
+      if (!slide) return;
+      slide.querySelectorAll("canvas.net").forEach(c => {
+        if (!networks.has(c)) networks.set(c, makeNetwork(c));
+        setTimeout(() => networks.get(c).start(), 60);
+      });
+    }
+    Reveal.on("ready", e => onSlide(e.currentSlide));
+    Reveal.on("slidechanged", e => onSlide(e.currentSlide));
+    window.addEventListener("resize", () => networks.forEach(n => n.resize()));
+  </script>
+</body>
+
+</html>
