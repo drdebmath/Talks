@@ -135,7 +135,7 @@ Why can't an AI agent just open a bank account? First, a bank's ID check expects
 
 Simple arithmetic, in rupees. A card payment in the US has a fixed fee of 30 cents, about ₹26. If an AI agent pays ₹0.01 for one request, that fee is about 2,600 times the payment. The main Ethereum network costs roughly ₹1 to ₹5 per payment, depending on how busy it is. An L2 network with USDC costs roughly ₹0.1 to ₹1. Notice that every fee is still bigger than ₹0.01. The answer is a bundled payment: the AI agent adds up many tiny payments and pays once, so one fee covers thousands of requests. These are rough numbers; fees change.
 
-## 26. Internet-born workers need internet-born money.
+## 26. Internet-native workers need internet-native money.
 
 This line sums up part two. Pause here.
 
