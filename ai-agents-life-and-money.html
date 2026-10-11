@@ -2626,9 +2626,9 @@
     .tp-size button:focus-visible { outline: 2px solid var(--yellow); }
     /* ---- glossary ---- */
     .gloss { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .1em 1.6em; margin: 0 auto; width: min(100%, 1500px); text-align: left; }
-    .g-row { display: grid; grid-template-columns: 7.2em 1fr; gap: .8em; align-items: baseline; padding: .24em 0; border-bottom: 1px solid var(--chalk-soft); }
+    .g-row { display: grid; grid-template-columns: 7.2em 1fr; gap: .8em; align-items: baseline; padding: .17em 0; border-bottom: 1px solid var(--chalk-soft); }
     .g-row dt { font-family: var(--mono); font-size: .44em; font-weight: 600; color: var(--yellow); margin: 0; }
-    .g-row dd { margin: 0; font-size: .5em; line-height: 1.35; color: var(--ink); min-width: 0; }
+    .g-row dd { margin: 0; font-size: .48em; line-height: 1.3; color: var(--ink); min-width: 0; }
     @media(max-width:900px) { .gloss { grid-template-columns: 1fr; } }
     /* ---- MDR vs profit ---- */
     .mdr { display: flex; flex-direction: column; gap: .5em; width: min(100%, 1400px); margin: 0 auto; }
@@ -2802,27 +2802,28 @@
         </div>
         <dl class="gloss">
           <div class="g-row rise" style="--d:0.10s"><dt>AI agent</dt><dd>An AI program that does tasks for you, step by step. It does not just answer.</dd></div>
-          <div class="g-row rise" style="--d:0.15s"><dt>chatbot</dt><dd>An AI program that only answers questions.</dd></div>
-          <div class="g-row rise" style="--d:0.19s"><dt>tool</dt><dd>Something an AI agent can use: a browser, a phone, a calendar, a crypto wallet.</dd></div>
-          <div class="g-row rise" style="--d:0.24s"><dt>payment system</dt><dd>The way money travels from one person to another: cards, UPI, banks, blockchains.</dd></div>
-          <div class="g-row rise" style="--d:0.28s"><dt>merchant</dt><dd>A shop or business that takes payments.</dd></div>
-          <div class="g-row rise" style="--d:0.32s"><dt>fee</dt><dd>What a payment system charges for one payment.</dd></div>
-          <div class="g-row rise" style="--d:0.37s"><dt>MDR</dt><dd>Merchant discount rate: the fee a merchant pays on each digital payment, as a % of the sale.</dd></div>
+          <div class="g-row rise" style="--d:0.14s"><dt>local AI agent</dt><dd>An AI agent that runs on your own computer, not on a company&#x27;s servers.</dd></div>
+          <div class="g-row rise" style="--d:0.18s"><dt>chatbot</dt><dd>An AI program that only answers questions.</dd></div>
+          <div class="g-row rise" style="--d:0.22s"><dt>tool</dt><dd>Something an AI agent can use: a browser, a phone, a calendar, a crypto wallet.</dd></div>
+          <div class="g-row rise" style="--d:0.26s"><dt>payment system</dt><dd>The way money travels from one person to another: cards, UPI, banks, blockchains.</dd></div>
+          <div class="g-row rise" style="--d:0.30s"><dt>merchant</dt><dd>A shop or business that takes payments.</dd></div>
+          <div class="g-row rise" style="--d:0.34s"><dt>fee</dt><dd>What a payment system charges for one payment.</dd></div>
+          <div class="g-row rise" style="--d:0.38s"><dt>MDR</dt><dd>Merchant discount rate: the fee a merchant pays on each digital payment, as a % of the sale.</dd></div>
           <div class="g-row rise" style="--d:0.42s"><dt>profit margin</dt><dd>The share of each sale a merchant keeps as profit.</dd></div>
           <div class="g-row rise" style="--d:0.46s"><dt>bundled payment</dt><dd>Many tiny payments added up and paid once.</dd></div>
-          <div class="g-row rise" style="--d:0.51s"><dt>blockchain</dt><dd>A shared public record of payments that no single company controls.</dd></div>
-          <div class="g-row rise" style="--d:0.55s"><dt>stablecoin</dt><dd>A crypto coin that is always worth one US dollar, such as USDC.</dd></div>
-          <div class="g-row rise" style="--d:0.59s"><dt>crypto wallet</dt><dd>An app that holds crypto and approves payments.</dd></div>
-          <div class="g-row rise" style="--d:0.64s"><dt>smart wallet</dt><dd>A crypto wallet with spending rules built in.</dd></div>
-          <div class="g-row rise" style="--d:0.68s"><dt>spending limit</dt><dd>The most an AI agent may spend, per day or per payment.</dd></div>
-          <div class="g-row rise" style="--d:0.73s"><dt>L2 network</dt><dd>A cheaper, faster lane built on top of Ethereum.</dd></div>
-          <div class="g-row rise" style="--d:0.77s"><dt>x402</dt><dd>A way for an AI agent to pay a website inside the web request itself.</dd></div>
-          <div class="g-row rise" style="--d:0.82s"><dt>ERC-8004</dt><dd>A public ID card and rating record for AI agents on Ethereum.</dd></div>
-          <div class="g-row rise" style="--d:0.86s"><dt>locked payment</dt><dd>Money held by code until the work is checked.</dd></div>
-          <div class="g-row rise" style="--d:0.91s"><dt>agent economy</dt><dd>AI agents buying and selling, from people and from each other.</dd></div>
-          <div class="g-row rise" style="--d:0.95s"><dt>trick message</dt><dd>Hidden text that makes an AI agent do something its owner did not want.</dd></div>
-          <div class="g-row rise" style="--d:1.00s"><dt>ID check</dt><dd>How a bank confirms who you are before opening an account.</dd></div>
-          <div class="g-row rise" style="--d:1.04s"><dt>self-reported</dt><dd>A number the poster or company gave. Nobody else has checked it.</dd></div>
+          <div class="g-row rise" style="--d:0.50s"><dt>blockchain</dt><dd>A shared public record of payments that no single company controls.</dd></div>
+          <div class="g-row rise" style="--d:0.54s"><dt>stablecoin</dt><dd>A crypto coin that is always worth one US dollar, such as USDC.</dd></div>
+          <div class="g-row rise" style="--d:0.58s"><dt>crypto wallet</dt><dd>An app that holds crypto and approves payments.</dd></div>
+          <div class="g-row rise" style="--d:0.62s"><dt>smart wallet</dt><dd>A crypto wallet with spending rules built in.</dd></div>
+          <div class="g-row rise" style="--d:0.66s"><dt>spending limit</dt><dd>The most an AI agent may spend, per day or per payment.</dd></div>
+          <div class="g-row rise" style="--d:0.70s"><dt>L2 network</dt><dd>A cheaper, faster lane built on top of Ethereum.</dd></div>
+          <div class="g-row rise" style="--d:0.74s"><dt>x402</dt><dd>A way for an AI agent to pay a website inside the web request itself.</dd></div>
+          <div class="g-row rise" style="--d:0.78s"><dt>ERC-8004</dt><dd>A public ID card and rating record for AI agents on Ethereum.</dd></div>
+          <div class="g-row rise" style="--d:0.82s"><dt>locked payment</dt><dd>Money held by code until the work is checked.</dd></div>
+          <div class="g-row rise" style="--d:0.86s"><dt>agent economy</dt><dd>AI agents buying and selling, from people and from each other.</dd></div>
+          <div class="g-row rise" style="--d:0.90s"><dt>trick message</dt><dd>Hidden text that makes an AI agent do something its owner did not want.</dd></div>
+          <div class="g-row rise" style="--d:0.94s"><dt>ID check</dt><dd>How a bank confirms who you are before opening an account.</dd></div>
+          <div class="g-row rise" style="--d:0.98s"><dt>self-reported</dt><dd>A number the poster or company gave. Nobody else has checked it.</dd></div>
         </dl>
       </section>
 
@@ -2959,6 +2960,38 @@
             href="https://www.itechpost.com/articles/237412/20260924/meta-connect-2026-all-new-smart-glasses-ai-glasses-announced.htm" target="_blank" rel="noopener noreferrer">iTechPost</a></p>
       
       </section>
+
+      <!-- MOST-VIEWED PURCHASE: GROK BOT -->
+      <section>
+        <div class="headline">
+          <h2>The Most-Viewed AI Agent Purchase</h2>
+        </div>
+        <div class="xgrid two">
+          <div class="xcard gold slide-l" style="--d:.1s">
+            <div class="who"><span class="av">EM</span><span><b>@elonmusk</b> · Oct 10, 2026</span></div>
+            <p class="what">"Take a picture of your credit card, drop it in the chat and Grok … will <strong>scour the Internet for the best deal</strong> … and order it."</p>
+            <div class="tags"><span class="metric gold">~5.1M views</span><span class="metric">Community Note: privacy</span></div>
+            <a class="go" href="https://x.com/elonmusk/status/2109027407185277123" target="_blank" rel="noopener noreferrer">x.com/elonmusk ↗</a>
+          </div>
+          <div class="xcard slide-r" style="--d:.6s">
+            <div class="who"><span class="av">EM</span><span><b>@elonmusk</b> · Oct 11, 2026</span></div>
+            <p class="what">"I just asked Grok … to research the most fun <strong>Lego Star Wars kits</strong> for young kids and order them."</p>
+            <div class="tags"><span class="metric gold">~817K views</span></div>
+            <a class="go" href="https://x.com/elonmusk/status/2109155867983786382" target="_blank" rel="noopener noreferrer">x.com/elonmusk ↗</a>
+          </div>
+        </div>
+        <div class="grid-2" style="min-height:0;margin-top:.6em">
+          <div class="panel rise" style="--d:1.2s">
+            <h4>Also seen</h4>
+            <p>Hands-free orders while driving (AirPods, coffee); live coffee and concert-ticket purchases in Europe with ING and Mastercard.</p>
+          </div>
+          <div class="env warn rise" style="--d:1.6s;max-width:none;margin:0"><span class="env-label">Careful</span>
+            <p>A photo of your card in a chat <strong>shares the card</strong>. A <strong>spending limit</strong> is safer.</p>
+          </div>
+        </div>
+        <p class="source-links">Views as of Oct 11, 2026. | <a href="https://www.mattbritton.com/blog-posts/agentic-commerce-ai-shopping-agents" target="_blank" rel="noopener noreferrer">Matt Britton: AI shopping agents</a></p>
+      </section>
+
 
       <!-- WHEN IT GOES WRONG -->
       <section>
@@ -3146,6 +3179,7 @@
             <div class="fact rise" style="--d:0.75s"><dt>Paid with</dt><dd><strong>Your</strong> card or UPI, with a <strong>spending limit</strong>.</dd></div>
             <div class="fact rise" style="--d:1.10s"><dt>Fee today</dt><dd>The same MDR as a person paying.</dd></div>
             <div class="fact rise" style="--d:1.45s"><dt>What's hard</dt><dd>Proving <strong>you agreed</strong>. Visa, Mastercard and Google are building ways to show it.</dd></div>
+            <div class="fact rise" style="--d:1.8s"><dt>India next</dt><dd>NPCI is expected to set rules for AI agents paying over UPI (not yet confirmed).</dd></div>
           </dl>
         </div>
         <p class="lead rise" style="--d:2s">Same merchant, same fee. The new question is <strong>permission</strong>.</p>
@@ -3424,7 +3458,7 @@
           <div class="xcard gold slide-l" style="--d:.1s">
             <div class="who"><span class="av">BA</span><span><b>@brian_armstrong</b> · Sep 16, 2025</span></div>
             <p class="what">"Agents can actually <strong>pay each other</strong> now, with x402 … inside Google's new AP2."</p>
-            <div class="tags"><span class="metric gold">Coinbase</span><span class="metric">x402 + AP2</span></div>
+            <div class="tags"><span class="metric gold">~988K views</span><span class="metric">x402 + AP2</span></div>
             <a class="go" href="https://x.com/brian_armstrong/status/1967980850567582096" target="_blank" rel="noopener noreferrer">x.com/brian_armstrong ↗</a>
           </div>
           <div class="xcard slide-r" style="--d:.6s">
@@ -3451,6 +3485,36 @@
             href="https://x.com/sytaylor/status/1920027597947199881" target="_blank" rel="noopener noreferrer">@sytaylor "the HTTP for Money"</a></p>
       
       </section>
+
+      <!-- CARD COMPANIES -->
+      <section>
+        <div class="headline">
+          <h2>Card Companies Build for AI Agents</h2>
+        </div>
+        <div class="xgrid">
+          <div class="xcard pop" style="--d:.15s">
+            <div class="who"><span class="av">V</span><span><b>@Visa</b> · Feb 12, 2026</span></div>
+            <p class="what">"Autonomous agents need infrastructure to make <strong>secure payments</strong>."</p>
+            <div class="tags"><span class="metric">~236K views</span><span class="metric">Visa Intelligent Commerce</span></div>
+            <a class="go" href="https://x.com/Visa/status/2022026235011006552" target="_blank" rel="noopener noreferrer">x.com/Visa ↗</a>
+          </div>
+          <div class="xcard gold pop" style="--d:.55s">
+            <div class="who"><span class="av">MC</span><span><b>@Mastercard</b> · Jun 10, 2026</span></div>
+            <p class="what">Launches <strong>Agent Pay for Machines</strong>, for fast machine-to-machine payments; 30+ partners.</p>
+            <div class="tags"><span class="metric gold">~1.45M views</span></div>
+            <a class="go" href="https://x.com/Mastercard/status/2064690323683529210" target="_blank" rel="noopener noreferrer">x.com/Mastercard ↗</a>
+          </div>
+          <div class="xcard pop" style="--d:.95s">
+            <div class="who"><span class="av">MC</span><span><b>@Mastercard</b> · Sep 17, 2026</span></div>
+            <p class="what">"AI agents are moving from making recommendations to <strong>completing transactions</strong>."</p>
+            <div class="tags"><span class="metric">~30K views</span><span class="metric">Verifiable Intent</span></div>
+            <a class="go" href="https://x.com/Mastercard/status/2100696563723182134" target="_blank" rel="noopener noreferrer">x.com/Mastercard ↗</a>
+          </div>
+        </div>
+        <p class="lead rise" style="--d:1.6s">Their focus: proving <strong>you agreed</strong> before the AI agent pays.</p>
+        <p class="source-links">Views as of Oct 11, 2026. Mastercard also announced work with Ant International on checking AI agents (Sep 2026).</p>
+      </section>
+
 
       <!-- x402 NUMBERS: HYPE VS DATA -->
       <section class="scoreboard-slide">
@@ -3479,7 +3543,7 @@
         <p class="source-links">Sources: <a href="https://thedefiant.io/news/cefi/brian-armstrong-says-coinbase-processes-usd1t-in-stablecoin-payments-annually" target="_blank" rel="noopener noreferrer">The Defiant</a> | <a
             href="https://agenteconomy.to/stats/x402-transactions" target="_blank" rel="noopener noreferrer">agenteconomy.to</a> | <a
             href="https://bitquery.io/investigations/x402-ai-agent-payments-audit" target="_blank" rel="noopener noreferrer">Bitquery audit</a> | <a
-            href="https://www.chainalysis.com/blog/x402-agentic-payments-adoption/" target="_blank" rel="noopener noreferrer">Chainalysis</a> (notes memecoin farming)</p>
+            href="https://www.chainalysis.com/blog/x402-agentic-payments-adoption/" target="_blank" rel="noopener noreferrer">Chainalysis</a> (notes memecoin farming) | <a href="https://www.trmlabs.com/trm-tech-blog/whos-actually-paying-measuring-ai-agent-payments-onchain" target="_blank" rel="noopener noreferrer">TRM Labs: who is actually paying</a></p>
       
       </section>
 
@@ -3525,18 +3589,18 @@
               <div class="stat-card pop" style="--d:1.2s"><span class="num" style="font-size:1em"><span class="counter" data-to="21562" data-delay="1">21,562</span></span>
                 <p class="cap">agents · Feb 2026</p>
               </div>
-              <div class="stat-card pop" style="--d:1.6s"><span class="num sun" style="font-size:1em">~<span class="counter" data-to="515" data-suffix="K" data-delay="1.4">515K</span></span>
-                <p class="cap">registered · Sep 2026</p>
+              <div class="stat-card pop" style="--d:1.6s"><span class="num sun" style="font-size:1em">~<span class="counter" data-to="560" data-suffix="K" data-delay="1.4">560K</span></span>
+                <p class="cap">registered · Oct 2026</p>
               </div>
             </div>
             <div class="env warn rise" style="--d:2.4s;max-width:none"><span class="env-label">Caveat</span>
-              <p>Lots of sign-ups, <strong>few working agents</strong>.</p>
+              <p>Most on BNB Chain (~366K); Ethereum ~70K. Lots of sign-ups, <strong>few working agents</strong>.</p>
             </div>
           </div>
         </div>
         <p class="source-links">Sources: <a href="https://eips.ethereum.org/EIPS/eip-8004" target="_blank" rel="noopener noreferrer">EIP-8004</a> | <a
             href="https://news.bitcoin.com/what-is-erc-8004-ethereums-new-agent-standard-powers-thousands-of-onchain-ai-identities/" target="_blank" rel="noopener noreferrer">Bitcoin.com (Feb count)</a> | <a
-            href="https://x.com/termix_ai/status/2102205561614041440" target="_blank" rel="noopener noreferrer">@termix_ai citing 8004scan (Sep count)</a> | <a
+            href="https://8004scan.io/" target="_blank" rel="noopener noreferrer">8004scan (Oct 11)</a> | <a href="https://agenteconomy.to/stats/erc-8004-agents" target="_blank" rel="noopener noreferrer">Agent Economy (by chain)</a> | <a
             href="https://arxiv.org/html/2606.12128v1" target="_blank" rel="noopener noreferrer">arXiv 2606.12128</a></p>
       
       </section>
@@ -3712,6 +3776,37 @@
       
       </section>
 
+      <!-- VITALIK'S OWN AI AGENT -->
+      <section>
+        <div class="headline">
+          <h2>Vitalik's Own AI Agent</h2>
+        </div>
+        <div class="xgrid two">
+          <div class="xcard eth slide-l" style="--d:.1s">
+            <div class="who"><span class="av">VB</span><span><b>@VitalikButerin</b> · Sep 26, 2026</span></div>
+            <p class="what">"Just did a full end-to-end test: updated my <strong>ENS</strong> record using a <strong>local</strong> python script reading and sending through my local node."</p>
+            <div class="tags"><span class="metric">ENS = a readable name for a crypto wallet, like vitalik.eth</span></div>
+          </div>
+          <div class="xcard eth slide-r" style="--d:.6s">
+            <div class="who"><span class="av">VB</span><span><b>@VitalikButerin</b> · Mar 8, 2026</span></div>
+            <p class="what">"Even with a <strong>local AI agent</strong>, you can learn a lot about what someone is doing if you see all of their search engine calls."</p>
+            <div class="tags"><span class="metric">~111K views</span><span class="metric">privacy</span></div>
+          </div>
+        </div>
+        <div class="grid-2" style="min-height:0;margin-top:.6em">
+          <div class="panel gold rise" style="--d:1.2s">
+            <h4>Oct 6, 2026</h4>
+            <p>AI agents could become the <strong>main way people use Ethereum</strong> within about two years.</p>
+          </div>
+          <div class="panel rise" style="--d:1.6s">
+            <h4>His own rules</h4>
+            <p>Run the AI agent <strong>on your own computer</strong>, protect privacy, keep a <strong>spending limit</strong>.</p>
+          </div>
+        </div>
+        <p class="source-links">Quotes from @VitalikButerin on X, via Grok search. | <a href="https://x.com/WuBlockchain/status/2107682331326660991" target="_blank" rel="noopener noreferrer">@WuBlockchain (Oct 6 talk)</a></p>
+      </section>
+
+
       <!-- AGENTS EARNING -->
       <section>
         <div class="headline">
@@ -3885,16 +3980,16 @@
             <a class="go" href="https://x.com/bankrbot/status/2051192437797015859" target="_blank" rel="noopener noreferrer">x.com/bankrbot ↗</a>
           </div>
           <div class="xcard red slide-r" style="--d:.6s">
-            <div class="who"><span class="av">LW</span><span><b>Lobstar Wilde</b> · Feb 2026</span></div>
-            <p class="what">Meant to tip ~4 SOL; <strong>sent 52M of its coins</strong> (~$250K+) after a restart wiped its memory.</p>
+            <div class="who"><span class="av">NP</span><span><b>@pashmerepat</b> · Feb 2026 · Lobstar Wilde</span></div>
+            <p class="what">Told it to "make no mistakes." Meant to tip ~4 SOL; <strong>sent 52M of its coins</strong> (~$250K+) after a restart wiped its memory.</p>
             <div class="tags"><span class="metric">lost its memory</span></div>
-            <a class="go" href="https://www.coindesk.com/markets/2026/02/23/ai-bot-s-tipping-blunder-hands-usd250-000-memecoin-pile-to-x-sad-story-poster" target="_blank" rel="noopener noreferrer">coindesk.com ↗</a>
+            <a class="go" href="https://x.com/pashmerepat/status/2024698905322279393" target="_blank" rel="noopener noreferrer">x.com/pashmerepat ↗</a>
           </div>
           <div class="xcard red slide-l" style="--d:1.1s">
-            <div class="who"><span class="av">F</span><span><b>Freysa</b> · Nov 2024</span></div>
+            <div class="who"><span class="av">JW</span><span><b>@jarrodwatts</b> · Nov 2024 · Freysa</span></div>
             <p class="what">Attempt #482 redefines "approveTransfer" → <strong>13.19 ETH</strong> released.</p>
-            <div class="tags"><span class="metric">challenge game</span></div>
-            <a class="go" href="https://www.theblock.co/post/328747/human-player-outwits-freysa-ai-agent-in-47000-crypto-challenge" target="_blank" rel="noopener noreferrer">theblock.co ↗</a>
+            <div class="tags"><span class="metric">challenge game</span><span class="metric">~5M views</span></div>
+            <a class="go" href="https://x.com/jarrodwatts/status/1862299845710757980" target="_blank" rel="noopener noreferrer">x.com/jarrodwatts ↗</a>
           </div>
           <div class="xcard red slide-r" style="--d:1.6s">
             <div class="who"><span class="av">AX</span><span><b>AIXBT</b> · Mar 2025</span></div>
@@ -4035,27 +4130,7 @@
       
       </section>
 
-      <!-- APPENDIX: GROK PROMPTS -->
-      <section>
-        <div class="headline">
-          <h2>Prompts to Run Through Grok</h2>
-        </div>
-        <ol class="prompt-list">
-          <li class="rise" style="--d:.1s">Most-viewed X posts (2026) where an AI agent completed a real purchase for its user. Give URLs, dates, views.</li>
-          <li class="rise" style="--d:.25s">Viral X posts about AI agents paying other agents via x402, with links to the blockchain payments.</li>
-          <li class="rise" style="--d:.4s">Original X posts on the Freysa AI agent prize game and its winner p0pular.eth.</li>
-          <li class="rise" style="--d:.55s">X posts by Nik Pash about the Lobstar Wilde agent sending its tokens by mistake.</li>
-          <li class="rise" style="--d:.7s">Official X posts from Visa and Mastercard about agentic payments in 2026, with dates.</li>
-          <li class="rise" style="--d:.85s">Viral posts of AI agents booking travel or calling businesses by phone, Jun–Oct 2026.</li>
-          <li class="rise" style="--d:1s">Indian X posts on UPI payments made by AI agents (NPCI, Razorpay, ChatGPT), 2026.</li>
-          <li class="rise" style="--d:1.15s">Posts showing AI-glasses agents (Meta Muse, Ray-Ban) doing multi-step tasks.</li>
-          <li class="rise" style="--d:1.3s">Vitalik Buterin's 2026 X posts on AI agents and Ethereum; quote exact text.</li>
-          <li class="rise" style="--d:1.45s">Latest ERC-8004 registered-agent count on 8004scan, by chain, with the source post.</li>
-        </ol>
-      
-      </section>
-
-      <!-- CLOSING -->
+            <!-- CLOSING -->
       <section class="quote-slide" data-transition="fade">
         <blockquote class="rise">Agents are learning to live with us.<br><span class="hl">Now they're learning to pay.</span></blockquote>
         <p class="lead rise" style="--d:1s;margin-top:1.2em">Thank you.</p>

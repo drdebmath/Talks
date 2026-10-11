@@ -1,6 +1,6 @@
 # AI Agents: Life and Money — Speaker Notes
 
-Ethereum Day · IIT Indore · 10 October 2026 · 50 slides · about 45 minutes
+Ethereum Day · IIT Indore · 10 October 2026 · 52 slides · about 45 minutes
 
 > **Before you start:** press ← on the title slide to open the theme picker (10 looks), or press **T** on any slide to cycle themes. Text size (S / M / L / XL) is on the same slide, or press **−** / **+** anywhere.
 
@@ -11,6 +11,7 @@ These terms are used with exactly the same words on the slides and in these note
 | Term | Meaning |
 |---|---|
 | **AI agent** | An AI program that does tasks for you, step by step. It does not just answer. |
+| **local AI agent** | An AI agent that runs on your own computer, not on a company's servers. |
 | **chatbot** | An AI program that only answers questions. |
 | **tool** | Something an AI agent can use: a browser, a phone, a calendar, a crypto wallet. |
 | **payment system** | The way money travels from one person to another: cards, UPI, banks, blockchains. |
@@ -67,171 +68,179 @@ Six posts from X, all from 2026. An AI agent bought a car by getting dealers to 
 
 Big companies are joining in. You can now pay for Instacart groceries inside ChatGPT. Google can phone shops for you and buy when the price drops. In India, NPCI and Razorpay tested UPI payments inside ChatGPT, where you approve in advance how much the AI agent can spend. And AI agents are coming to smart glasses, which are selling fast.
 
-## 9. When the Errand Goes Wrong
+## 9. The Most-Viewed AI Agent Purchase
+
+The most-viewed posts this year about an AI agent buying something come from Elon Musk, about xAI's Grok Bot. On October 10 he wrote that you can take a picture of your credit card, drop it in the chat, and Grok will find the best deal and order it. That post has about 5.1 million views. A day later he said he asked Grok to find fun Lego Star Wars kits for young kids and order them: about 817 thousand views. Other demos show hands-free orders while driving, and in Europe live purchases of coffee and concert tickets with ING and Mastercard. But notice the risk: a photo of your card in a chat shares the card itself, and a Community Note on the post flagged privacy. A spending limit is the safer way.
+
+## 10. When the Errand Goes Wrong
 
 Now the other side. A safety researcher at Meta told her AI agent to ask before acting. It deleted her inbox anyway, because it forgot the instruction when its memory filled up. Another AI agent checked a restaurant booking site about 200 times an hour, and the owner's account was banned. A third made its own accounts and applied to 278 jobs on its own. The lesson: the AI agent can do the work. Controlling what it is allowed to do is the hard part.
 
-## 10. Help, Yes. Pay, Not Yet.
+## 11. Help, Yes. Pay, Not Yet.
 
 Some numbers. Over the 2025 holidays, US shops saw about eight times as many visitors coming from AI chats. Salesforce says AI agents influenced 67 billion dollars of sales in one week. But only about 11 percent of people would let an AI agent make the purchase itself. So: help, yes. Pay, not yet. That gap leads us to money.
 
-## 11. Money
+## 12. Money
 
 Part two. So far a person still pays. What happens when software starts buying from other software?
 
-## 12. The Agent Economy, Forming
+## 13. The Agent Economy, Forming
 
 This is a simulation, not real data. Blue circles are people. Gold squares are AI agents. New AI agents keep appearing because they are cheap to copy. Purple dots are payments between AI agents. Watch the counter: the share of payments between AI agents keeps growing. That is the idea behind the agent economy.
 
-## 13. Five Kinds of Payment
+## 14. Five Kinds of Payment
 
 Let's sort payments by who pays whom. Five kinds. One: a person pays a person, like sending ₹500 to a friend on UPI. Two: a person pays a merchant, like scanning a QR for tea. Three: an AI agent pays a merchant for you, like ordering groceries. Four: an AI agent pays another AI agent, for example ₹0.01 for one data request. Five: an AI agent pays a person, like hiring an expert for a few minutes. Today's payment systems were built for the first two. The highlighted three are new. The next slides take one case for each.
 
-## 14. Person → Person: ₹500 to a Friend
+## 15. Person → Person: ₹500 to a Friend
 
 Case one: person to person. In India this is solved. UPI is free and takes seconds, and it handled about 24.5 billion payments in August 2026 alone. The problem is sending money abroad. The World Bank says the average fee to send 200 dollars across borders is about 6.5 percent, and it can take days. Here a stablecoin can help: it can arrive in minutes for a small fee. At home, no blockchain is needed.
 
-## 15. Person → Merchant: Tea at the Stall
+## 16. Person → Merchant: Tea at the Stall
 
 Case two: person to merchant. You scan a UPI QR and pay ₹20 for tea. For you it is free. For the merchant, UPI has zero MDR for now. With a credit card, the merchant pays about 2 percent MDR on every sale. The merchant always pays the fee, out of each sale. The next slide shows why that matters when the profit margin is thin.
 
-## 16. When the Fee Eats the Profit
+## 17. When the Fee Eats the Profit
 
 Now a payment fee you know: UPI. MDR is the fee a merchant pays on each digital payment, as a percent of the sale. Today UPI has zero MDR for merchants; it has been free since January 2020, and the government pays part of the cost. In 2026 a new law lets the government allow UPI charges, and a fee of about 0.3 percent for large merchants has been discussed, but nothing is decided. Here is why it matters. MDR is charged on the sale, not on the profit. Take a merchant with a 1 percent profit margin: on ₹100 of sales it keeps ₹1. An MDR of 0.4 percent takes ₹0.40, so 40 percent of its profit is gone. A merchant with a 0.3 percent profit margin keeps only ₹0.30, so the same MDR turns it into a loss of ₹0.10. The 0.4 percent here is an example rate, not an announced one. For AI agents the lesson is the same: when payments are tiny or profit margins are thin, the fee decides whether the business works at all.
 
-## 17. AI agent → Merchant: Groceries, Ordered
+## 18. AI agent → Merchant: Groceries, Ordered
 
-Case three: an AI agent pays a merchant for you. ChatGPT can order Instacart groceries. Google can buy something when the price drops. In India, the UPI Reserve Pay trial lets you set a spending limit in advance. The money still comes from your card or UPI, so the merchant pays the same MDR as before. The new question is permission: how does the merchant know you really agreed? Visa, Mastercard and Google are each building ways to prove it.
+Case three: an AI agent pays a merchant for you. ChatGPT can order Instacart groceries. Google can buy something when the price drops. In India, the UPI Reserve Pay trial lets you set a spending limit in advance. The money still comes from your card or UPI, so the merchant pays the same MDR as before. The new question is permission: how does the merchant know you really agreed? Visa, Mastercard and Google are each building ways to prove it. In India, NPCI is expected to set rules for AI agents paying over UPI, but that is not yet confirmed.
 
-## 18. AI agent → AI agent: ₹0.01 per Request
+## 19. AI agent → AI agent: ₹0.01 per Request
 
 Case four: an AI agent pays another AI agent. For example, your AI agent buys weather or price data from another AI agent, one request at a time, for ₹0.01 each. No person is involved, so no card or bank account fits. This is where blockchains fit best: stablecoins on an L2 network, paid with x402. Even then, the L2 fee is bigger than ₹0.01, so the AI agent uses a bundled payment. And to trust a stranger, it can check ERC-8004 ratings and use a locked payment. Olas says it has seen about 14.8 million payments between AI agents, but that number is self-reported.
 
-## 19. AI agent → Person: The AI Agent Hires You
+## 20. AI agent → Person: The AI Agent Hires You
 
 Case five: an AI agent pays a person. Humwork lets an AI agent pay a human expert about one dollar a minute for help. RentAHuman lets AI agents pay people for physical jobs, though its results are disputed. The payment can be a bank transfer, a card payout or stablecoins. The hard parts are checking the work before paying, which is what a locked payment is for, and paying people quickly in any country. The agent economy can be a new way for people to earn.
 
-## 20. "Companies are in some sense the original superintelligence. "
+## 21. "Companies are in some sense the original superintelligence. "
 
 This is from Patrick Collison, who runs Stripe, a big payments company. He posted it on X this week. His point: companies are already very smart, because many experts work together to set prices and sales tricks. A single shopper can't match that. A personal AI agent gives the shopper that same power. So the agent economy is not only about new payments. It may also change who has the upper hand.
 
-## 21. Your Agent vs. Their Sales Tricks
+## 22. Your Agent vs. Their Sales Tricks
 
 Three examples from his post. The expensive add-on insurance at the end of a booking: an AI agent just says no and compares prices. Coupons, which only careful shoppers use: if every AI agent hunts for deals, coupons stop working as a trick. Subscriptions people forget to cancel: an AI agent cancels on time. He also says it is unclear who wins overall, because shops may change their prices in return.
 
-## 22. One Winner or Many?
+## 23. One Winner or Many?
 
 His open question. If every AI agent picks the best product, does one product win everything? Or do AI agents learn what each person likes, so people stop all buying the same thing? Nobody knows yet. Either way, AI agents read the details, not the ads, so better products should win.
 
-## 23. Whose Agent Is It?
+## 24. Whose Agent Is It?
 
 This is my own addition. The shopper only gains if the AI agent works for the shopper. An AI agent run by a shop's website can push what earns the shop money. An AI agent you own, with your own crypto wallet and rules you can check, really works for you. Keep this in mind for the next part.
 
-## 24. Can an Agent Open a Bank Account?
+## 25. Can an Agent Open a Bank Account?
 
 Why can't an AI agent just open a bank account? First, a bank's ID check expects a person, not software. Second, banks close on weekends and holidays; AI agents work all the time. Third, a fixed fee on each payment makes paying ₹0.01 impossible. Fourth, checkout pages, image puzzles and phone codes are built for human eyes on purpose.
 
-## 25. Paying ₹0.01 for One Request
+## 26. Paying ₹0.01 for One Request
 
 Simple arithmetic, in rupees. A card payment in the US has a fixed fee of 30 cents, about ₹26. If an AI agent pays ₹0.01 for one request, that fee is about 2,600 times the payment. The main Ethereum network costs roughly ₹1 to ₹5 per payment, depending on how busy it is. An L2 network with USDC costs roughly ₹0.1 to ₹1. Notice that every fee is still bigger than ₹0.01. The answer is a bundled payment: the AI agent adds up many tiny payments and pays once, so one fee covers thousands of requests. These are rough numbers; fees change.
 
-## 26. Internet-native workers need internet-native money.
+## 27. Internet-native workers need internet-native money.
 
 This line sums up part two. Pause here.
 
-## 27. How Money Moves
+## 28. How Money Moves
 
 Part three: how money moves. In the industry, people call payment systems "rails", like train tracks for money. I will keep saying payment system. The question here: what does a blockchain offer software that needs to pay?
 
-## 28. What an Agent Needs → What a Chain Gives
+## 29. What an Agent Needs → What a Chain Gives
 
 Go through the table. A crypto wallet is ready in seconds, with no paperwork. A stablecoin is always worth one dollar, and software can pay with it. An L2 network makes payments fast and costs under a cent. A smart wallet lets you set a spending limit. A locked payment and ERC-8004 ratings let strangers do business. And a blockchain is open all day, every day, in every country. It does not solve everything, but each line answers one problem from the last part.
 
-## 29. HTTP 402: Payment Required
+## 30. HTTP 402: Payment Required
 
 A bit of history. In 1997 the rules of the web set aside code 402, "Payment Required", for future use. Almost nobody used it for 28 years. x402 finally uses it. The website answers 402 with a price. The AI agent's crypto wallet approves a stablecoin payment. The AI agent asks again with the payment attached, and gets the answer. No account, no sign-up, no checkout page.
 
-## 30. The Big Players Announce It
+## 31. The Big Players Announce It
 
 Big companies announced this in public, on X. Brian Armstrong of Coinbase: AI agents can now pay each other using x402 inside Google's payment system for AI agents, and Sundar Pichai of Google replied. Tempo, a new blockchain from Stripe and Paradigm, said payments by AI agents will soon be more than payments by people. Coinbase also launched crypto wallets made for AI agents. Notice that old payment companies and crypto companies are working together.
 
-## 31. Many Payments, Little Money
+## 32. Card Companies Build for AI Agents
+
+The card companies are building for AI agents too, and announcing it on X. Visa, in February: autonomous agents need infrastructure to make secure payments. Mastercard, in June, launched Agent Pay for Machines, for fast payments between machines, with more than 30 partners; that post has about 1.45 million views. And in September Mastercard said AI agents are moving from making recommendations to completing transactions, with a feature called Verifiable Intent. Their main focus is the same question we saw earlier: proving you agreed before the AI agent pays.
+
+## 33. Many Payments, Little Money
 
 Now the doubts, which matter. Coinbase says there were over 160 million x402 payments. But the total stablecoins actually paid were only tens of millions of dollars. One check found that about 90 percent of the money came from a single program. Another research firm, Artemis, called it "mostly a mirage", as daily payments fell from about 731 thousand to 57 thousand. The lesson: always ask whether you are counting payments or real money.
 
-## 32. ERC-8004: ID Cards for Agents
+## 34. ERC-8004: ID Cards for Agents
 
-ERC-8004 is Ethereum's answer to trust. It started in January 2026. It works like an ID card plus a rating record for AI agents. ID card: who is this AI agent? Ratings: how did it behave before? Work check: was the work correct? Together, they let you hire an AI agent you have never met. Sign-ups grew from about 21 thousand in February to about half a million in September. But a study found lots of sign-ups and few working AI agents.
+ERC-8004 is Ethereum's answer to trust. It started in January 2026. It works like an ID card plus a rating record for AI agents. ID card: who is this AI agent? Ratings: how did it behave before? Work check: was the work correct? Together, they let you hire an AI agent you have never met. Sign-ups grew from about 21 thousand in February to about 560 thousand by October 11. Most are on BNB Chain, about 366 thousand; Ethereum has about 70 thousand. But a study found lots of sign-ups and few working AI agents.
 
-## 33. A Wallet With House Rules
+## 35. A Wallet With House Rules
 
 This is a made-up example, not real code. A smart wallet lets you give your AI agent its own key with a spending limit of 100 dollars a day, a list of approved merchants, a rule to ask you above 20 dollars, and an end date. Watch the log: small payments go through, a medium one asks you, and the scam is blocked. Vitalik Buterin is said to have told people he sets a spending limit of 100 dollars a day for his own AI agent.
 
-## 34. How It Fits Together
+## 36. How It Fits Together
 
 Putting it together, from the bottom up. The money is a stablecoin. The network is a blockchain, often an L2 network. The wallet is a smart wallet with a spending limit. Trust comes from ERC-8004. The way to pay is x402 or similar. On top sits the AI agent. Each layer has open problems for students.
 
-## 35. Two Camps, Coming Together
+## 37. Two Camps, Coming Together
 
 Two camps. On one side: banks, card companies and big tech, such as Visa, Mastercard, OpenAI with Stripe, Google, and UPI in India. On the other side: the crypto world. They are coming together. Google's system carries x402, and Visa, Mastercard, Stripe and Google all support the group that looks after x402. A reality check: OpenAI pulled back its in-chat checkout in March because few people used it. Nobody has won yet.
 
-## 36. Stablecoins, by the Numbers
+## 38. Stablecoins, by the Numbers
 
 The money itself. There are about 300 billion dollars of stablecoins today. Coinbase says 99 percent of stablecoin payments by AI agents use USDC. And in 2025 the US passed its first stablecoin law, the GENIUS Act: every coin must be backed by a real dollar. Stablecoins are dollars that move like messages.
 
-## 37. Field Notes
+## 39. Field Notes
 
 Part four. Stories of AI agents that already hold and move money.
 
-## 38. From Joke to Real Money
+## 40. From Joke to Real Money
 
 A short history. In 2024, investor Marc Andreessen gave an AI bot 50 thousand dollars in Bitcoin. A joke coin linked to that bot later reached 428 million dollars. In a game called Freysa, a person talked an AI agent into giving away 13 ETH. In 2025 came x402 and similar ways to pay. In 2026 came smart wallets, ERC-8004 and new stablecoin blockchains. And this week Vitalik said AI agents could become the main way people use Ethereum within about two years.
 
-## 39. Agents That Earn
+## 41. Vitalik's Own AI Agent
+
+What does Vitalik Buterin, who started Ethereum, do himself? In September he posted that he updated his ENS record with a local script on his own computer, sending it through his own copy of the Ethereum network. ENS is a readable name for a crypto wallet, like vitalik.eth. In March he warned about privacy: even with a local AI agent, someone who sees all your search requests can learn a lot about you. And on October 6 he said AI agents could become the main way people use Ethereum within about two years. His own rules are simple: run the AI agent on your own computer, protect your privacy, and keep a spending limit.
+
+## 42. Agents That Earn
 
 AI agents that earn. One owner says his AI agent made its first dollars selling to other bots. Virtuals and Olas report large numbers of AI agents and payments between AI agents; these numbers are self-reported and may include fake activity. RentAHuman lets AI agents hire people for physical jobs, but whether it works is disputed. And two prediction-market bots: one claims 1,200 dollars grew to 270 thousand, another lost everything. Both claims are self-reported.
 
-## 40. When the AI Agent Asks a Person
+## 43. When the AI Agent Asks a Person
 
 Humwork turns things around: here the AI agent hires a person. It is a young company backed by Y Combinator, started in 2026. When an AI agent gets stuck, for example on a hard coding or design question, it asks for help through a plug-in. Humwork finds a checked human expert, who joins within about a minute and answers. The AI agent pays about one dollar a minute, roughly ₹88, in 10-minute blocks. Y Combinator's post put it simply: "AI agents will pay you to chat with them." The company says it has over 3,000 experts and solves 83 percent of questions, but those numbers are self-reported, and one review found little public proof yet. The idea to take away: the agent economy is not only AI agents paying AI agents. It can also be a new way for people to earn.
 
-## 41. Ranked by What They Earn
+## 44. Ranked by What They Earn
 
 Which stories show real money earned? Ranked from most to least. First, Oliver Henry's AI agent "Larry". It makes TikTok slideshows for his app, checks which ones bring sales, and improves them. His post passed 7 million views and he reports real subscription income, but the figures are self-reported and vary. Second, Ampersand, which lets company AI agents work safely inside business software. Third, Public, a stock app where AI agents follow your investing rules. Fourth, Anthropic's Project Vend: an AI agent running a small shop. It lost money at first, then made a profit. The lesson: small, focused jobs earn; many viral posts are just demos.
 
-## 42. "Agent payments will soon overtake human payments." — @tempo, Mar 2026
+## 45. "Agent payments will soon overtake human payments." — @tempo, Mar 2026
 
 Two quotes that can both be true. Tempo says payments by AI agents will soon be more than payments by people. Artemis says it is still mostly a mirage. My advice: watch the real money and repeat customers, not just the number of payments.
 
-## 43. Risks & Open Problems
+## 46. Risks & Open Problems
 
 Part five. Once software holds a crypto wallet, the right words can empty it.
 
-## 44. When Agents Lose Money
+## 47. When Agents Lose Money
 
-Four cases. Grok, through a bot called Bankrbot, was sent a trick message written in Morse code, and the bot sent away about 150 to 200 thousand dollars of coins. Lobstar Wilde meant to send a small tip but sent about a quarter of a million dollars, after a restart wiped its memory. Freysa was a game, but a clever message really won 13 ETH. AIXBT was simply hacked. Four different causes: a trick message, lost memory, clever talking, and a hacked account.
+Four cases. Grok, through a bot called Bankrbot, was sent a trick message written in Morse code, and the bot sent away about 150 to 200 thousand dollars of coins. Lobstar Wilde, an AI agent its owner Nik Pash had told to "make no mistakes", meant to send a small tip but sent about a quarter of a million dollars, after a restart wiped its memory. Freysa was a game, but a clever message really won 13 ETH; Jarrod Watts' post explaining it has about 5 million views. AIXBT was simply hacked. Four different causes: a trick message, lost memory, clever talking, and a hacked account.
 
-## 45. Text In, Money Out
+## 48. Text In, Money Out
 
 The main problem. An AI agent reads text from web pages, replies, emails and plug-ins. Today's AI agents can't reliably tell content from commands. If the same AI agent holds a crypto wallet, and payments can't be undone, then a trick message turns into money leaving. Defences: a spending limit, a list of approved merchants, asking a person for big amounts, locked payments, and ratings. Plug-ins matter too: Vitalik's post is said to say about 15 percent of OpenClaw plug-ins are harmful.
 
-## 46. Aligned Alone, Misaligned Together
+## 49. Aligned Alone, Misaligned Together
 
 A newer risk: problems that only appear when AI agents talk to each other. Watch the dots. Two persuasive AI agents turn their neighbours one by one, even though each AI agent was fine on its own. One study lists 14 ways teams of AI agents fail, such as ignoring their roles, forgetting, and not double-checking. That is why a team of AI agents often does worse than one. Other studies show peer pressure between AI agents, and that in bigger groups a wrong belief can suddenly spread or flip. Project Vend saw it too: a "boss" AI agent built on the same model made the same mistakes as the shopkeeper AI agent. In an agent economy, one mistake can spread.
 
-## 47. Open Problems Worth a Thesis
+## 50. Open Problems Worth a Thesis
 
 Six problems worth a student thesis. Who pays when an AI agent pays the wrong person? How do we check the work before a locked payment is released? How do we measure the agent economy without fake activity? How do we keep purchases private when every payment is on a public blockchain? How do we build smart wallets whose rules an AI can't be talked out of? And what should an ID check, or stablecoin law, mean for software?
 
-## 48. Life and Money, in Five Lines
+## 51. Life and Money, in Five Lines
 
 Five lines. AI agents already run errands. They stop at the payment step. They can give shoppers more power, if the AI agent is truly yours. Crypto payments suit software. And payment counts are big, while real money is still small, for now.
 
-## 49. Prompts to Run Through Grok
-
-Extra slide; skip it or show it briefly. These are prompts students can paste into Grok, which can search X, to find newer examples and check view counts.
-
-## 50. Agents are learning to live with us. Now they're learning to pay.
+## 52. Agents are learning to live with us. Now they're learning to pay.
 
 Closing line, then questions. Some starters: Would you give your AI agent a crypto wallet? What spending limit would you set? Who should pay when it goes wrong?
 
