@@ -2645,6 +2645,35 @@
     .acc-red { color: var(--red); }
     @media(max-width:900px) { .mdr-row { grid-template-columns: 1fr; } .mdr-row .res { text-align: left; } }
     @media(prefers-reduced-motion:reduce) { .mdr-bar i { width: var(--w) !important; animation: none !important; } }
+    /* ---- five kinds & case slides ---- */
+    .kinds { display: flex; flex-direction: column; gap: .32em; width: min(100%, 1450px); margin: 0 auto; }
+    .kind {
+      display: grid; grid-template-columns: 5.2em 9.5em 1fr 1fr; gap: .8em; align-items: center; text-align: left;
+      padding: .45em .8em; border-radius: 10px; background: var(--panel); border: 1px solid var(--chalk-soft);
+    }
+    .kind .kf { font-size: .8em; white-space: nowrap; }
+    .kind b { font-size: .56em; color: var(--ink-strong); }
+    .kind span { font-size: .52em; color: var(--ink); }
+    .kind .kp { font-family: var(--mono); font-size: .42em; color: var(--ink-muted); }
+    .kind.new { border-color: var(--yellow); box-shadow: inset 4px 0 0 var(--yellow); }
+    .case { display: grid; grid-template-columns: 1fr 1.25fr; gap: 1.2em; align-items: center; width: 100%; }
+    .case-flow {
+      display: flex; align-items: center; justify-content: center; gap: .5em; padding: 1em .6em;
+      background: var(--panel); border: 1px solid var(--chalk-soft); border-radius: 14px; min-height: 6em;
+    }
+    .party { display: flex; flex-direction: column; align-items: center; gap: .25em; }
+    .party .em { font-size: 2.3em; line-height: 1; }
+    .party span:last-child { font-family: var(--mono); font-size: .4em; color: var(--ink-muted); }
+    .track { position: relative; flex: 0 1 5em; height: 3px; background: var(--chalk); border-radius: 2px; }
+    .track b { position: absolute; top: 50%; left: 0; width: .5em; height: .5em; border-radius: 50%; transform: translate(-50%, -50%); animation: coin-run 1.6s linear infinite; }
+    @keyframes coin-run { from { left: 0; opacity: 0; } 15% { opacity: 1; } 85% { opacity: 1; } to { left: 100%; opacity: 0; } }
+    .facts { margin: 0; text-align: left; }
+    .fact { display: grid; grid-template-columns: 7.5em 1fr; gap: .7em; align-items: baseline; padding: .42em 0; border-bottom: 1px solid var(--chalk-soft); }
+    .fact dt { font-family: var(--mono); font-size: .42em; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--yellow); margin: 0; }
+    .fact dd { margin: 0; font-size: .58em; line-height: 1.35; color: var(--ink); min-width: 0; }
+    .fact dd strong { color: var(--ink-strong); }
+    @media(max-width:900px) { .case, .kind { grid-template-columns: 1fr; } }
+    @media(prefers-reduced-motion:reduce) { .track b { animation: none !important; left: 50%; } }
   </style>
 </head>
 
@@ -2774,25 +2803,26 @@
         <dl class="gloss">
           <div class="g-row rise" style="--d:0.10s"><dt>AI agent</dt><dd>An AI program that does tasks for you, step by step. It does not just answer.</dd></div>
           <div class="g-row rise" style="--d:0.15s"><dt>chatbot</dt><dd>An AI program that only answers questions.</dd></div>
-          <div class="g-row rise" style="--d:0.20s"><dt>tool</dt><dd>Something an AI agent can use: a browser, a phone, a calendar, a crypto wallet.</dd></div>
-          <div class="g-row rise" style="--d:0.25s"><dt>payment system</dt><dd>The way money travels from one person to another: cards, UPI, banks, blockchains.</dd></div>
-          <div class="g-row rise" style="--d:0.30s"><dt>fee</dt><dd>What a payment system charges for one payment.</dd></div>
-          <div class="g-row rise" style="--d:0.35s"><dt>MDR</dt><dd>Merchant discount rate: the fee a shop pays on each digital payment, as a % of the sale.</dd></div>
-          <div class="g-row rise" style="--d:0.40s"><dt>profit margin</dt><dd>The share of each sale a shop keeps as profit.</dd></div>
-          <div class="g-row rise" style="--d:0.45s"><dt>bundled payment</dt><dd>Many tiny payments added up and paid once.</dd></div>
-          <div class="g-row rise" style="--d:0.50s"><dt>blockchain</dt><dd>A shared public record of payments that no single company controls.</dd></div>
+          <div class="g-row rise" style="--d:0.19s"><dt>tool</dt><dd>Something an AI agent can use: a browser, a phone, a calendar, a crypto wallet.</dd></div>
+          <div class="g-row rise" style="--d:0.24s"><dt>payment system</dt><dd>The way money travels from one person to another: cards, UPI, banks, blockchains.</dd></div>
+          <div class="g-row rise" style="--d:0.28s"><dt>merchant</dt><dd>A shop or business that takes payments.</dd></div>
+          <div class="g-row rise" style="--d:0.32s"><dt>fee</dt><dd>What a payment system charges for one payment.</dd></div>
+          <div class="g-row rise" style="--d:0.37s"><dt>MDR</dt><dd>Merchant discount rate: the fee a merchant pays on each digital payment, as a % of the sale.</dd></div>
+          <div class="g-row rise" style="--d:0.42s"><dt>profit margin</dt><dd>The share of each sale a merchant keeps as profit.</dd></div>
+          <div class="g-row rise" style="--d:0.46s"><dt>bundled payment</dt><dd>Many tiny payments added up and paid once.</dd></div>
+          <div class="g-row rise" style="--d:0.51s"><dt>blockchain</dt><dd>A shared public record of payments that no single company controls.</dd></div>
           <div class="g-row rise" style="--d:0.55s"><dt>stablecoin</dt><dd>A crypto coin that is always worth one US dollar, such as USDC.</dd></div>
-          <div class="g-row rise" style="--d:0.60s"><dt>crypto wallet</dt><dd>An app that holds crypto and approves payments.</dd></div>
-          <div class="g-row rise" style="--d:0.65s"><dt>smart wallet</dt><dd>A crypto wallet with spending rules built in.</dd></div>
-          <div class="g-row rise" style="--d:0.70s"><dt>spending limit</dt><dd>The most an AI agent may spend, per day or per payment.</dd></div>
-          <div class="g-row rise" style="--d:0.75s"><dt>L2 network</dt><dd>A cheaper, faster lane built on top of Ethereum.</dd></div>
-          <div class="g-row rise" style="--d:0.80s"><dt>x402</dt><dd>A way for an AI agent to pay a website inside the web request itself.</dd></div>
-          <div class="g-row rise" style="--d:0.85s"><dt>ERC-8004</dt><dd>A public ID card and rating record for AI agents on Ethereum.</dd></div>
-          <div class="g-row rise" style="--d:0.90s"><dt>locked payment</dt><dd>Money held by code until the work is checked.</dd></div>
-          <div class="g-row rise" style="--d:0.95s"><dt>agent economy</dt><dd>AI agents buying and selling, from people and from each other.</dd></div>
-          <div class="g-row rise" style="--d:1.00s"><dt>trick message</dt><dd>Hidden text that makes an AI agent do something its owner did not want.</dd></div>
-          <div class="g-row rise" style="--d:1.05s"><dt>ID check</dt><dd>How a bank confirms who you are before opening an account.</dd></div>
-          <div class="g-row rise" style="--d:1.10s"><dt>self-reported</dt><dd>A number the poster or company gave. Nobody else has checked it.</dd></div>
+          <div class="g-row rise" style="--d:0.59s"><dt>crypto wallet</dt><dd>An app that holds crypto and approves payments.</dd></div>
+          <div class="g-row rise" style="--d:0.64s"><dt>smart wallet</dt><dd>A crypto wallet with spending rules built in.</dd></div>
+          <div class="g-row rise" style="--d:0.68s"><dt>spending limit</dt><dd>The most an AI agent may spend, per day or per payment.</dd></div>
+          <div class="g-row rise" style="--d:0.73s"><dt>L2 network</dt><dd>A cheaper, faster lane built on top of Ethereum.</dd></div>
+          <div class="g-row rise" style="--d:0.77s"><dt>x402</dt><dd>A way for an AI agent to pay a website inside the web request itself.</dd></div>
+          <div class="g-row rise" style="--d:0.82s"><dt>ERC-8004</dt><dd>A public ID card and rating record for AI agents on Ethereum.</dd></div>
+          <div class="g-row rise" style="--d:0.86s"><dt>locked payment</dt><dd>Money held by code until the work is checked.</dd></div>
+          <div class="g-row rise" style="--d:0.91s"><dt>agent economy</dt><dd>AI agents buying and selling, from people and from each other.</dd></div>
+          <div class="g-row rise" style="--d:0.95s"><dt>trick message</dt><dd>Hidden text that makes an AI agent do something its owner did not want.</dd></div>
+          <div class="g-row rise" style="--d:1.00s"><dt>ID check</dt><dd>How a bank confirms who you are before opening an account.</dd></div>
+          <div class="g-row rise" style="--d:1.04s"><dt>self-reported</dt><dd>A number the poster or company gave. Nobody else has checked it.</dd></div>
         </dl>
       </section>
 
@@ -3009,53 +3039,161 @@
       
       </section>
 
-      <!-- THREE KINDS OF AGENT COMMERCE -->
+            <!-- FIVE KINDS OF PAYMENT -->
       <section>
         <div class="headline">
-          <h2>Three Kinds of Agent Money</h2>
+          <h2>Five Kinds of Payment</h2>
         </div>
-        <svg class="flow-svg rise" viewBox="0 0 1200 330" role="img" aria-label="Human to business, agent to business, agent to agent" style="max-height:min(330px,40vh)">
-          <!-- row 1 -->
-          <g class="rise" style="--d:.2s">
-            <text x="40" y="58" class="mut-label">01 · ON YOUR BEHALF</text>
-            <rect x="260" y="25" width="170" height="56" rx="6" class="chalk-box blue"></rect>
-            <text x="345" y="59" text-anchor="middle" class="label">👤 + 🤖</text>
-            <rect x="820" y="25" width="170" height="56" rx="6" class="chalk-box"></rect>
-            <text x="905" y="59" text-anchor="middle" class="label">🏪 merchant</text>
-            <path id="f1" d="M430 53 L820 53" class="chalk-arrow blue"></path>
-            <text x="625" y="40" text-anchor="middle" class="sub-label">your card · your rules</text>
-            <circle r="7" class="coin blue"><animateMotion dur="2.6s" repeatCount="indefinite" path="M430 53 L815 53"></animateMotion></circle>
-          </g>
-          <!-- row 2 -->
-          <g class="rise" style="--d:.9s">
-            <text x="40" y="168" class="mut-label">02 · PAY-PER-USE</text>
-            <rect x="260" y="135" width="170" height="56" rx="6" class="chalk-box gold"></rect>
-            <text x="345" y="169" text-anchor="middle" class="label">🤖 agent</text>
-            <rect x="820" y="135" width="170" height="56" rx="6" class="chalk-box"></rect>
-            <text x="905" y="169" text-anchor="middle" class="label">🌐 data service</text>
-            <path d="M430 163 L820 163" class="chalk-arrow"></path>
-            <text x="625" y="150" text-anchor="middle" class="sub-label">₹0.01 per request</text>
-            <circle r="5" class="coin"><animateMotion dur="1.1s" repeatCount="indefinite" path="M430 163 L815 163"></animateMotion></circle>
-            <circle r="5" class="coin"><animateMotion dur="1.1s" begin=".37s" repeatCount="indefinite" path="M430 163 L815 163"></animateMotion></circle>
-            <circle r="5" class="coin"><animateMotion dur="1.1s" begin=".74s" repeatCount="indefinite" path="M430 163 L815 163"></animateMotion></circle>
-          </g>
-          <!-- row 3 -->
-          <g class="rise" style="--d:1.6s">
-            <text x="40" y="278" class="mut-label">03 · AGENT ↔ AGENT</text>
-            <rect x="260" y="245" width="170" height="56" rx="6" class="chalk-box eth"></rect>
-            <text x="345" y="279" text-anchor="middle" class="label">🤖 buyer</text>
-            <rect x="820" y="245" width="170" height="56" rx="6" class="chalk-box eth"></rect>
-            <text x="905" y="279" text-anchor="middle" class="label">🤖 seller</text>
-            <path d="M430 263 L820 263" class="chalk-arrow blue"></path>
-            <path d="M820 285 L430 285" class="chalk-arrow dashed"></path>
-            <circle r="6" class="coin eth"><animateMotion dur="1.8s" repeatCount="indefinite" path="M430 263 L815 263"></animateMotion></circle>
-            <rect width="12" height="12" fill="var(--blue)"><animateMotion dur="1.8s" begin=".9s" repeatCount="indefinite" path="M815 279 L430 279"></animateMotion></rect>
-            <text x="1010" y="279" class="sub-label">no human</text>
-          </g>
-        </svg>
-        <p class="lead rise" style="--d:2.3s">Cards were built for <strong>01</strong>. Rows <strong>02–03</strong> are the new part.</p>
-      
+        <div class="kinds">
+          <div class="kind rise" style="--d:.15s"><span class="kf">👤 → 👤</span><b>Person → Person</b><span>₹500 to a friend</span><span class="kp">UPI · free</span></div>
+          <div class="kind rise" style="--d:.45s"><span class="kf">👤 → 🏪</span><b>Person → Merchant</b><span>Tea at the stall</span><span class="kp">UPI QR · free for now</span></div>
+          <div class="kind new rise" style="--d:.75s"><span class="kf">🤖 → 🏪</span><b>AI agent → Merchant</b><span>AI agent orders your groceries</span><span class="kp">your card or UPI + spending limit</span></div>
+          <div class="kind new rise" style="--d:1.05s"><span class="kf">🤖 → 🤖</span><b>AI agent → AI agent</b><span>₹0.01 for one data request</span><span class="kp">stablecoin · x402</span></div>
+          <div class="kind new rise" style="--d:1.35s"><span class="kf">🤖 → 👤</span><b>AI agent → Person</b><span>AI agent hires an expert</span><span class="kp">$1 per minute · Humwork</span></div>
+        </div>
+        <p class="lead rise" style="--d:1.9s">Today's payment systems were built for the <strong>first two</strong>.</p>
       </section>
+
+      <section>
+        <div class="headline">
+          <h2>Person → Person: ₹500 to a Friend</h2>
+        </div>
+        <div class="case">
+          <div class="case-flow pop" style="--d:.15s">
+            <div class="party"><span class="em">👤</span><span>you</span></div>
+            <div class="track"><b style="background:var(--blue)"></b><b style="background:var(--blue);animation-delay:.8s"></b></div>
+            <div class="party"><span class="em">👤</span><span>friend</span></div>
+          </div>
+          <dl class="facts">
+            <div class="fact rise" style="--d:0.40s"><dt>Example</dt><dd>UPI to a friend: <strong>free</strong>, done in seconds.</dd></div>
+            <div class="fact rise" style="--d:0.75s"><dt>Scale</dt><dd><strong>24.5 billion</strong> UPI payments in Aug 2026.</dd></div>
+            <div class="fact rise" style="--d:1.10s"><dt>Fee today</dt><dd>₹0 at home. Sending money abroad: about <strong>6.5%</strong> on average.</dd></div>
+            <div class="fact rise" style="--d:1.45s"><dt>Where blockchains help</dt><dd>Abroad: a <strong>stablecoin</strong> arrives in minutes for a small fee.</dd></div>
+          </dl>
+        </div>
+        <p class="lead rise" style="--d:2s">At home this is solved. <strong>Across borders</strong> it is not.</p>
+        <p class="source-links">Sources: <a href="https://www.outlookbusiness.com/news/upi-transactions-near-record-level-of-298-lakh-cr-in-aug-volume-at-all-time-high-of-2451-bn" target="_blank" rel="noopener noreferrer">Outlook Business: UPI Aug 2026</a> | <a href="https://remittanceprices.worldbank.org/" target="_blank" rel="noopener noreferrer">World Bank: Remittance Prices Worldwide</a></p>
+      </section>
+
+      <section>
+        <div class="headline">
+          <h2>Person → Merchant: Tea at the Stall</h2>
+        </div>
+        <div class="case">
+          <div class="case-flow pop" style="--d:.15s">
+            <div class="party"><span class="em">👤</span><span>you</span></div>
+            <div class="track"><b style="background:var(--blue)"></b><b style="background:var(--blue);animation-delay:.8s"></b></div>
+            <div class="party"><span class="em">🏪</span><span>merchant</span></div>
+          </div>
+          <dl class="facts">
+            <div class="fact rise" style="--d:0.40s"><dt>Example</dt><dd>Scan a UPI QR, pay ₹20.</dd></div>
+            <div class="fact rise" style="--d:0.75s"><dt>Fee today</dt><dd>UPI: <strong>zero MDR</strong> for now. Credit card: the merchant pays about <strong>2% MDR</strong>.</dd></div>
+            <div class="fact rise" style="--d:1.10s"><dt>Who pays</dt><dd>The merchant, out of every sale.</dd></div>
+            <div class="fact rise" style="--d:1.45s"><dt>What's hard</dt><dd>A merchant with a thin <strong>profit margin</strong> feels every fee.</dd></div>
+          </dl>
+        </div>
+        <p class="lead rise" style="--d:2s">Free for you does not mean free for the <strong>merchant</strong>.</p>
+        <p class="source-links">Sources: <a href="https://www.forbesindia.com/article/news/what-is-merchant-discount-rate-on-upi-and-why-does-india-want-to-bring-it-back/2996894/1" target="_blank" rel="noopener noreferrer">Forbes India: UPI charges</a> · card MDR is a typical figure</p>
+      </section>
+
+      <!-- UPI MDR -->
+      <section>
+        <div class="headline">
+          <h2>When the Fee Eats the Profit</h2>
+        </div>
+        <div class="mdr">
+          <div class="mdr-row rise" style="--d:.2s">
+            <span class="who">Merchant with 1% profit margin</span>
+            <div class="mdr-bar"><i class="profit" style="--w:100%"></i><i class="cut" style="--w:40%;--d:1.2s"></i></div>
+            <span class="res">₹1.00 profit − ₹0.40 MDR = <strong class="acc-green">₹0.60</strong></span>
+          </div>
+          <div class="mdr-row rise" style="--d:.6s">
+            <span class="who">Merchant with 0.3% profit margin</span>
+            <div class="mdr-bar"><i class="profit" style="--w:30%"></i><i class="cut over" style="--w:40%;--d:1.8s"></i></div>
+            <span class="res">₹0.30 profit − ₹0.40 MDR = <strong class="acc-red">−₹0.10</strong></span>
+          </div>
+          <p class="fig-cap rise" style="--d:.9s">Per ₹100 of sales, with an MDR of 0.4% (an example rate).</p>
+        </div>
+        <div class="grid-2" style="min-height:0;margin-top:.5em">
+          <div class="panel rise" style="--d:2.4s">
+            <h4>Today</h4>
+            <p>UPI has <strong>zero MDR</strong> for merchants since Jan 2020; the government pays part of the cost.</p>
+          </div>
+          <div class="panel gold rise" style="--d:2.8s">
+            <h4>2026</h4>
+            <p>A new law lets the government allow UPI charges. Talk of <strong>~0.3% for large merchants</strong>; no final decision.</p>
+          </div>
+        </div>
+        <p class="lead rise" style="--d:3.3s">MDR is charged on the <strong>sale</strong>, not on the <strong>profit</strong>. Thin profit margins feel it first.</p>
+        <p class="source-links">Sources: <a href="https://www.forbesindia.com/article/news/what-is-merchant-discount-rate-on-upi-and-why-does-india-want-to-bring-it-back/2996894/1" target="_blank" rel="noopener noreferrer">Forbes India: UPI charges bill</a> | <a
+            href="https://www.newsonair.gov.in/finance-ministry-says-there-is-no-plan-to-levy-mdr-charge-on-upi-transactions" target="_blank" rel="noopener noreferrer">News on AIR: Finance Ministry, Jun 2025</a> | <a
+            href="https://www.deccanherald.com/amp/story/india%2Funion-cabinet-approves-rs-1500-crore-to-incentivise-low-value-upi-transactions-3453376" target="_blank" rel="noopener noreferrer">Deccan Herald: ₹1,500 crore incentive</a></p>
+
+      </section>
+
+      <section>
+        <div class="headline">
+          <h2>AI agent → Merchant: Groceries, Ordered</h2>
+        </div>
+        <div class="case">
+          <div class="case-flow pop" style="--d:.15s">
+            <div class="party"><span class="em">🤖</span><span>your AI agent</span></div>
+            <div class="track"><b style="background:var(--yellow)"></b><b style="background:var(--yellow);animation-delay:.8s"></b></div>
+            <div class="party"><span class="em">🏪</span><span>merchant</span></div>
+          </div>
+          <dl class="facts">
+            <div class="fact rise" style="--d:0.40s"><dt>Example</dt><dd>ChatGPT orders Instacart groceries; Google buys when the price drops.</dd></div>
+            <div class="fact rise" style="--d:0.75s"><dt>Paid with</dt><dd><strong>Your</strong> card or UPI, with a <strong>spending limit</strong>.</dd></div>
+            <div class="fact rise" style="--d:1.10s"><dt>Fee today</dt><dd>The same MDR as a person paying.</dd></div>
+            <div class="fact rise" style="--d:1.45s"><dt>What's hard</dt><dd>Proving <strong>you agreed</strong>. Visa, Mastercard and Google are building ways to show it.</dd></div>
+          </dl>
+        </div>
+        <p class="lead rise" style="--d:2s">Same merchant, same fee. The new question is <strong>permission</strong>.</p>
+        <p class="source-links">Sources: <a href="https://techcrunch.com/2025/12/08/you-can-buy-your-instacart-groceries-without-leaving-chatgpt" target="_blank" rel="noopener noreferrer">TechCrunch: Instacart</a> | <a href="https://www.onmanorama.com/news/business/2025/10/09/npci-razorpay-openai-chatgpt-payments.html" target="_blank" rel="noopener noreferrer">UPI Reserve Pay pilot</a> | <a href="https://www.forbes.com/sites/digital-assets/2026/06/07/visa-mastercard-and-coinbase-are-fighting-over-how-ai-agents-pay/" target="_blank" rel="noopener noreferrer">Forbes</a></p>
+      </section>
+
+      <section>
+        <div class="headline">
+          <h2>AI agent → AI agent: ₹0.01 per Request</h2>
+        </div>
+        <div class="case">
+          <div class="case-flow pop" style="--d:.15s">
+            <div class="party"><span class="em">🤖</span><span>buyer AI agent</span></div>
+            <div class="track"><b style="background:var(--eth)"></b><b style="background:var(--eth);animation-delay:.8s"></b></div>
+            <div class="party"><span class="em">🤖</span><span>seller AI agent</span></div>
+          </div>
+          <dl class="facts">
+            <div class="fact rise" style="--d:0.40s"><dt>Example</dt><dd>An AI agent buys weather or price data from another AI agent, <strong>request by request</strong>.</dd></div>
+            <div class="fact rise" style="--d:0.75s"><dt>Paid with</dt><dd><strong>Stablecoins</strong> on an <strong>L2 network</strong>, using <strong>x402</strong>.</dd></div>
+            <div class="fact rise" style="--d:1.10s"><dt>Fee today</dt><dd>Even the L2 fee is bigger than ₹0.01, so it needs a <strong>bundled payment</strong>.</dd></div>
+            <div class="fact rise" style="--d:1.45s"><dt>What's hard</dt><dd>Trusting a stranger: <strong>ERC-8004</strong> ratings and a <strong>locked payment</strong>.</dd></div>
+          </dl>
+        </div>
+        <p class="lead rise" style="--d:2s">No card or bank account fits here. This is where <strong>blockchains</strong> fit best.</p>
+        <p class="source-links">Sources: <a href="https://www.x402.org/" target="_blank" rel="noopener noreferrer">x402.org</a> | <a href="https://olas.network/" target="_blank" rel="noopener noreferrer">Olas: ~14.8M agent-to-agent payments (self-reported)</a></p>
+      </section>
+
+      <section>
+        <div class="headline">
+          <h2>AI agent → Person: The AI Agent Hires You</h2>
+        </div>
+        <div class="case">
+          <div class="case-flow pop" style="--d:.15s">
+            <div class="party"><span class="em">🤖</span><span>AI agent</span></div>
+            <div class="track"><b style="background:var(--green)"></b><b style="background:var(--green);animation-delay:.8s"></b></div>
+            <div class="party"><span class="em">👤</span><span>expert</span></div>
+          </div>
+          <dl class="facts">
+            <div class="fact rise" style="--d:0.40s"><dt>Example</dt><dd>Humwork: an AI agent pays an expert <strong>$1 per minute</strong> for help.</dd></div>
+            <div class="fact rise" style="--d:0.75s"><dt>Also</dt><dd>RentAHuman: AI agents pay people for physical jobs (results disputed).</dd></div>
+            <div class="fact rise" style="--d:1.10s"><dt>Paid with</dt><dd>Bank transfer, card payout or <strong>stablecoins</strong>.</dd></div>
+            <div class="fact rise" style="--d:1.45s"><dt>What's hard</dt><dd>Checking the work before paying (a <strong>locked payment</strong>), and paying people in any country.</dd></div>
+          </dl>
+        </div>
+        <p class="lead rise" style="--d:2s">The <strong>agent economy</strong> can be a new way for people to earn.</p>
+        <p class="source-links">Sources: <a href="https://www.ycombinator.com/companies/humwork" target="_blank" rel="noopener noreferrer">YC: Humwork</a> | <a href="https://x.com/Cointelegraph/status/2018743807437652094" target="_blank" rel="noopener noreferrer">@Cointelegraph on RentAHuman</a></p>
+      </section>
+
 
       <!-- COLLISON: ORIGINAL SUPERINTELLIGENCE -->
       <section class="quote-slide" data-transition="fade">
@@ -3143,7 +3281,7 @@
             <h4>Owned by you</h4>
             <ul>
               <li>Your keys, <strong>your wallet</strong></li>
-              <li>Works with any shop</li>
+              <li>Works with any merchant</li>
               <li>Rules you can <strong>check</strong></li>
             </ul>
           </div>
@@ -3200,40 +3338,7 @@
 
       </section>
 
-      <!-- UPI MDR -->
-      <section>
-        <div class="headline">
-          <h2>When the Fee Eats the Profit</h2>
-        </div>
-        <div class="mdr">
-          <div class="mdr-row rise" style="--d:.2s">
-            <span class="who">Shop with 1% profit margin</span>
-            <div class="mdr-bar"><i class="profit" style="--w:100%"></i><i class="cut" style="--w:40%;--d:1.2s"></i></div>
-            <span class="res">₹1.00 profit − ₹0.40 MDR = <strong class="acc-green">₹0.60</strong></span>
-          </div>
-          <div class="mdr-row rise" style="--d:.6s">
-            <span class="who">Shop with 0.3% profit margin</span>
-            <div class="mdr-bar"><i class="profit" style="--w:30%"></i><i class="cut over" style="--w:40%;--d:1.8s"></i></div>
-            <span class="res">₹0.30 profit − ₹0.40 MDR = <strong class="acc-red">−₹0.10</strong></span>
-          </div>
-          <p class="fig-cap rise" style="--d:.9s">Per ₹100 of sales, with an MDR of 0.4% (an example rate).</p>
-        </div>
-        <div class="grid-2" style="min-height:0;margin-top:.5em">
-          <div class="panel rise" style="--d:2.4s">
-            <h4>Today</h4>
-            <p>UPI has <strong>zero MDR</strong> for shops since Jan 2020; the government pays part of the cost.</p>
-          </div>
-          <div class="panel gold rise" style="--d:2.8s">
-            <h4>2026</h4>
-            <p>A new law lets the government allow UPI charges. Talk of <strong>~0.3% for large merchants</strong>; no final decision.</p>
-          </div>
-        </div>
-        <p class="lead rise" style="--d:3.3s">MDR is charged on the <strong>sale</strong>, not on the <strong>profit</strong>. Thin profit margins feel it first.</p>
-        <p class="source-links">Sources: <a href="https://www.forbesindia.com/article/news/what-is-merchant-discount-rate-on-upi-and-why-does-india-want-to-bring-it-back/2996894/1" target="_blank" rel="noopener noreferrer">Forbes India: UPI charges bill</a> | <a
-            href="https://www.newsonair.gov.in/finance-ministry-says-there-is-no-plan-to-levy-mdr-charge-on-upi-transactions" target="_blank" rel="noopener noreferrer">News on AIR: Finance Ministry, Jun 2025</a> | <a
-            href="https://www.deccanherald.com/amp/story/india%2Funion-cabinet-approves-rs-1500-crore-to-incentivise-low-value-upi-transactions-3453376" target="_blank" rel="noopener noreferrer">Deccan Herald: ₹1,500 crore incentive</a></p>
-
-      </section>
+      
 
       <section class="quote-slide" data-transition="fade">
         <blockquote class="rise">Internet-born workers<br><span class="hl">need internet-born money.</span></blockquote>
@@ -3260,7 +3365,7 @@
               <tr class="rise" style="--d:.3s"><td class="h">Account, no paperwork</td><td>A crypto wallet is ready in seconds.</td></tr>
               <tr class="rise" style="--d:.6s"><td class="h">Money software can send</td><td>Stablecoins: always worth $1, and software can pay with them.</td></tr>
               <tr class="rise" style="--d:.9s"><td class="h">Tiny, instant payments</td><td>L2 networks: seconds, under a cent.</td></tr>
-              <tr class="rise" style="--d:1.2s"><td class="h">Spending limits</td><td>Smart wallets: spending limits, approved shops, keys that expire.</td></tr>
+              <tr class="rise" style="--d:1.2s"><td class="h">Spending limits</td><td>Smart wallets: spending limits, approved merchants, keys that expire.</td></tr>
               <tr class="rise" style="--d:1.5s"><td class="h">Trust strangers</td><td>Locked payments + ERC-8004 ID cards and ratings.</td></tr>
               <tr class="rise" style="--d:1.8s"><td class="h alt">Open 24/7, global</td><td>No business days. No borders.</td></tr>
             </tbody>
@@ -3653,6 +3758,66 @@
       
       </section>
 
+      <!-- HUMWORK -->
+      <section>
+        <div class="headline">
+          <h2>When the AI Agent Asks a Person</h2>
+        </div>
+        <div class="loop-wrap">
+          <div class="stage slide-l" style="--d:.1s">
+            <svg class="wide" viewBox="0 0 600 360" role="img" aria-label="An AI agent gets stuck, asks Humwork, a human expert answers and is paid per minute">
+              <g class="pop" style="--d:.3s">
+                <rect x="20" y="40" width="170" height="70" rx="10" class="chalk-box gold"></rect>
+                <text x="105" y="72" text-anchor="middle" class="label">🤖 AI agent</text>
+                <text x="105" y="94" text-anchor="middle" class="mut-label">stuck on a task</text>
+              </g>
+              <g class="pop" style="--d:1s">
+                <rect x="215" y="145" width="170" height="70" rx="10" class="chalk-box"></rect>
+                <text x="300" y="177" text-anchor="middle" class="label">Humwork</text>
+                <text x="300" y="199" text-anchor="middle" class="mut-label">finds an expert</text>
+              </g>
+              <g class="pop" style="--d:1.7s">
+                <rect x="410" y="40" width="170" height="70" rx="10" class="chalk-box blue"></rect>
+                <text x="495" y="72" text-anchor="middle" class="label">🧑‍💻 expert</text>
+                <text x="495" y="94" text-anchor="middle" class="mut-label">joins in ~1 minute</text>
+              </g>
+              <path d="M140 110 L235 145" class="chalk-arrow draw" style="--len:110;--d:.7s"></path>
+              <path d="M365 145 L455 110" class="chalk-arrow draw" style="--len:110;--d:1.4s"></path>
+              <path d="M410 70 L195 70" class="chalk-arrow blue dashed draw" style="--len:220;--d:2.2s"></path>
+              <text x="300" y="60" text-anchor="middle" class="sub-label rise" style="--d:2.4s">answer</text>
+              <g class="rise" style="--d:2.8s">
+                <rect x="190" y="270" width="220" height="56" rx="28" class="chalk-box gold"></rect>
+                <text x="300" y="304" text-anchor="middle" class="label">💵 $1 per minute</text>
+              </g>
+              <circle r="7" fill="var(--yellow)"><animateMotion dur="2.6s" begin="3s" repeatCount="indefinite" path="M105 112 C 120 330, 480 330, 495 112"></animateMotion></circle>
+            </svg>
+          </div>
+          <div>
+            <div class="xcard gold slide-r" style="--d:.5s">
+              <div class="who"><span class="av">YC</span><span><b>@ycombinator</b> · Apr 2026</span></div>
+              <p class="what">"AI agents will <strong>pay you to chat</strong> with them."</p>
+              <a class="go" href="https://x.com/ycombinator/status/2044445649538809985" target="_blank" rel="noopener noreferrer">x.com/ycombinator ↗</a>
+            </div>
+            <div class="panel slide-r" style="--d:1.1s;margin-top:.5em">
+              <h4>How it works</h4>
+              <p>The AI agent asks for help through a plug-in. A <strong>checked human expert</strong> joins and answers.</p>
+            </div>
+            <div class="panel gold slide-r" style="--d:1.7s;margin-top:.5em">
+              <h4>Price</h4>
+              <p><span class="acc">$1 per minute</span> (≈ ₹88), paid in 10-minute blocks.</p>
+            </div>
+            <div class="env warn slide-r" style="--d:2.3s;max-width:none"><span class="env-label">Early</span>
+              <p>Started 2026; "3,000+ experts, 83% solved" is <strong>self-reported</strong>.</p>
+            </div>
+          </div>
+        </div>
+        <p class="lead rise" style="--d:3s">The agent economy <strong>hires people</strong> too.</p>
+        <p class="source-links">Sources: <a href="https://www.ycombinator.com/companies/humwork" target="_blank" rel="noopener noreferrer">YC: Humwork</a> | <a
+            href="https://www.testingcatalog.com/humwork-a2p-marketplace-connects-ai-agents-with-experts/" target="_blank" rel="noopener noreferrer">TestingCatalog</a> | <a
+            href="https://humwork.ai/" target="_blank" rel="noopener noreferrer">humwork.ai</a></p>
+      </section>
+
+
       <!-- RANKED BY UTILITY -->
       <section>
         <div class="headline">
@@ -3777,7 +3942,7 @@
         <div class="grid-2" style="min-height:0;margin-top:.5em">
           <div class="panel gold rise" style="--d:3.4s">
             <h4>Defences</h4>
-            <p>Spending limits · approved shops · ask a human for big amounts · locked payments · ratings.</p>
+            <p>Spending limits · approved merchants · ask a human for big amounts · locked payments · ratings.</p>
           </div>
           <div class="panel rise" style="--d:3.8s">
             <h4>Bad plug-ins</h4>
