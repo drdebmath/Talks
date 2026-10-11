@@ -2,7 +2,7 @@
 
 Ethereum Day · IIT Indore · 10 October 2026 · 42 slides · about 45 minutes
 
-> **Before you start:** press ← on the title slide to open the theme picker (10 looks), or press **T** on any slide to cycle themes. The choice is remembered in that browser.
+> **Before you start:** press ← on the title slide to open the theme picker (10 looks), or press **T** on any slide to cycle themes. Text size (S / M / L / XL) is on the same slide, or press **−** / **+** anywhere. The choice is remembered in that browser.
 
 ## 1. AI Agents: Life and Money
 

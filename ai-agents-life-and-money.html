@@ -2614,6 +2614,16 @@
     .tp-name { font-family: var(--mono); font-size: .34em; color: var(--ink); letter-spacing: .04em; padding-left: .2em; }
     @media(max-width:900px) { .tp-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 
+    /* ---- text size ---- */
+    .reveal .slides { font-size: calc(100% * var(--fs, 1)); }
+    .tp-size { display: flex; justify-content: center; align-items: center; gap: .35em; margin-top: .8em; font-family: var(--mono); font-size: .36em; color: var(--ink-muted); }
+    .tp-size button {
+      all: unset; cursor: pointer; min-width: 2.4em; text-align: center; padding: .35em .6em; border-radius: 999px;
+      border: 1px solid var(--chalk-soft); color: var(--ink); font-family: var(--mono);
+    }
+    .tp-size button[aria-pressed="true"] { background: var(--ink-strong); color: var(--bg, #fff); border-color: var(--ink-strong); }
+    body.skin .tp-size button[aria-pressed="true"] { color: var(--page); }
+    .tp-size button:focus-visible { outline: 2px solid var(--yellow); }
   </style>
 </head>
 
@@ -2641,7 +2651,7 @@
       <section class="theme-picker" data-transition="fade">
         <div class="tp-head">
           <h2>Theme</h2>
-          <p>Choose a look · press → to start · T cycles themes</p>
+          <p>Choose a look · press → to start · T cycles themes · − / + text size</p>
         </div>
         <div class="tp-grid">
             <button class="tp-opt" data-skin="minimal" aria-pressed="false" style="--b:#FFFFFF;--c:#0A0A0B;--a:#2F5BFF;--f:'Inter Tight'"><span class="tp-sw"><b>Aa</b><i></i></span><span class="tp-name">Modern Minimal</span></button>
@@ -2654,6 +2664,13 @@
             <button class="tp-opt" data-skin="blocks" aria-pressed="false" style="--b:#FFE14D;--c:#000;--a:#FF4F00;--f:'Archivo Black'"><span class="tp-sw"><b>Aa</b><i></i></span><span class="tp-name">Bold Blocks</span></button>
             <button class="tp-opt" data-skin="indigo" aria-pressed="false" style="--b:#0C1024;--c:#F2F4FF;--a:#5CE1E6;--f:'Sora'"><span class="tp-sw"><b>Aa</b><i></i></span><span class="tp-name">Night Indigo</span></button>
             <button class="tp-opt" data-skin="notion" aria-pressed="false" style="--b:#FAFAFA;--c:#191919;--a:#D9730D;--f:'DM Sans'"><span class="tp-sw"><b>Aa</b><i></i></span><span class="tp-name">Quiet Grey</span></button>
+        </div>
+        <div class="tp-size" role="group" aria-label="Text size">
+          <span>Text size</span>
+          <button data-fs="0.85" aria-pressed="false">S</button>
+          <button data-fs="1" aria-pressed="false">M</button>
+          <button data-fs="1.15" aria-pressed="false">L</button>
+          <button data-fs="1.3" aria-pressed="false">XL</button>
         </div>
       </section>
 
@@ -3956,6 +3973,24 @@
         const cur = SKIN_KEYS.find(x => document.body.classList.contains("skin-" + x)) || "banknote";
         setSkin(SKIN_KEYS[(SKIN_KEYS.indexOf(cur) + 1) % SKIN_KEYS.length]);
       }
+    });
+    /* text size */
+    const FS = [...document.querySelectorAll(".tp-size button")].map(b => b.dataset.fs);
+    function setFs(v) {
+      if (!FS.includes(v)) v = "1";
+      document.body.style.setProperty("--fs", v);
+      document.querySelectorAll(".tp-size button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.fs === v)));
+      try { localStorage.setItem("lm-fs", v); } catch (e) {}
+      if (window.Reveal && Reveal.isReady && Reveal.isReady()) { scheduleFitSlides(); setTimeout(fitSlidesToViewport, 80); }
+    }
+    let savedFs = null; try { savedFs = localStorage.getItem("lm-fs"); } catch (e) {}
+    setFs(savedFs || "1");
+    document.querySelectorAll(".tp-size button").forEach(b => b.addEventListener("click", () => setFs(b.dataset.fs)));
+    document.addEventListener("keydown", e => {
+      if (e.metaKey || e.ctrlKey || e.altKey) return;
+      const cur = FS.indexOf(document.body.style.getPropertyValue("--fs") || "1");
+      if (e.key === "-" || e.key === "_") setFs(FS[Math.max(0, cur - 1)]);
+      if (e.key === "+" || e.key === "=") setFs(FS[Math.min(FS.length - 1, cur + 1)]);
     });
     const toTitle = () => { if (!location.hash || location.hash === "#/" || location.hash === "#") Reveal.slide(1, 0, 0); };
     if (Reveal.isReady()) toTitle(); else Reveal.on("ready", toTitle);
