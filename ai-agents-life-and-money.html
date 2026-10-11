@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
-    href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..700;1,6..96,400..700&family=Instrument+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Archivo:wght@500;700;800&family=Manrope:wght@400;500;600;700;800&family=Newsreader:ital,opsz,wght@0,6..72,400..700;1,6..72,400..700&family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..700;1,6..96,400..700&family=Instrument+Sans:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Archivo+Black&family=Sora:wght@300;400;600;700&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&family=DM+Mono:wght@400;500&display=swap"
     rel="stylesheet">
   <style>
     :root {
@@ -2258,6 +2258,362 @@
     .rosette { opacity: .38; }
     .crowd { min-height: 1.4em; align-items: center; margin-bottom: .45em; }
     .reveal .slide-number { right: auto; left: 34px; bottom: 26px; }
+
+    /* ===== skin layer: strips ornament, everything driven by tokens ===== */
+    body.skin .rosette, body.skin .board-frame, body.skin .aurora, body.skin .orbit { display: none !important; }
+    body.skin::before, body.skin::after { display: none !important; }
+    body.skin, body.skin .reveal-viewport { background: var(--page) !important; }
+    body.skin .reveal { font-family: var(--serif); color: var(--ink); }
+    body.skin .reveal h1, body.skin .reveal h2, body.skin .reveal h3 {
+      font-family: var(--display); font-weight: var(--hw); letter-spacing: var(--hls);
+      color: var(--ink-strong); text-shadow: none; text-transform: var(--htt, none); font-style: normal;
+    }
+    body.skin .reveal h1 em { font-style: var(--em-style, normal); color: var(--accent); font-weight: var(--hw); }
+    body.skin .reveal .headline { text-align: var(--halign); width: 100%; }
+    body.skin .reveal .headline h2 { font-size: var(--h2size, 1.5em); }
+    body.skin .reveal .headline h2::after { display: var(--uline, none); background: var(--accent); height: 3px; left: 0; right: auto; width: 1.4em; transform: none !important; animation: none !important; }
+    body.skin .reveal a { color: var(--link); text-decoration-color: currentColor; }
+    body.skin .lead, body.skin .reveal .lead { text-align: var(--halign); max-width: 100%; color: var(--ink); }
+    body.skin .lead strong, body.skin .panel p .acc, body.skin .xcard .what strong, body.skin .rung .rb strong { color: var(--accent); }
+    body.skin .reveal .progress { color: var(--accent); }
+    body.skin .reveal .controls { color: var(--accent); }
+    body.skin .reveal .slide-number { color: var(--ink-muted); font-family: var(--mono); }
+
+    body.skin .reveal .panel, body.skin .reveal .panel.gold, body.skin .reveal .stat-card, body.skin .reveal .xcard,
+    body.skin .reveal .xcard.gold, body.skin .reveal .xcard.red, body.skin .reveal .xcard.eth,
+    body.skin .reveal .day-ev, body.skin .reveal .day-ev.money, body.skin .reveal .layer, body.skin .reveal .vs .col, body.skin .reveal .tactic,
+    body.skin .reveal .dist, body.skin .reveal .rung, body.skin .reveal .era, body.skin .reveal .era.now, body.skin .reveal .env,
+    body.skin .reveal .env.warn, body.skin .reveal .stage, body.skin .reveal .net-stage, body.skin .reveal .seminar-table, body.skin .reveal .cold-row {
+      background: var(--card); border: var(--card-border); border-top: var(--card-top, var(--card-border)); border-radius: var(--radius); box-shadow: var(--shadow);
+    }
+    body.skin .reveal .panel h4, body.skin .reveal .panel.gold h4, body.skin .vs .col h4, body.skin .vs .col.eth h4, body.skin .dist h4, body.skin .env .env-label {
+      color: var(--label); font-family: var(--labelfont, var(--mono));
+    }
+    body.skin .reveal .stat-card .num, body.skin .reveal .stat-card .num.sun, body.skin .reveal .stat-card .num.hot {
+      font-family: var(--display); font-style: normal; font-weight: var(--hw); color: var(--ink-strong); letter-spacing: var(--hls);
+    }
+    body.skin .reveal .stat-card .num.sun { color: var(--accent); }
+    body.skin .reveal .stat-card .num.hot { color: var(--red); }
+    body.skin .metric, body.skin .metric.gold { border: 0; border-radius: 999px; background: var(--chip); color: var(--ink); }
+    body.skin .xcard .who .av, body.skin .xcard.gold .who .av, body.skin .xcard.red .who .av, body.skin .xcard.eth .who .av { background: var(--chip); color: var(--ink-strong); }
+    body.skin .xcard .what { color: var(--ink-strong); }
+    body.skin .chalk-box { fill: var(--svgfill); stroke: var(--ink-muted); }
+    body.skin .chalk-box.gold { stroke: var(--accent); }
+    body.skin .chalk-box.blue { stroke: var(--link); }
+    body.skin .chalk-box.eth { stroke: var(--eth); }
+    body.skin .chalk-box.red { stroke: var(--red); }
+    body.skin .divider .secno { color: var(--accent); font-family: var(--display); font-style: normal; font-weight: var(--hw); text-shadow: none; animation: none; }
+    body.skin .divider h2::after { background: var(--accent); }
+    body.skin .quote-slide blockquote { font-family: var(--display); font-style: normal; font-weight: var(--qw, var(--hw)); color: var(--ink-strong); letter-spacing: var(--hls); }
+    body.skin .quote-slide blockquote .hl { color: var(--accent); }
+    body.skin .titlepage .rule { background: var(--ink-muted); }
+    body.skin .titlepage .rule::after { background: var(--page); color: var(--accent); }
+    body.skin .titlepage .author a { color: var(--ink-strong); }
+    body.skin .toc-row { background: transparent !important; box-shadow: none !important; border-color: var(--line); }
+    body.skin .toc-row .no { color: var(--accent); }
+    body.skin .seminar-table thead th { background: var(--chip); color: var(--ink-muted); }
+    body.skin .source-links { color: var(--ink-muted); }
+    body.skin .layer, body.skin .layer.l-gold, body.skin .layer.l-eth, body.skin .layer.l-red { border-left: 4px solid var(--accent); }
+    body.skin .layer .ln { color: var(--label); }
+
+    body.skin.skin-minimal {
+      --page: #FFFFFF;
+      --ink: #3A3A3C;
+      --ink-strong: #0A0A0B;
+      --ink-muted: #8A8A8E;
+      --accent: #2F5BFF;
+      --link: #2F5BFF;
+      --label: #8A8A8E;
+      --card: #F5F5F7;
+      --card-border: 0;
+      --radius: 18px;
+      --shadow: none;
+      --chip: #EDEDF0;
+      --line: #E5E5EA;
+      --svgfill: #FFFFFF;
+      --display: "Inter Tight", system-ui, sans-serif;
+      --serif: "Inter", system-ui, sans-serif;
+      --mono: "JetBrains Mono", monospace;
+      --hw: 600;
+      --hls: -.03em;
+      --halign: left;
+      --h2size: 1.7em;
+      --uline: none;
+      --red: #E5484D;
+      --eth: #6E56CF;
+      --blue: var(--link); --yellow: var(--accent); --chalk-soft: var(--line); --chalk: var(--line);
+      --panel: var(--card); --panel-strong: var(--card);
+    }
+    html:has(body.skin-minimal) { background: #FFFFFF; }
+    body.skin.skin-minimal .reveal .slides section.present .slide-fit { align-items: stretch; } body.skin.skin-minimal .titlepage, body.skin.skin-minimal .titlepage .lead { text-align: left; } body.skin.skin-minimal .titlepage h1 { font-size: 3.2em; max-width: 100%; margin-left: 0; } body.skin.skin-minimal .titlepage .rule { margin-left: 0; } body.skin.skin-minimal .divider { text-align: left; } body.skin.skin-minimal .divider .sub { margin-left: 0; } body.skin.skin-minimal .quote-slide blockquote { text-align: left; margin-left: 0; }
+    body.skin.skin-swiss {
+      --page: #F4F4F2;
+      --ink: #1C1C1C;
+      --ink-strong: #000000;
+      --ink-muted: #6B6B6B;
+      --accent: #E63312;
+      --link: #000000;
+      --label: #E63312;
+      --card: transparent;
+      --card-border: 0;
+      --card-top: 2px solid #000;
+      --radius: 0;
+      --shadow: none;
+      --chip: #E4E4E0;
+      --line: #000000;
+      --svgfill: #F4F4F2;
+      --display: "Archivo", "Helvetica Neue", Arial, sans-serif;
+      --serif: "Inter", Arial, sans-serif;
+      --mono: "JetBrains Mono", monospace;
+      --hw: 800;
+      --hls: -.035em;
+      --halign: left;
+      --h2size: 1.9em;
+      --uline: none;
+      --red: #E63312;
+      --eth: #3B3BFF;
+      --blue: var(--link); --yellow: var(--accent); --chalk-soft: var(--line); --chalk: var(--line);
+      --panel: var(--card); --panel-strong: var(--card);
+    }
+    html:has(body.skin-swiss) { background: #F4F4F2; }
+    body.skin.skin-swiss .reveal .slides section.present .slide-fit { align-items: stretch; } body.skin.skin-swiss .reveal .headline { border-bottom: 2px solid #000; padding-bottom: .2em; } body.skin.skin-swiss .titlepage, body.skin.skin-swiss .divider { text-align: left; } body.skin.skin-swiss .titlepage h1 { font-size: 3.4em; margin-left: 0; } body.skin.skin-swiss .titlepage .rule { margin-left: 0; background: #E63312; height: 6px; width: 3em; } body.skin.skin-swiss .divider .secno { font-size: 6em; } body.skin.skin-swiss .reveal .stage, body.skin.skin-swiss .reveal .net-stage { border: 0; }
+    body.skin.skin-ethsoft {
+      --page: #F6F6FB;
+      --ink: #3B3F5C;
+      --ink-strong: #141629;
+      --ink-muted: #8589A6;
+      --accent: #627EEA;
+      --link: #4C63D2;
+      --label: #627EEA;
+      --card: #FFFFFF;
+      --card-border: 1px solid #E6E8F5;
+      --radius: 22px;
+      --shadow: 0 12px 32px rgba(98,126,234,.10);
+      --chip: #EEF0FD;
+      --line: #E0E3F5;
+      --svgfill: #FFFFFF;
+      --display: "Manrope", system-ui, sans-serif;
+      --serif: "Manrope", system-ui, sans-serif;
+      --mono: "JetBrains Mono", monospace;
+      --hw: 800;
+      --hls: -.025em;
+      --halign: center;
+      --h2size: 1.6em;
+      --uline: none;
+      --red: #E5484D;
+      --eth: #8A5CF6;
+      --blue: var(--link); --yellow: var(--accent); --chalk-soft: var(--line); --chalk: var(--line);
+      --panel: var(--card); --panel-strong: var(--card);
+    }
+    html:has(body.skin-ethsoft) { background: #F6F6FB; }
+    body.skin.skin-ethsoft { background: radial-gradient(circle at 15% 10%, #E9ECFF, transparent 40%), radial-gradient(circle at 90% 90%, #F1E9FF, transparent 45%), #F6F6FB !important; } body.skin.skin-ethsoft .reveal .metric { color: #4C63D2; }
+    body.skin.skin-editorial {
+      --page: #FFFFFF;
+      --ink: #2D2D2D;
+      --ink-strong: #111111;
+      --ink-muted: #767676;
+      --accent: #0B6E4F;
+      --link: #0B6E4F;
+      --label: #0B6E4F;
+      --card: #FFFFFF;
+      --card-border: 0;
+      --card-top: 1px solid #111;
+      --radius: 0;
+      --shadow: none;
+      --chip: #F0F3F1;
+      --line: #DDDDDD;
+      --svgfill: #FFFFFF;
+      --display: "Newsreader", Georgia, serif;
+      --serif: "Inter", system-ui, sans-serif;
+      --mono: "JetBrains Mono", monospace;
+      --hw: 500;
+      --hls: -.015em;
+      --halign: left;
+      --h2size: 1.8em;
+      --uline: none;
+      --red: #B42318;
+      --eth: #5B4BB7;
+      --em-style: italic;
+      --labelfont: "Inter", sans-serif;
+      --blue: var(--link); --yellow: var(--accent); --chalk-soft: var(--line); --chalk: var(--line);
+      --panel: var(--card); --panel-strong: var(--card);
+    }
+    html:has(body.skin-editorial) { background: #FFFFFF; }
+    body.skin.skin-editorial .reveal .slides section.present .slide-fit { align-items: stretch; } body.skin.skin-editorial .titlepage, body.skin.skin-editorial .divider { text-align: left; } body.skin.skin-editorial .titlepage h1 { font-size: 3.3em; margin-left: 0; } body.skin.skin-editorial .titlepage .rule { margin-left: 0; } body.skin.skin-editorial .quote-slide blockquote { font-style: italic; }
+    body.skin.skin-terminal {
+      --page: #0B0F0C;
+      --ink: #B8C4BC;
+      --ink-strong: #E9F5EC;
+      --ink-muted: #5F7266;
+      --accent: #3DDC84;
+      --link: #3DDC84;
+      --label: #3DDC84;
+      --card: #111813;
+      --card-border: 1px solid #1F2B23;
+      --radius: 6px;
+      --shadow: none;
+      --chip: #17221B;
+      --line: #1F2B23;
+      --svgfill: #111813;
+      --display: "JetBrains Mono", monospace;
+      --serif: "JetBrains Mono", monospace;
+      --mono: "JetBrains Mono", monospace;
+      --hw: 800;
+      --hls: -.04em;
+      --halign: left;
+      --h2size: 1.45em;
+      --uline: none;
+      --red: #FF6B57;
+      --eth: #A78BFA;
+      --blue: var(--link); --yellow: var(--accent); --chalk-soft: var(--line); --chalk: var(--line);
+      --panel: var(--card); --panel-strong: var(--card);
+    }
+    html:has(body.skin-terminal) { background: #0B0F0C; }
+    html:has(body.skin-terminal) { color-scheme: dark; } body.skin.skin-terminal .reveal .slides section.present .slide-fit { align-items: stretch; } body.skin.skin-terminal .reveal .headline h2::before { content: '> '; color: #3DDC84; } body.skin.skin-terminal .titlepage, body.skin.skin-terminal .divider { text-align: left; } body.skin.skin-terminal .titlepage h1 { margin-left: 0; } body.skin.skin-terminal .titlepage .rule { margin-left: 0; } body.skin.skin-terminal .reveal p, body.skin.skin-terminal .reveal li { font-size-adjust: none; } body.skin.skin-terminal .reveal .panel p, body.skin.skin-terminal .xcard .what { font-size: .55em; }
+    body.skin.skin-glass {
+      --page: #EEF2F7;
+      --ink: #334155;
+      --ink-strong: #0B1220;
+      --ink-muted: #7A8699;
+      --accent: #0EA5A4;
+      --link: #0E7490;
+      --label: #0E7490;
+      --card: rgba(255,255,255,.55);
+      --card-border: 1px solid rgba(255,255,255,.8);
+      --radius: 24px;
+      --shadow: 0 20px 50px rgba(15,40,80,.10);
+      --chip: rgba(14,165,164,.12);
+      --line: rgba(15,40,80,.12);
+      --svgfill: #FFFFFF;
+      --display: "Plus Jakarta Sans", system-ui, sans-serif;
+      --serif: "Plus Jakarta Sans", system-ui, sans-serif;
+      --mono: "JetBrains Mono", monospace;
+      --hw: 800;
+      --hls: -.03em;
+      --halign: center;
+      --h2size: 1.6em;
+      --uline: none;
+      --red: #E11D48;
+      --eth: #7C3AED;
+      --blue: var(--link); --yellow: var(--accent); --chalk-soft: var(--line); --chalk: var(--line);
+      --panel: var(--card); --panel-strong: var(--card);
+    }
+    html:has(body.skin-glass) { background: #EEF2F7; }
+    body.skin.skin-glass { background: radial-gradient(60% 50% at 10% 10%, #CFF5F2 0, transparent 60%), radial-gradient(50% 50% at 90% 20%, #E2DBFF 0, transparent 60%), radial-gradient(60% 60% at 70% 100%, #FFE3D6 0, transparent 60%), #EEF2F7 !important; } body.skin.skin-glass .reveal .panel, body.skin.skin-glass .reveal .xcard, body.skin.skin-glass .reveal .stat-card, body.skin.skin-glass .reveal .rung { backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); }
+    body.skin.skin-blocks {
+      --page: #FFFDF7;
+      --ink: #111111;
+      --ink-strong: #000000;
+      --ink-muted: #555555;
+      --accent: #FF4F00;
+      --link: #000000;
+      --label: #000000;
+      --card: #FFFFFF;
+      --card-border: 2.5px solid #000;
+      --radius: 10px;
+      --shadow: 6px 6px 0 #000;
+      --chip: #FFE14D;
+      --line: #000;
+      --svgfill: #FFFFFF;
+      --display: "Archivo Black", "Arial Black", sans-serif;
+      --serif: "Archivo", Arial, sans-serif;
+      --mono: "JetBrains Mono", monospace;
+      --hw: 400;
+      --hls: -.02em;
+      --halign: left;
+      --h2size: 1.7em;
+      --uline: none;
+      --red: #E5381F;
+      --eth: #5B3BFF;
+      --blue: var(--link); --yellow: var(--accent); --chalk-soft: var(--line); --chalk: var(--line);
+      --panel: var(--card); --panel-strong: var(--card);
+    }
+    html:has(body.skin-blocks) { background: #FFFDF7; }
+    body.skin.skin-blocks .reveal .slides section.present .slide-fit { align-items: stretch; } body.skin.skin-blocks .reveal .panel.gold, body.skin.skin-blocks .reveal .xcard.gold { background: #FFE14D; } body.skin.skin-blocks .reveal .xcard.red { background: #FFD6CC; } body.skin.skin-blocks .reveal .stat-card:nth-child(2) { background: #C9F2FF; } body.skin.skin-blocks .titlepage, body.skin.skin-blocks .divider { text-align: left; } body.skin.skin-blocks .titlepage h1 { font-size: 3.4em; margin-left: 0; } body.skin.skin-blocks .titlepage h1 em { background: #FFE14D; color: #000; padding: 0 .15em; } body.skin.skin-blocks .titlepage .rule { display: none; }
+    body.skin.skin-indigo {
+      --page: #0C1024;
+      --ink: #B9C1E0;
+      --ink-strong: #F2F4FF;
+      --ink-muted: #6C7499;
+      --accent: #5CE1E6;
+      --link: #8EA2FF;
+      --label: #8EA2FF;
+      --card: #131938;
+      --card-border: 1px solid #222A55;
+      --radius: 16px;
+      --shadow: 0 20px 50px rgba(0,0,0,.35);
+      --chip: #1C2450;
+      --line: #222A55;
+      --svgfill: #131938;
+      --display: "Sora", system-ui, sans-serif;
+      --serif: "Sora", system-ui, sans-serif;
+      --mono: "JetBrains Mono", monospace;
+      --hw: 600;
+      --hls: -.03em;
+      --halign: center;
+      --h2size: 1.55em;
+      --uline: none;
+      --red: #FF6B8B;
+      --eth: #A78BFA;
+      --qw: 300;
+      --blue: var(--link); --yellow: var(--accent); --chalk-soft: var(--line); --chalk: var(--line);
+      --panel: var(--card); --panel-strong: var(--card);
+    }
+    html:has(body.skin-indigo) { background: #0C1024; }
+    html:has(body.skin-indigo) { color-scheme: dark; } body.skin.skin-indigo { background: radial-gradient(70% 60% at 50% -10%, #1E2A6B 0, transparent 60%), #0C1024 !important; } body.skin.skin-indigo .reveal .panel p, body.skin.skin-indigo .reveal .xcard .what { font-weight: 300; }
+    body.skin.skin-notion {
+      --page: #FAFAFA;
+      --ink: #37352F;
+      --ink-strong: #191919;
+      --ink-muted: #8F8C86;
+      --accent: #D9730D;
+      --link: #2F6FA8;
+      --label: #8F8C86;
+      --card: #FFFFFF;
+      --card-border: 1px solid #EAEAEA;
+      --radius: 10px;
+      --shadow: 0 1px 2px rgba(0,0,0,.04);
+      --chip: #F1F1EF;
+      --line: #EAEAEA;
+      --svgfill: #FFFFFF;
+      --display: "DM Sans", system-ui, sans-serif;
+      --serif: "DM Sans", system-ui, sans-serif;
+      --mono: "DM Mono", monospace;
+      --hw: 700;
+      --hls: -.025em;
+      --halign: left;
+      --h2size: 1.55em;
+      --uline: none;
+      --red: #D44C47;
+      --eth: #9065B0;
+      --blue: var(--link); --yellow: var(--accent); --chalk-soft: var(--line); --chalk: var(--line);
+      --panel: var(--card); --panel-strong: var(--card);
+    }
+    html:has(body.skin-notion) { background: #FAFAFA; }
+    body.skin.skin-notion .reveal .slides section.present .slide-fit { align-items: stretch; } body.skin.skin-notion .titlepage, body.skin.skin-notion .divider { text-align: left; } body.skin.skin-notion .titlepage h1 { margin-left: 0; } body.skin.skin-notion .titlepage .rule { margin-left: 0; } body.skin.skin-notion .reveal .panel h4 { text-transform: none; letter-spacing: 0; font-size: .46em; }
+
+    /* ---- theme picker (slide before the title) ---- */
+    .reveal .slide-number a { text-decoration: none; }
+    .theme-picker .tp-head { text-align: center; margin-bottom: .7em; }
+    .theme-picker .tp-head h2 { font-size: 1.1em; margin: 0; }
+    .theme-picker .tp-head p { margin: .3em 0 0; font-family: var(--mono); font-size: .38em; color: var(--ink-muted); letter-spacing: .06em; }
+    .tp-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: .45em; width: min(100%, 1300px); margin: 0 auto; }
+    .tp-opt {
+      all: unset; cursor: pointer; display: flex; flex-direction: column; gap: .3em; text-align: left;
+      border-radius: 12px; padding: .25em; outline: 2px solid transparent; transition: outline-color .2s, transform .2s;
+    }
+    .tp-opt:hover { transform: translateY(-3px); }
+    .tp-opt:focus-visible, .tp-opt[aria-pressed="true"] { outline-color: var(--yellow); }
+    .tp-sw {
+      height: 3.1em; border-radius: 9px; background: var(--b); position: relative; overflow: hidden;
+      display: flex; align-items: flex-end; padding: .25em .35em; box-sizing: border-box;
+      box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .12);
+    }
+    .tp-sw b { font-family: var(--f); font-weight: 700; font-size: .95em; color: var(--c); line-height: 1; }
+    .tp-sw i { position: absolute; right: .35em; top: .35em; width: .55em; height: .55em; border-radius: 50%; background: var(--a); }
+    .tp-name { font-family: var(--mono); font-size: .34em; color: var(--ink); letter-spacing: .04em; padding-left: .2em; }
+    @media(max-width:900px) { .tp-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
   </style>
 </head>
 
@@ -2280,6 +2636,26 @@
           </marker>
         </defs>
       </svg>
+
+            <!-- THEME PICKER (one slide before the title) -->
+      <section class="theme-picker" data-transition="fade">
+        <div class="tp-head">
+          <h2>Theme</h2>
+          <p>Choose a look · press → to start · T cycles themes</p>
+        </div>
+        <div class="tp-grid">
+            <button class="tp-opt" data-skin="minimal" aria-pressed="false" style="--b:#FFFFFF;--c:#0A0A0B;--a:#2F5BFF;--f:'Inter Tight'"><span class="tp-sw"><b>Aa</b><i></i></span><span class="tp-name">Modern Minimal</span></button>
+            <button class="tp-opt" data-skin="swiss" aria-pressed="false" style="--b:#F4F4F2;--c:#000;--a:#E63312;--f:'Archivo'"><span class="tp-sw"><b>Aa</b><i></i></span><span class="tp-name">Swiss Grid</span></button>
+            <button class="tp-opt" data-skin="ethsoft" aria-pressed="false" style="--b:#F6F6FB;--c:#141629;--a:#627EEA;--f:'Manrope'"><span class="tp-sw"><b>Aa</b><i></i></span><span class="tp-name">Ethereum Soft</span></button>
+            <button class="tp-opt" data-skin="editorial" aria-pressed="false" style="--b:#FFFFFF;--c:#111;--a:#0B6E4F;--f:'Newsreader'"><span class="tp-sw"><b>Aa</b><i></i></span><span class="tp-name">Editorial</span></button>
+            <button class="tp-opt" data-skin="banknote" aria-pressed="false" style="--b:#F2F4EE;--c:#0F1D17;--a:#A66C08;--f:'Bodoni Moda'"><span class="tp-sw"><b>Aa</b><i></i></span><span class="tp-name">Banknote</span></button>
+            <button class="tp-opt" data-skin="terminal" aria-pressed="false" style="--b:#0B0F0C;--c:#E9F5EC;--a:#3DDC84;--f:'JetBrains Mono'"><span class="tp-sw"><b>Aa</b><i></i></span><span class="tp-name">Terminal Dark</span></button>
+            <button class="tp-opt" data-skin="glass" aria-pressed="false" style="--b:#E6F3F4;--c:#0B1220;--a:#0EA5A4;--f:'Plus Jakarta Sans'"><span class="tp-sw"><b>Aa</b><i></i></span><span class="tp-name">Soft Glass</span></button>
+            <button class="tp-opt" data-skin="blocks" aria-pressed="false" style="--b:#FFE14D;--c:#000;--a:#FF4F00;--f:'Archivo Black'"><span class="tp-sw"><b>Aa</b><i></i></span><span class="tp-name">Bold Blocks</span></button>
+            <button class="tp-opt" data-skin="indigo" aria-pressed="false" style="--b:#0C1024;--c:#F2F4FF;--a:#5CE1E6;--f:'Sora'"><span class="tp-sw"><b>Aa</b><i></i></span><span class="tp-name">Night Indigo</span></button>
+            <button class="tp-opt" data-skin="notion" aria-pressed="false" style="--b:#FAFAFA;--c:#191919;--a:#D9730D;--f:'DM Sans'"><span class="tp-sw"><b>Aa</b><i></i></span><span class="tp-name">Quiet Grey</span></button>
+        </div>
+      </section>
 
       <!-- 1 · TITLE -->
       <section class="titlepage" data-transition="fade">
@@ -3429,7 +3805,7 @@
     function fitSlidesToViewport() { document.querySelectorAll(".reveal .slides > section, .reveal .slides > section > section").forEach(e => { if (e.classList.contains("stack")) return; const w = e.firstElementChild; if (!(w instanceof HTMLElement) || !w.classList.contains("slide-fit")) return; w.style.transform = "scale(1)"; const aw = e.clientWidth, ah = e.clientHeight, cw = w.scrollWidth, ch = w.scrollHeight; if (!aw || !ah || !cw || !ch) return; w.style.transform = `scale(${Math.min(1, (aw - 12) / cw, (ah - 14) / ch)})` }) }
     let fitRaf = null; function scheduleFitSlides() { if (fitRaf !== null) cancelAnimationFrame(fitRaf); fitRaf = requestAnimationFrame(() => { fitRaf = null; fitSlidesToViewport() }) }
     prepareSlideFit();
-    Reveal.initialize({ hash: true, slideNumber: "c/t", progress: true, center: true, margin: 0, width: '100%', height: '100%', minScale: 1, maxScale: 1, transition: "fade", backgroundTransition: "fade", autoAnimate: true, autoAnimateDuration: 1.0, autoAnimateEasing: "ease-out", fragments: !/fragments=false/.test(location.search) });
+    Reveal.initialize({ hash: true, slideNumber: (sl) => { const i = Reveal.getIndices(sl).h; return i === 0 ? ["", "", NaN] : [i, "/", Reveal.getTotalSlides() - 1]; }, progress: true, center: true, margin: 0, width: '100%', height: '100%', minScale: 1, maxScale: 1, transition: "fade", backgroundTransition: "fade", autoAnimate: true, autoAnimateDuration: 1.0, autoAnimateEasing: "ease-out", fragments: !/fragments=false/.test(location.search) });
     Reveal.on("ready", () => { scheduleFitSlides(); setTimeout(fitSlidesToViewport, 120) });
     Reveal.on("slidechanged", scheduleFitSlides); Reveal.on("fragmentshown", scheduleFitSlides); Reveal.on("fragmenthidden", scheduleFitSlides); Reveal.on("resize", scheduleFitSlides);
     window.addEventListener("load", () => { scheduleFitSlides(); setTimeout(fitSlidesToViewport, 120) }); window.addEventListener("resize", scheduleFitSlides);
@@ -3461,8 +3837,8 @@
       const hudTx = canvas.parentElement.querySelector("[data-hud=tx]");
       const hudShare = canvas.parentElement.querySelector("[data-hud=share]");
       let W = 0, H = 0, nodes = [], edges = [], packets = [], tick = 0, tx = 0, agentTx = 0, running = false, phase = 0;
-      const css = getComputedStyle(document.documentElement);
-      const C = { human: css.getPropertyValue("--blue").trim() || "#8fd0c6", agent: css.getPropertyValue("--yellow").trim() || "#f2cc60", eth: css.getPropertyValue("--eth").trim() || "#a7a4f2", line: "rgba(20,35,29,.08)" };
+      let css = getComputedStyle(document.body);
+      let C = { human: css.getPropertyValue("--blue").trim() || "#8fd0c6", agent: css.getPropertyValue("--yellow").trim() || "#f2cc60", eth: css.getPropertyValue("--eth").trim() || "#a7a4f2", line: "rgba(20,35,29,.08)" };
       function resize() {
         const r = canvas.getBoundingClientRect(), d = window.devicePixelRatio || 1;
         W = r.width; H = r.height; canvas.width = W * d; canvas.height = H * d; ctx.setTransform(d, 0, 0, d, 0, 0);
@@ -3524,7 +3900,7 @@
         requestAnimationFrame(frame);
       }
       return {
-        start() { resize(); seed(); if (!running) { running = true; requestAnimationFrame(frame); } },
+        start() { css = getComputedStyle(document.body); C = { ...C, human: css.getPropertyValue("--blue").trim() || C.human, agent: css.getPropertyValue("--yellow").trim() || C.agent, eth: css.getPropertyValue("--eth").trim() || C.eth }; resize(); seed(); if (!running) { running = true; requestAnimationFrame(frame); } },
         stop() { running = false; },
         resize
       };
@@ -3560,6 +3936,29 @@
         ctx.stroke();
       });
     });
+  </script>
+  <script>
+    /* theme switching: picker slide lives at index 0, talk opens at index 1 */
+    const SKIN_KEYS = [...document.querySelectorAll(".tp-opt")].map(b => b.dataset.skin);
+    function setSkin(k) {
+      if (!SKIN_KEYS.includes(k)) k = "minimal";
+      document.body.classList.remove("skin", ...SKIN_KEYS.map(x => "skin-" + x));
+      if (k !== "banknote") document.body.classList.add("skin", "skin-" + k);
+      document.querySelectorAll(".tp-opt").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.skin === k)));
+      try { localStorage.setItem("lm-skin", k); } catch (e) {}
+      if (window.Reveal && Reveal.isReady && Reveal.isReady()) { scheduleFitSlides(); onSlide(Reveal.getCurrentSlide()); }
+    }
+    let saved = null; try { saved = localStorage.getItem("lm-skin"); } catch (e) {}
+    setSkin(saved || "minimal");
+    document.querySelectorAll(".tp-opt").forEach(b => b.addEventListener("click", () => setSkin(b.dataset.skin)));
+    document.addEventListener("keydown", e => {
+      if ((e.key === "t" || e.key === "T") && !e.metaKey && !e.ctrlKey && !e.altKey) {
+        const cur = SKIN_KEYS.find(x => document.body.classList.contains("skin-" + x)) || "banknote";
+        setSkin(SKIN_KEYS[(SKIN_KEYS.indexOf(cur) + 1) % SKIN_KEYS.length]);
+      }
+    });
+    const toTitle = () => { if (!location.hash || location.hash === "#/" || location.hash === "#") Reveal.slide(1, 0, 0); };
+    if (Reveal.isReady()) toTitle(); else Reveal.on("ready", toTitle);
   </script>
 </body>
 

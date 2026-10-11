@@ -2,6 +2,8 @@
 
 Ethereum Day · IIT Indore · 10 October 2026 · 42 slides · about 45 minutes
 
+> **Before you start:** press ← on the title slide to open the theme picker (10 looks), or press **T** on any slide to cycle themes. The choice is remembered in that browser.
+
 ## 1. AI Agents: Life and Money
 
 Welcome. This talk is in two halves: what AI agents already do in daily life, and how they are starting to move money, which is where blockchains come in. I'll try to stay neutral: you'll see the hype and the counter-evidence side by side. Approximate length: 40–45 minutes plus questions.
